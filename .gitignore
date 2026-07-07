@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store
+bg_atlases/
+bg_config/
+# generated large outputs (keep sidecars small enough to commit; figures are regenerable)
+figures/*.png
+*.nwb

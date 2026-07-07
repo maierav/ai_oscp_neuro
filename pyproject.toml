@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openscope-pp-ccf"
+version = "0.1.0"
+description = "CCF annotation and penetration figures for the OpenScope Community Predictive Processing Neuropixels dataset (DANDI 001637)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+dependencies = [
+    "pynwb",
+    "h5py",
+    "remfile",
+    "requests",
+    "numpy",
+    "pandas",
+    "scipy",
+    "matplotlib",
+    "pyarrow",
+]
+
+[project.optional-dependencies]
+atlas = ["brainglobe-atlasapi"]
+
+[tool.setuptools]
+packages = ["openscope_ccf"]
+
+[tool.setuptools.package-data]
+openscope_ccf = ["data/*.csv"]
