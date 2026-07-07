@@ -28,4 +28,4 @@ atlas = ["brainglobe-atlasapi"]
 packages = ["openscope_ccf"]
 
 [tool.setuptools.package-data]
-openscope_ccf = ["data/*.csv"]
+openscope_ccf = ["data/*.csv", "data/sidecars/*.parquet", "data/sidecars/*.csv"]

@@ -75,10 +75,14 @@ openscope_ccf/          package
   sidecar.py            build/load/attach sidecar tables
   figures.py            build_probe_data, make_3d, make_laminar
   data/ccf_session_index.csv   registry of CCF sessions
+  data/sidecars/          prebuilt per-session sidecars (Parquet), shipped with the package
 notebooks/              Colab notebook
 scripts/build_all.py    batch driver
-data/sidecars/          generated per-session sidecars (Parquet)
 ```
+
+`load_ccf`/`attach` resolve sidecars from `./data/sidecars` if present, else fall
+back to the copy shipped inside the installed package — so they work from a clone
+or a bare `pip install`.
 
 ## Data & attribution
 

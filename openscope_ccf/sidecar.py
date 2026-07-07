@@ -25,6 +25,20 @@ from .nwbio import open_remote, unit_electrode_rows, electrodes_frame, _decode
 from .ccf import decode_ccf
 
 
+def _resolve_sidecar_dir(sidecar_dir):
+    """Resolve the sidecar directory, falling back to the packaged copy.
+
+    Prefers ``sidecar_dir`` relative to the current working directory (the repo
+    layout), then the copy shipped inside the installed package, so ``load_ccf``
+    works whether you run from a clone or from an installed wheel.
+    """
+    p = Path(sidecar_dir)
+    if p.exists():
+        return p
+    pkg = Path(__file__).resolve().parent / "data" / "sidecars"
+    return pkg if pkg.exists() else p
+
+
 def build_unit_sidecar(fh, subject: str, date: str, paradigm: str) -> pd.DataFrame:
     """Per-unit CCF sidecar from an open NWB file handle."""
     u = fh["units"]
@@ -81,7 +95,7 @@ def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str
 
 def load_ccf(session_tag: str, kind: str = "units", sidecar_dir="data/sidecars") -> pd.DataFrame:
     """Load a session's sidecar. ``kind`` is ``"units"`` or ``"channels"``."""
-    p = Path(sidecar_dir) / f"{kind}_{session_tag}.parquet"
+    p = _resolve_sidecar_dir(sidecar_dir) / f"{kind}_{session_tag}.parquet"
     return pd.read_parquet(p)
 
 
