@@ -1,7 +1,10 @@
-# openscope-pp-ccf
+# ai_oscp_neuro
 
 CCF annotation and penetration figures for the **OpenScope Community Predictive
 Processing** Neuropixels dataset ([DANDI 001637](https://dandiarchive.org/dandiset/001637)).
+
+> Python package `openscope_ccf` — import name is `openscope_ccf`; the GitHub
+> repository is `maierav/ai_oscp_neuro`.
 
 This toolkit turns the preliminary Allen CCF alignment packaged into the DANDI
 NWB files into two reusable products:
