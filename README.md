@@ -65,6 +65,23 @@ The notebook also documents two SLAP2 gotchas it took to get there — the per-D
 onset offset, and DMD1's compressed timestamps (rebuilt over the simultaneous
 DMD2 acquisition span).
 
+**Are these RFs real, or just the noise we selected for?** Since the examples are
+the top units by SNR, we test them against three noise controls: split-half
+reliability (even vs. odd trials), a per-unit trial-label permutation null, and a
+negative control (non-visual units for ecephys; responses re-aligned to random
+times for the imaging arms).
+
+![RF significance across three modalities](figures/rf_significance_three_modalities.png)
+
+The RFs are stimulus-locked and reproducible: 16–18 % of units/ROIs carry a
+significant RF at true stimulus onsets in **Neuropixels and mesoscope**,
+collapsing to ~1–2 % (chance) in the controls — and for ecephys the significant
+RFs concentrate in visual cortex and visual thalamus while motor cortex and
+hippocampus sit at chance. **SLAP2 glutamate** shows a real but weaker
+population effect (7 % vs. 5 % control); its best dendritic ROIs are highly
+reliable (r > 0.35, p < 1e-4) but population fractions should be read cautiously.
+Section 5 of the notebook reproduces all three tests.
+
 ## Why this exists
 
 The DANDI NWBs ship a per-channel CCF acronym in `electrodes.location` plus CCF
