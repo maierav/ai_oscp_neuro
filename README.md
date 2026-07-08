@@ -95,6 +95,21 @@ or a bare `pip install`.
 - CCF alignment: OpenScope community ([discussion #163](https://github.com/AllenNeuralDynamics/openscope-community-predictive-processing/discussions/163)).
 - Atlas: `allen_mouse_25um` via [BrainGlobe](https://brainglobe.info/).
 
+## Notebook hygiene (Colab ↔ GitHub)
+
+Saving a notebook from Colab can insert a `metadata.widgets` block without the
+required `state` key, which makes GitHub refuse to render it ("Invalid Notebook").
+`scripts/clean_notebook.py` strips only that block — **figures and all other
+outputs are preserved** (unlike "Clear all outputs", which deletes them).
+
+Two layers keep this automatic:
+
+* **Local pre-commit hook** — `pip install pre-commit && pre-commit install`, then
+  every local `git commit` cleans notebooks first (see `.pre-commit-config.yaml`).
+* **GitHub Action** — `.github/workflows/clean-notebooks.yml` cleans and commits
+  back on any pushed notebook, which covers saving from Colab straight to GitHub
+  (that path bypasses local hooks).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

@@ -1,0 +1,34 @@
+name: Clean notebook widgets
+
+# When a notebook is pushed (e.g. saved from Colab straight to GitHub), strip the
+# metadata.widgets block that breaks GitHub rendering, and commit the fix back.
+# Figure images and all other outputs are preserved.
+on:
+  push:
+    paths:
+      - "**/*.ipynb"
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Strip metadata.widgets from notebooks
+        run: python scripts/clean_notebook.py
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain '*.ipynb')" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add '*.ipynb'
+            git commit -m "CI: strip Colab metadata.widgets for GitHub rendering"
+            git push
+          else
+            echo "notebooks already clean"
+          fi

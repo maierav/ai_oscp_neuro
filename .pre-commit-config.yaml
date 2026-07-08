@@ -1,0 +1,18 @@
+# Auto-strip Colab's metadata.widgets block from notebooks before every commit,
+# so GitHub can always render them. Figure images and other outputs are kept.
+#
+# One-time setup after cloning:
+#     pip install pre-commit
+#     pre-commit install
+#
+# Then it runs automatically on `git commit`. To run manually on all files:
+#     pre-commit run --all-files
+repos:
+  - repo: local
+    hooks:
+      - id: clean-notebook-widgets
+        name: strip Colab metadata.widgets (keeps figures)
+        entry: python scripts/clean_notebook.py
+        language: system
+        files: \.ipynb$
+        pass_filenames: true
