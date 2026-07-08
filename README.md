@@ -45,6 +45,26 @@ alignment):
   modalities; the sensorimotor, sequence, and duration paradigms exist in
   Neuropixels and mesoscope only.
 
+## Validation — receptive fields across all three scales
+
+Before running any prediction-error / mismatch analysis, we sanity-checked the
+full pipeline (stream NWB → align to stimulus trials → extract response → build
+a receptive field) against a known answer: a real visual neuron should respond
+to a **compact patch of visual space**. Using each dataset's `RF mapping` block,
+we recover clean, retinotopically localized receptive fields in all three
+modalities — spikes (Neuropixels), somatic ΔF/F (mesoscope), and dendritic
+glutamate ΔF/F (SLAP2):
+
+![Example receptive fields across three recording scales](figures/rf_examples_three_modalities.png)
+
+Each panel is one unit/ROI (baseline-subtracted response averaged per screen
+position); rows use independent colour scales (spike rate vs. ΔF/F are not
+directly comparable in magnitude). Reproduce this figure end-to-end in Colab:
+[`notebooks/rf_sanity_check_three_modalities.ipynb`](notebooks/rf_sanity_check_three_modalities.ipynb).
+The notebook also documents two SLAP2 gotchas it took to get there — the per-DMD
+onset offset, and DMD1's compressed timestamps (rebuilt over the simultaneous
+DMD2 acquisition span).
+
 ## Why this exists
 
 The DANDI NWBs ship a per-channel CCF acronym in `electrodes.location` plus CCF
