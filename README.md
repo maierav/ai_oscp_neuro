@@ -1,14 +1,45 @@
 # ai_oscp_neuro
 
-CCF annotation and penetration figures for the **OpenScope Community Predictive
-Processing** Neuropixels dataset ([DANDI 001637](https://dandiarchive.org/dandiset/001637)).
+Analysis toolkit and cross-scale validation for the **OpenScope Community
+Predictive Processing** dataset — Allen Institute for Neural Dynamics.
 
 > Python package `openscope_ccf` — import name is `openscope_ccf`; the GitHub
 > repository is `maierav/ai_oscp_neuro`.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/maierav/ai_oscp_neuro/blob/main/notebooks/ccf_penetration_figures.ipynb)
 
-This toolkit turns the preliminary Allen CCF alignment packaged into the DANDI
+## Background & motivation
+
+The [OpenScope Community Predictive Processing](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/)
+project asks how the brain implements **predictive processing** — whether the
+cortex learns to predict upcoming sensory input and signals *prediction errors*
+when reality violates expectation. The central scientific question is whether
+different kinds of violation (a sensory oddball, a broken sensorimotor
+contingency, an omitted stimulus) are computed by **distinct specialized
+circuits** or by a **common canonical mechanism** repeated across the brain. To
+test this, the same battery of "mismatch" paradigms is recorded at **three
+spatial scales in mouse visual cortex**, so that error signals can be compared
+from single spikes up to population and dendritic activity.
+
+The conceptual and methodological background — the predictive-processing
+framework, the paradigm design, and the experimental program — is laid out in the
+community white paper:
+
+> Aizenbud et al. (2025), *Neural mechanisms of predictive processing: a
+> collaborative community experiment through the OpenScope program.*
+> [arXiv:2504.09614](https://arxiv.org/abs/2504.09614)
+
+**What this repository does.** It is a practical analysis layer on top of the
+public data: it makes the preliminary anatomical (CCF) alignment usable, provides
+attachable annotations for downstream spike/LFP/imaging analyses, and establishes
+a set of **confidence-building validations** (receptive fields and direction
+tuning across all three modalities) that must pass before the harder
+prediction-error analyses are trusted. It is deliberately kept separate from any
+one analysis so the products are reusable.
+
+## What's in this repository
+
+The core toolkit turns the preliminary Allen CCF alignment packaged into the DANDI
 NWB files into two reusable products:
 
 1. **Attachable CCF sidecars** — small per-session Parquet tables (one per unit,
@@ -19,6 +50,10 @@ NWB files into two reusable products:
    Allen brain, and a per-probe laminar cross-check that overlays CCF region/layer
    boundaries on spontaneous LFP band power and MUA depth profiles, so the
    alignment can be validated against the recordings.
+
+Alongside these are the **cross-scale validation notebooks** (receptive fields,
+direction tuning) documented below, which double as worked examples of streaming
+and analyzing each modality.
 
 ## Dataset at a glance
 
@@ -44,6 +79,65 @@ alignment):
   frequent standard) is therefore the one comparison expressible in all three
   modalities; the sensorimotor, sequence, and duration paradigms exist in
   Neuropixels and mesoscope only.
+
+## Data particulars & gotchas (read before analyzing)
+
+These are non-obvious properties of the data that cost real debugging time. If
+you are an analyst — human or LLM — picking this up cold, read this first; several
+of them silently produce wrong-but-plausible results.
+
+**Access.** The clean HDF5 NWB files live on DANDI (001637 / 001768 / 001424); the
+same data is also on `s3://aind-open-data` as `.nwb.zarr`. We stream the DANDI
+HDF5 over HTTP (`remfile` + `h5py`) rather than downloading — see `nwbio.py`. No
+DANDI credentials are needed for these public dandisets.
+
+**Stimulus blocks (Neuropixels & mesoscope).** Stimuli are organized into named
+`intervals` blocks, and the useful ones are easy to misread:
+- `Control block 1` (`standard_control`) — the **14-direction drifting-grating
+  sweep** used for tuning (below). *Not* a mismatch block.
+- `Control block 4` (`open_loop_prerecorded`) — the **open-loop comparator** for
+  the sensorimotor paradigm (the paper-prescribed control: same stimuli, motor
+  coupling removed).
+- `Standard mismatch block` — the actual oddball block; `Orientation`,
+  `TrialType`, `contrast` columns define standard vs. deviant vs. omission.
+- Column names are **capitalized** (`Orientation`, `TemporalFrequency`,
+  `SpatialFrequency`), and orientations are in **radians**, not degrees.
+
+**Direction ≠ orientation.** The 14-condition sweep is **drifting** gratings
+(`TemporalFrequency = 2 Hz`), which measure **direction** tuning over 0–360°.
+There is **no static-grating orientation sweep** in this dataset (the `TF = 0`
+trials in those blocks are a single orientation). Report DSI as measured; an
+orientation index (OSI) is only obtainable by *folding* the curve 360°→180°.
+Calling the drifting-grating result "orientation tuning" is the mistake to avoid.
+
+**Ecephys electrode/unit mapping.** `units.extremum_channel_index` is a
+**per-probe** index (0–~382), but the `electrodes` table **stacks all probes**.
+Indexing `electrodes` directly with it assigns every unit to the first probe.
+Correct mapping (add the per-probe row offset) lives in
+`nwbio.unit_electrode_rows()`. Also: `units.device_name` is a per-session device
+identifier, **not** an anatomical label — get area/layer from CCF, not from the
+device name. Real CCF alignment is present in **30 of 48** usable ecephys sessions
+so far (`electrodes.location` / `x` / `y` / `z` populated); the rest carry
+placeholder `"unknown"` locations.
+
+**SLAP2 is structurally different.** All stimuli sit in one monolithic
+`intervals/gratings` table (no named blocks); segment it by stimulus statistics.
+The oddball is *embedded* (a dominant standard orientation with rarer deviants +
+contrast-0 omissions). Three imaging quirks, all load-bearing:
+- **Two DMD paths** (`Fluorescence_DMD1` / `Fluorescence_DMD2`) image
+  **simultaneously** but with a small fixed onset offset (DMD1 ≈ +0.115 s).
+- A DMD's **stored timestamps can be compressed** (e.g. labeled over ~1000 s when
+  the recording is ~3020 s). Because the two DMDs are simultaneous, rebuild the
+  bad timebase as a uniform axis over the *other* DMD's intact span.
+- **RF/tuning yield varies strongly across sessions.** Pick a good session before
+  judging the modality (we use sub-796630 2025-10-01 DMD1). One early SLAP2 format
+  (sub-794237) differs and is skipped.
+
+**CCF acronyms encode area *and* layer.** `electrodes.location` gives e.g. `VISp5`
+(area `VISp`, layer `5`), `DG-mo` (area `DG`, layer `mo`), `CA1` (a hippocampal
+subfield, *not* a layer), or a fiber-tract code like `fi`. `ccf.py` decodes these;
+`electrodes.x/y/z` are absolute CCF µm, while `units.estimated_x/y/z` are
+probe-local relative coordinates.
 
 ## Validation — receptive fields across all three scales
 
@@ -111,7 +205,7 @@ method) — not as a static-grating measurement.
 
 | Modality | median DSI | OSI (derived) | tuning HWHM | % direction-selective |
 |---|---|---|---|---|
-| Neuropixels (spikes) | 0.19 | 0.39 | 28° | 11 % |
+| Neuropixels (spikes) | 0.18 | 0.39 | 28° | 11 % |
 | Mesoscope (ΔF/F soma) | 0.42 | 0.64 | 16° | 53 % |
 | SLAP2 (glutamate) | 0.31 | 0.49 | 21° | 24 % |
 
@@ -126,16 +220,14 @@ tuning validates **feature** sensitivity — together the pipeline reads real vi
 signals at all three scales. Reproduce in Colab:
 [`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb).
 
-## Why this exists
+## Why a CCF package
 
-The DANDI NWBs ship a per-channel CCF acronym in `electrodes.location` plus CCF
-coordinates in `electrodes.x/y/z`. Two things make these awkward to use directly:
-
-- The acronyms need decoding into area + layer + tissue class (e.g. `VISp5` →
-  area `VISp`, layer `5`; `DG-mo` → area `DG`, layer `mo`; `fi` → fiber tract).
-- `units.extremum_channel_index` is a **per-probe** index, but the `electrodes`
-  table stacks all probes. Indexing directly assigns every unit to the first
-  probe — a subtle bug this package fixes in `unit_electrode_rows()`.
+The raw NWB CCF fields are awkward to use directly for the two reasons detailed in
+*Data particulars* above — the acronyms need decoding into area + layer + tissue
+class, and the per-probe `extremum_channel_index` must be offset before indexing
+the stacked `electrodes` table. This package handles both once (`ccf.py`,
+`nwbio.unit_electrode_rows()`) and ships the results as attachable sidecars, so
+every downstream analysis inherits correct anatomy without re-solving them.
 
 ## Install
 
