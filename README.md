@@ -351,10 +351,12 @@ response to those gratings and read the integration window off the data.
 ![Same gratings, three modalities](figures/crossscale_psth_comparison.png)
 
 The trial- and population-averaged response to the 0° standard and 90° oddball
-(single session per modality) makes the mismatch concrete: spikes track grating
-onset *and* offset within ~500 ms; the jGCaMP8s population response builds and
-decays over ~1–2 s; the SLAP2 iGluSnFR population mean stays elevated with no clean
-decay.
+(single session per modality; each panel scaled to its own data range) makes the
+mismatch concrete: spikes track grating onset *and* offset within ~500 ms; the
+jGCaMP8s population response builds and decays over ~1–2 s; the SLAP2 iGluSnFR
+population mean is dominated by large ongoing fluctuations — the standard and
+oddball traces weave around each other across the whole window with only a modest
+onset bump (~200 ms), rather than a clean stimulus-locked transient.
 
 **The key methodological point: compare on responsive cells, not the population
 mean.** Population-*mean* imaging traces are dominated by ongoing activity and give
