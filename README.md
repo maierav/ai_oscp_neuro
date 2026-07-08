@@ -30,13 +30,20 @@ alignment):
 ![Data available across scales](figures/modality_paradigm_matrix.png)
 
 - **Neuropixels** (DANDI 001637) and **Mesoscope 2p** (001768) carry all four
-  paradigms with an identical block design (including an open-loop prerecorded
-  control block), enabling a cross-modal comparison of the same prediction-error
-  contrast.
-- **SLAP2** (001424) currently provides an orientation-tuning battery at
-  dendritic / glutamate (iGluSnFR) resolution rather than the four-paradigm
-  oddball design; oddball-matched SLAP2 data are expected in a later release.
-- **Standard oddball** is the one paradigm present in all three modalities.
+  paradigms with an identical named-block design (including an open-loop
+  prerecorded control block), enabling a cross-modal comparison of the same
+  prediction-error contrast across paradigms.
+- **SLAP2** (001424) stores its stimuli as a single monolithic `gratings`
+  stream rather than named paradigm blocks. It contains an embedded
+  **orientation oddball** (a dominant "standard" orientation with rarer
+  orientation deviants and omissions) plus orientation-tuning and RF blocks,
+  recoverable by segmenting the stream on orientation statistics. This provides
+  a standard/feature-oddball contrast at dendritic / glutamate (iGluSnFR)
+  resolution; the full four-paradigm SLAP2 set is expected in a later release.
+- The **standard / feature oddball** contrast (rare orientation deviant vs.
+  frequent standard) is therefore the one comparison expressible in all three
+  modalities; the sensorimotor, sequence, and duration paradigms exist in
+  Neuropixels and mesoscope only.
 
 ## Why this exists
 
