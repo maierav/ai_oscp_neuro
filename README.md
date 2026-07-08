@@ -70,11 +70,12 @@ DMD timebase (rebuilt over the other DMD's simultaneous span), and strong
 session-to-session variation in RF yield (pick a good session before judging the
 modality).
 
-**Are these RFs real, or just the noise we selected for?** Since the examples are
-the top units by SNR, we test them against three noise controls: split-half
-reliability (even vs. odd trials), a per-unit trial-label permutation null, and a
-negative control (non-visual units for ecephys; responses re-aligned to random
-times for the imaging arms).
+**Are these RFs real, or just structure we selected for?** Because the examples
+are hand-picked (highest Gaussian-fit R²), a selection process could in principle
+dress up noise. We test against three noise controls that do not depend on the
+selection: split-half reliability (even vs. odd trials), a per-unit trial-label
+permutation null, and a negative control (non-visual units for ecephys; responses
+re-aligned to random times for the imaging arms).
 
 ![RF significance across three modalities](figures/rf_significance_three_modalities.png)
 
@@ -82,10 +83,14 @@ The RFs are stimulus-locked and reproducible: 16–18 % of units/ROIs carry a
 significant RF at true stimulus onsets in **Neuropixels and mesoscope**,
 collapsing to ~1–2 % (chance) in the controls — and for ecephys the significant
 RFs concentrate in visual cortex and visual thalamus while motor cortex and
-hippocampus sit at chance. **SLAP2 glutamate** shows a real but weaker
-population effect (7 % vs. 5 % control); its best dendritic ROIs are highly
-reliable (r > 0.35, p < 1e-4) but population fractions should be read cautiously.
-Section 5 of the notebook reproduces all three tests.
+hippocampus sit at chance. **SLAP2 glutamate** shows a real but weaker population
+effect (7 % vs. 5 % control); its best dendritic ROIs are reliable (split-half
+r > 0.35, permutation p below the 1/300 resolution floor) but population fractions
+should be read cautiously. Note the SLAP2 significance panel was computed on an
+earlier, lower-yield session (sub-801381, 41 ROIs); RF yield varies strongly
+across sessions, so this 7 % is a conservative lower bound — the best session
+(sub-796630, shown in the gallery above) gives ~15 well-formed RFs. Section 5 of
+the notebook reproduces all three tests.
 
 ## Why this exists
 
