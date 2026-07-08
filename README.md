@@ -6,6 +6,8 @@ Processing** Neuropixels dataset ([DANDI 001637](https://dandiarchive.org/dandis
 > Python package `openscope_ccf` — import name is `openscope_ccf`; the GitHub
 > repository is `maierav/ai_oscp_neuro`.
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/maierav/ai_oscp_neuro/blob/main/notebooks/ccf_penetration_figures.ipynb)
+
 This toolkit turns the preliminary Allen CCF alignment packaged into the DANDI
 NWB files into two reusable products:
 
