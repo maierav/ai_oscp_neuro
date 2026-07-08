@@ -227,7 +227,7 @@ tuning validates **feature** sensitivity — together the pipeline reads real vi
 signals at all three scales. Reproduce in Colab:
 [`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb).
 
-## First analysis — feature-oddball prediction error (Neuropixels)
+## Feature-oddball prediction error (Neuropixels) — the complete analysis
 
 With the pipeline validated, the first prediction-error result asks whether a rare
 *oddball* orientation drives a genuine **prediction error** or merely reflects
@@ -253,10 +253,86 @@ One example session (sub-830851, 141 responsive visual units):
   cortical layers — a canonical rather than compartment-specific signature.
 
 **This is one example session, not the confirmatory claim.** The full analysis
-pools the 9 Neuropixels sessions with Allen CCF alignment, with cross-session
-bootstrap CIs and FDR correction across the area × layer grid, exactly as
+pools the 9 Neuropixels sessions with Allen CCF alignment, exactly as
 [pre-registered](docs/oddball_analysis_plan.md). Reproduce the example in Colab:
 [`notebooks/oddball_prediction_error_ecephys.ipynb`](notebooks/oddball_prediction_error_ecephys.ipynb).
+
+### Confirmatory result — 9 sessions, 1,331 responsive units
+
+Pooling the 9 CCF-labelled standard-oddball sessions (9 mice, one session each),
+with session-stratified bootstrap CIs and FDR correction across the area × layer grid.
+
+![Confirmatory feature-oddball, 9 sessions](figures/oddball_confirmatory_9sessions.png)
+
+- **A** — the adaptation-controlled `DvI` clearly exceeds the adaptation-inflated
+  naive `OI`. Pooled **DvI₉₀ = +0.46** (95% CI +0.42…+0.50, p ≈ 7×10⁻¹¹⁰) and
+  **DvI₄₅ = +0.26** (p ≈ 3×10⁻⁵⁸) — both far above the naive OI ≈ +0.08. (The 45°
+  deviance, marginal in the single session, is robustly positive once pooled.)
+- **B** — **all 9 sessions** are positive for both deviants; the effect is not
+  driven by one animal.
+- **C** — `DvI₉₀` barely depends on a unit's orientation preference (r = −0.13):
+  neurons tuned *to* the deviant are not the ones carrying it.
+- **D** — tuned and untuned units carry **equal** deviance (medians +0.47 vs +0.45).
+- **E** — equalizing the preferred-orientation distribution by resampling leaves the
+  population median unchanged (+0.47 balanced vs +0.46 naive) — **not** a
+  tuning-sampling artifact.
+- **F** — deviance is significant (★ = FDR p<0.05) in **13/15** area × layer cells;
+  present almost everywhere, with a superficial-heavy gradient (L2/3 ≈ +0.68 →
+  L6a ≈ +0.37 pooled across areas). A **broadcast** rather than compartment-specific
+  signal.
+
+### Population dynamics, laminar timing, and a second error type
+
+The confirmatory dataset supports time-resolved and mechanistic views beyond the
+summary indices:
+
+![Population deviance dynamics by area](figures/oddball_ts_by_area.png)
+
+Mean ± SEM PSTHs per visual area in three normalizations (absolute Hz, % change,
+z-score). The oddball rides above both the standard and the physically-identical
+equiprobable control throughout the evoked response. *(Population PSTHs use
+mean ± SEM with silent-unit gating: a bin-wise median of low-rate spike trains is
+quantized, and % change / z-score explode when the per-unit baseline is near zero,
+so units below 1 Hz baseline / 0.3 Hz SD are gated out of those two panels.)*
+
+![Laminar deviance timing](figures/oddball_laminar_latency.png)
+
+Per-unit latency of the deviance trace by layer. **Onset is layer-invariant**
+(~55–65 ms, Kruskal-Wallis p = 0.55) but **peak latency is not** (p = 0.012;
+L6a peaks early ~95 ms, L4 late ~175 ms). The layers begin responding together
+and differ in how quickly the signal peaks and decays — not in when it starts.
+
+![Omission prediction error](figures/oddball_omission_ecephys.png)
+
+The **omission** deviant — a withheld expected grating — is a *tuning-free,
+stimulus-free* prediction error: any positive response is error by construction.
+Omission drives positive firing (pooled +0.31 Hz, p ≈ 6×10⁻³¹, 61% of units > 0,
+positive in **all 9** sessions).
+
+![Feature-deviance vs omission](figures/oddball_error_type_dissociation.png)
+
+Are feature-deviance and omission the *same* prediction-error signal? Measured on
+the same units: **A** — their laminar profiles overlap (layer × error-type
+interaction n.s., F = 2.4, p = 0.14). **B** — but the two signals are **nearly
+independent at the single-unit level** (Spearman ρ = +0.06): a unit's
+feature-deviance barely predicts its omission response. **C** — only a weak laminar
+modulation of the balance (Kruskal p = 0.018). The interpretation is a *middle*
+position between a single canonical error signal shared cell-by-cell and cleanly
+segregated laminar circuits: overlapping populations and layers, but **largely
+different units** carrying the two error types.
+
+Reproduce all of the above in Colab:
+[`notebooks/oddball_confirmatory_ecephys.ipynb`](notebooks/oddball_confirmatory_ecephys.ipynb)
+(set `N_SESSIONS` to trade runtime for the full cohort).
+
+**A note on the other modalities.** The adaptation-controlled `DvI` is
+**spike-specific** and does not transfer directly to the calcium recordings: in the
+mesoscope (jGCaMP8s) the equiprobable control's baseline is contaminated by the slow
+indicator's response to the preceding random-orientation grating, and the imaged
+population is dominated by neurons tuned to the frequent standard (pooled DvI₉₀ ≈ 0,
+n.s.); SLAP2's gratings are a monolithic stream with no equiprobable control block.
+The tuning-free **omission** contrast is the appropriate cross-scale comparison and
+is the planned next step for the imaging modalities.
 
 ## Why a CCF package
 
@@ -317,7 +393,7 @@ openscope_ccf/          package
   figures.py            build_probe_data, make_3d, make_laminar
   data/ccf_session_index.csv   registry of CCF sessions
   data/sidecars/          prebuilt per-session sidecars (Parquet), shipped with the package
-notebooks/              Colab notebook
+notebooks/              Colab notebooks (CCF figures, RF/tuning validation, oddball analyses)
 scripts/build_all.py    batch driver
 ```
 

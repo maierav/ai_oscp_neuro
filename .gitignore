@@ -13,4 +13,9 @@ figures/*.png
 !figures/rf_significance_three_modalities.png
 !figures/direction_tuning_three_modalities.png
 !figures/oddball_ecephys_single_session.png
+!figures/oddball_confirmatory_9sessions.png
+!figures/oddball_ts_by_area.png
+!figures/oddball_laminar_latency.png
+!figures/oddball_omission_ecephys.png
+!figures/oddball_error_type_dissociation.png
 *.nwb
