@@ -227,6 +227,37 @@ tuning validates **feature** sensitivity — together the pipeline reads real vi
 signals at all three scales. Reproduce in Colab:
 [`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb).
 
+## First analysis — feature-oddball prediction error (Neuropixels)
+
+With the pipeline validated, the first prediction-error result asks whether a rare
+*oddball* orientation drives a genuine **prediction error** or merely reflects
+**stimulus-specific adaptation** of the frequent standard. The distinction is the
+whole game: a rare deviant almost always fires more than a repeated standard simply
+because the standard is fatigued. To rule that out we compare the deviant not only
+against the standard but against the **same grating shown equiprobably** in the
+`standard_control` block — physically identical, equally rare, but *not* surprising.
+The **deviance index** `DvI = (oddball − equiprobable control)/…` is therefore
+adaptation-free; the naive `OI = (oddball − standard)/…` is shown alongside.
+
+![Feature-oddball prediction error, example Neuropixels session](figures/oddball_ecephys_single_session.png)
+
+One example session (sub-830851, 141 responsive visual units):
+- **A** — the 90° oddball response exceeds both the *identical* equiprobable
+  control and the frequent standard.
+- **B** — DvI vs OI per unit; the deviance signal is present in the adaptation-free
+  index, not just the naive one.
+- **C** — deviance scales with feature distance: the orthogonal 90° deviant is
+  strongly significant (median DvI ≈ +0.34, p ≈ 9×10⁻⁹), the intermediate 45° is
+  not.
+- **D** — the 90° deviance is positive and consistent across visual areas and
+  cortical layers — a canonical rather than compartment-specific signature.
+
+**This is one example session, not the confirmatory claim.** The full analysis
+pools the 9 Neuropixels sessions with Allen CCF alignment, with cross-session
+bootstrap CIs and FDR correction across the area × layer grid, exactly as
+[pre-registered](docs/oddball_analysis_plan.md). Reproduce the example in Colab:
+[`notebooks/oddball_prediction_error_ecephys.ipynb`](notebooks/oddball_prediction_error_ecephys.ipynb).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in

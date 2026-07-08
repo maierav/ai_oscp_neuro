@@ -12,4 +12,5 @@ figures/*.png
 !figures/rf_examples_three_modalities.png
 !figures/rf_significance_three_modalities.png
 !figures/direction_tuning_three_modalities.png
+!figures/oddball_ecephys_single_session.png
 *.nwb
