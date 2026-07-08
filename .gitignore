@@ -18,4 +18,7 @@ figures/*.png
 !figures/oddball_laminar_latency.png
 !figures/oddball_omission_ecephys.png
 !figures/oddball_error_type_dissociation.png
+!figures/crossscale_psth_comparison.png
+!figures/crossscale_responsive_overlay.png
+!figures/crossscale_normalized_overlay.png
 *.nwb

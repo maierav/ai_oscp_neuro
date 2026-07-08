@@ -334,6 +334,56 @@ n.s.); SLAP2's gratings are a monolithic stream with no equiprobable control blo
 The tuning-free **omission** contrast is the appropriate cross-scale comparison and
 is the planned next step for the imaging modalities.
 
+## Comparing across scales — the timescale problem, solved empirically
+
+Before any oddball contrast can be compared across modalities, one obstacle has to
+be cleared: the three recording methods report the *same* neural event through very
+different temporal kinetics. A spike burst is over in ~150 ms; a jGCaMP8s transient
+builds and decays over ~1–2 s. A fixed post-stimulus window tuned to one modality
+therefore captures a different *fraction* of the response in another, so the same
+underlying effect reads as a different magnitude across scales — a measurement
+artifact, not biology.
+
+We solve this **empirically**, with no deconvolution or kernel-fitting. All three
+modalities recorded the same standard-oddball gratings, so we simply average the
+response to those gratings and read the integration window off the data.
+
+![Same gratings, three modalities](figures/crossscale_psth_comparison.png)
+
+The trial- and population-averaged response to the 0° standard and 90° oddball
+(single session per modality) makes the mismatch concrete: spikes track grating
+onset *and* offset within ~500 ms; the jGCaMP8s population response builds and
+decays over ~1–2 s; the SLAP2 iGluSnFR population mean stays elevated with no clean
+decay.
+
+**The key methodological point: compare on responsive cells, not the population
+mean.** Population-*mean* imaging traces are dominated by ongoing activity and give
+spurious peak times — the SLAP2 grand mean, in particular, has no reliable
+stimulus-locked peak. Restricting to responsive cells (units/ROIs with a reliable
+evoked response) recovers a real time-course in every modality.
+
+![Responsive-cell time-courses and integration windows](figures/crossscale_responsive_overlay.png)
+
+On responsive cells the timescales order sensibly by indicator kinetics — spikes
+peak at ~70 ms, iGluSnFR at ~200 ms, jGCaMP8s at ~880 ms (**A**). But the more
+useful quantity is the **cumulative fraction of the evoked response** (**B**): where
+the response actually lives in time. The 90%-capture points nearly coincide across
+modalities (~1650–1720 ms), because although the three peak at different times, all
+three responses spread across the inter-stimulus interval once the sustained/decay
+portion is included.
+
+**Practical recipe.** To put oddball responses on one footing, integrate the evoked
+response over **~0–1700 ms** (or each modality's own 90%-capture window; they nearly
+coincide), on **responsive cells**. A single common window then treats all three
+modalities fairly, with the empirical justification that ≥90% of the response is
+captured in each. This is orthogonal to — and does *not* fix — the tuning-dominance
+confound in the mesoscope feature-`DvI` noted above, which is a separate, biological
+issue.
+
+Reproduce in Colab:
+[`notebooks/crossscale_timescales.ipynb`](notebooks/crossscale_timescales.ipynb)
+(set `ONE_PER_MODALITY` for a quick pass).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in
