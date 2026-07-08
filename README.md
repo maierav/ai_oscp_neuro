@@ -55,6 +55,13 @@ Alongside these are the **cross-scale validation notebooks** (receptive fields,
 direction tuning) documented below, which double as worked examples of streaming
 and analyzing each modality.
 
+The first prediction-error analysis (the feature/orientation oddball) is
+**pre-registered** before any confirmatory result:
+[`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md). It commits the
+H0/H1 hypotheses, the adaptation-vs-deviance control (a verified equal-probability
+"many-standards" block), response windows, and statistics up front — the key
+design decisions, fixed before the p-values exist.
+
 ## Dataset at a glance
 
 The community project spans **three recording modalities** and **four
