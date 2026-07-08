@@ -57,13 +57,18 @@ glutamate ΔF/F (SLAP2):
 
 ![Example receptive fields across three recording scales](figures/rf_examples_three_modalities.png)
 
-Each panel is one unit/ROI (baseline-subtracted response averaged per screen
-position); rows use independent colour scales (spike rate vs. ΔF/F are not
-directly comparable in magnitude). Reproduce this figure end-to-end in Colab:
+Each panel is one unit/ROI, selected by **2-D Gaussian fit quality** (R²), with a
+diverging colour map centred at zero and a black half-maximum contour; titles give
+the fitted RF width (FWHM). The fitted widths are mouse-appropriate — median FWHM
+≈ 25° (ecephys), 18° (mesoscope), 15° (SLAP2, best session). We deliberately do
+**not** rank by peak/std "SNR" (which is biased toward spiky one-pixel maps) nor
+render with `vmin=0` (which crushes the graded surround to black) — both make real
+RFs look artificially point-like. Reproduce end-to-end in Colab:
 [`notebooks/rf_sanity_check_three_modalities.ipynb`](notebooks/rf_sanity_check_three_modalities.ipynb).
-The notebook also documents two SLAP2 gotchas it took to get there — the per-DMD
-onset offset, and DMD1's compressed timestamps (rebuilt over the simultaneous
-DMD2 acquisition span).
+The notebook also documents SLAP2 gotchas — the per-DMD onset offset, a compressed
+DMD timebase (rebuilt over the other DMD's simultaneous span), and strong
+session-to-session variation in RF yield (pick a good session before judging the
+modality).
 
 **Are these RFs real, or just the noise we selected for?** Since the examples are
 the top units by SNR, we test them against three noise controls: split-half
