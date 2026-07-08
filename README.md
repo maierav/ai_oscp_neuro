@@ -20,6 +20,24 @@ NWB files into two reusable products:
    boundaries on spontaneous LFP band power and MUA depth profiles, so the
    alignment can be validated against the recordings.
 
+## Dataset at a glance
+
+The community project spans **three recording modalities** and **four
+predictive-processing paradigms**. The matrix below shows what is available so
+far (sessions / mice per cell; CCF = sessions with preliminary Allen CCF
+alignment):
+
+![Data available across scales](figures/modality_paradigm_matrix.png)
+
+- **Neuropixels** (DANDI 001637) and **Mesoscope 2p** (001768) carry all four
+  paradigms with an identical block design (including an open-loop prerecorded
+  control block), enabling a cross-modal comparison of the same prediction-error
+  contrast.
+- **SLAP2** (001424) currently provides an orientation-tuning battery at
+  dendritic / glutamate (iGluSnFR) resolution rather than the four-paradigm
+  oddball design; oddball-matched SLAP2 data are expected in a later release.
+- **Standard oddball** is the one paradigm present in all three modalities.
+
 ## Why this exists
 
 The DANDI NWBs ship a per-channel CCF acronym in `electrodes.location` plus CCF

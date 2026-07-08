@@ -7,4 +7,6 @@ bg_atlases/
 bg_config/
 # generated large outputs (keep sidecars small enough to commit; figures are regenerable)
 figures/*.png
+# ...but keep documentation figures referenced from the README
+!figures/modality_paradigm_matrix.png
 *.nwb
