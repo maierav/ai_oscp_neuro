@@ -11,4 +11,5 @@ figures/*.png
 !figures/modality_paradigm_matrix.png
 !figures/rf_examples_three_modalities.png
 !figures/rf_significance_three_modalities.png
+!figures/orientation_tuning_three_modalities.png
 *.nwb

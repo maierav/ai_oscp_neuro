@@ -92,6 +92,35 @@ across sessions, so this 7 % is a conservative lower bound — the best session
 (sub-796630, shown in the gallery above) gives ~15 well-formed RFs. Section 5 of
 the notebook reproduces all three tests.
 
+## Validation — orientation tuning across all three scales
+
+A second known-answer check: orientation selectivity is the canonical property of
+mouse visual cortex, so real V1/LM neurons should be **orientation-tuned** with
+tuning that **reproduces across trial halves**. Each session's `Control block 1`
+(`standard_control`) carries a full **14-direction drifting-grating sweep** (0–315°
+in 22.5° steps, TF = 2 Hz); in SLAP2 the same directions live in the full-field
+gratings. We compute per-unit tuning curves, OSI/DSI, preferred orientation, and
+split-half tuning reliability:
+
+![Orientation tuning across three recording scales](figures/orientation_tuning_three_modalities.png)
+
+| Modality | median OSI | median DSI | split-half r |
+|---|---|---|---|
+| Neuropixels (spikes) | 0.38 | 0.18 | 0.79 |
+| Mesoscope (ΔF/F soma) | 0.63 | 0.40 | 0.60 |
+| SLAP2 (glutamate) | 0.49 | 0.31 | 0.91 |
+
+All three show strong, reproducible tuning (clean bilobed polar curves, split-half
+reliability far from the r = 0 null, preferred orientations spanning 0–180°). This
+check is **complementary** to the RF one: SLAP2 was the weakest arm for RF mapping
+(sparse, brief patches → low SNR per position) but is the *most* reliable here —
+orientation tuning uses many trials per condition and a sustained response that
+suits dendritic glutamate imaging. Mesoscope shows the sharpest selectivity
+(somatic calcium integrates the sustained response). RF mapping validates
+**spatial** sensitivity, orientation tuning validates **feature** sensitivity;
+together the pipeline reads real visual signals at all three scales. Reproduce in
+Colab: [`notebooks/orientation_tuning_three_modalities.ipynb`](notebooks/orientation_tuning_three_modalities.ipynb).
+
 ## Why this exists
 
 The DANDI NWBs ship a per-channel CCF acronym in `electrodes.location` plus CCF
