@@ -32,3 +32,4 @@ figures/*.png
 *.nwb
 !figures/sensorimotor_within_block.png
 !figures/sensorimotor_diagnostic.png
+!figures/sequence_mismatch.png

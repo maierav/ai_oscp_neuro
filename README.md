@@ -405,6 +405,42 @@ boundary set by the released data (low locomotion, small control block), not the
 analysis. It awaits sessions with more running. Reproduce:
 [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
 
+
+---
+
+## Result 4 — Sequence mismatch (prediction error in a learned temporal sequence)
+
+Results 1 and 3 define "expected" by frequency (standard-oddball) or motor contingency
+(sensorimotor). The sequence paradigm defines it by **learned temporal order**: a fixed
+4-element sequence **90° → 45° → 0° → 45°** (each element 267 ms), repeated ~1250 times per
+session, so the 3rd element (0°) becomes *predicted* by the two before it. Deviants (35 each)
+replace that expected 3rd element with an orientation shift (45°/90°), a blank, or a flow-halt.
+
+![Sequence mismatch prediction error](figures/sequence_mismatch.png)
+
+**Tuning-controlled result.** A raw "90°-deviant vs expected-0°" contrast is confounded by
+orientation preference (V1 cells respond more to 90° than 0°). We remove it with the same DvI
+logic as Result 1 — comparing the sequence deviant to the *physically identical* grating shown
+equiprobably in the `sequential_control_block` (matched 0.25 s, TF = 2 Hz), where the same
+orientation carries no sequence expectation:
+
+| deviant | DvI (vs equiprobable) | 95 % CI | p | sessions positive |
+|---|---|---|---|---|
+| 90° | **+0.21** | [+0.15, +0.27] | 7e-11 | 6/7 |
+| 45° | **+0.35** | [+0.24, +0.49] | 5e-06 | 6/7 |
+
+A positive DvI means the *sequential context*, not the orientation, drives the extra response.
+The dynamics confirm it: the deviant response peaks later (~110 ms) than the equiprobable control
+(~50 ms), a prediction-error component riding on top of the sensory drive — the same signature as
+the standard-oddball, now with expectation set by learned order rather than frequency.
+
+**Not overclaimed.** The `sequence_omission` trial type (position 5) is the *fixed* blank ending
+every sequence (present in 100 % of them), not a violation — its negative response is loss of
+visual drive. And the expected in-sequence 0° is less suppressed than an equiprobable 0° (+0.23),
+which resembles predictive suppression but cannot be separated from adaptation to the specific
+preceding element, so we rest the result on the confound-controlled DvI. Reproduce:
+[`notebooks/sequence_mismatch_ecephys.ipynb`](notebooks/sequence_mismatch_ecephys.ipynb).
+
 ---
 
 ## Cross-technique methods — why the raw numbers mislead, and how we correct
