@@ -503,6 +503,49 @@ Reproduce in Colab:
 [`notebooks/subsample_tuning_balanced.ipynb`](notebooks/subsample_tuning_balanced.ipynb)
 (set `ONE_PER_MODALITY` for a quick pass).
 
+## Stimulus omission — a tuning-free error signal across all three techniques
+
+The feature-oddball needed two separate corrections (control-referencing and
+tuning-balanced subsampling) because two-photon imaging over-samples cells tuned to the
+frequent standard, so the raw oddball-vs-standard index reverses sign. **Omission
+sidesteps that entirely.** When the expected grating is simply *withheld* — a blank where
+a stimulus was due — there is no stimulus orientation, so nothing biases which cells
+respond. The omission response reads directly off the raw population of each technique.
+
+- **Neuropixels / mesoscope:** omission is a labelled trial type in the Standard mismatch
+  block (`TrialType == "omission"`, 35 trials) — an *exact* paradigm match.
+- **SLAP2:** the omission-equivalent is the contrast-0 blank in the monolithic gratings
+  stream (not a paradigm-matched mismatch block — the weakest leg).
+
+![Omission across techniques](figures/omission_crossscale.png)
+
+| technique | omission response | z-score (95% CI) | p | % cells positive |
+|---|---|---|---|---|
+| Neuropixels | +0.40 Hz | **+1.86** [+1.36, +2.21] | 5.7e-19 | 67% |
+| Mesoscope | +0.052 dF/F | **+2.85** [+2.54, +3.14] | 1.8e-93 | 78% |
+| SLAP2 | +0.011 dF/F | **+0.18** [+0.11, +0.36] | 9.8e-05 | 66% |
+
+In every technique the omission trace rises above the standard after the withheld
+stimulus (top row). The mesoscope panel is the clearest: where a grating *is* present the
+slow calcium response actually dips, but when it's omitted the population ramps up
+strongly. Crucially there is **no sign reversal** — unlike the feature-oddball OI, the
+raw omission response is positive in the unmodified population of all three techniques,
+because omission is tuning-free.
+
+Session-to-session variability is shown honestly (panel C): the calcium sessions vary
+more than ephys (mesoscope 837568 z=+3.3 vs 845342 z=−0.16; the three SLAP2 sessions are
+weak but positive). The pooled effect is robust; the spread is not hidden.
+
+**For the H0/H1 question** (`arXiv:2504.09614`): feature-oddball (tuning-controlled) and
+omission (tuning-free) both yield positive, cross-technique-consistent prediction-error
+signals. Two error types, two independent confound-control strategies, one direction of
+effect at every scale — this favours a **common** deviance-detection mechanism across
+scales over technique- or error-type-specific circuits.
+
+Reproduce in Colab:
+[`notebooks/omission_crossscale.ipynb`](notebooks/omission_crossscale.ipynb)
+(set `ONE_PER_MODALITY` for a quick pass).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in

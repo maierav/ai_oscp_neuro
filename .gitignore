@@ -25,4 +25,5 @@ figures/*.png
 !figures/crossscale_mechanism.png
 !figures/subsample_balanced_timecourses.png
 !figures/subsample_balanced_summary.png
+!figures/omission_crossscale.png
 *.nwb
