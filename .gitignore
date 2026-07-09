@@ -23,4 +23,6 @@ figures/*.png
 !figures/crossscale_normalized_overlay.png
 !figures/crossscale_oddball_index.png
 !figures/crossscale_mechanism.png
+!figures/subsample_balanced_timecourses.png
+!figures/subsample_balanced_summary.png
 *.nwb

@@ -463,6 +463,46 @@ Reproduce in Colab:
 [`notebooks/crossscale_oddball_index.ipynb`](notebooks/crossscale_oddball_index.ipynb)
 (set `ONE_PER_MODALITY` for a quick pass).
 
+### Confirming it a second way — tuning-balanced subsampling
+
+The DvI removes the tuning confound from the *stimulus* side (reference the oddball
+against the physically identical grating in the control block). An independent check
+removes it from the *population* side instead: **subsample each technique's cells to an
+even orientation-preference (TPI) distribution** — equal numbers of 0°- and
+90°-preferring cells — so no technique is dominated by cells tuned to the frequent
+standard. We repeat the draw hundreds of times, average, and re-plot the balanced
+population under three normalizations (raw, % change, z-score) with ±SEM bands.
+
+![Tuning-balanced time-courses](figures/subsample_balanced_timecourses.png)
+
+![Balancing removes the sampling artifact](figures/subsample_balanced_summary.png)
+
+The result confirms the DvI conclusion by a completely different route. Balancing the
+tuning distribution flips the raw oddball-vs-standard index from negative to positive
+wherever it was biased:
+
+| technique | raw population OI | tuning-balanced OI (95% CI) |
+|---|---|---|
+| Neuropixels | +0.13 | **+0.17** [+0.11, +0.23] |
+| Mesoscope | **−0.45** | **+0.28** [+0.19, +0.34] |
+| SLAP2 | −0.02 | **+0.04** [+0.00, +0.10] |
+
+The mesoscope swing is the headline: its raw OI of −0.45 (the "sign reversal") becomes
+**+0.28** once the population is balanced. The size of the correction scales with the
+original bias — mesoscope had the strongest 0°-loading (median TPI −0.83) and moves
+most; Neuropixels was already near-balanced and barely shifts. In the balanced
+populations the **oddball leads the standard in all three techniques and all three
+normalizations**, so the finding is robust to normalization choice as well as to
+sampling. Two independent corrections — control-referenced (DvI) and population-balanced
+— agreeing on a positive oddball response makes the cross-scale claim considerably more
+secure. (Same **SLAP2 caveat**: with no control block its TPI and OI derive from the
+same comparison, so its balanced OI is the weakest leg; the clean result rests on
+Neuropixels + mesoscope.)
+
+Reproduce in Colab:
+[`notebooks/subsample_tuning_balanced.ipynb`](notebooks/subsample_tuning_balanced.ipynb)
+(set `ONE_PER_MODALITY` for a quick pass).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in
