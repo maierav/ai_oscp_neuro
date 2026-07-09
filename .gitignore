@@ -21,4 +21,6 @@ figures/*.png
 !figures/crossscale_psth_comparison.png
 !figures/crossscale_responsive_overlay.png
 !figures/crossscale_normalized_overlay.png
+!figures/crossscale_oddball_index.png
+!figures/crossscale_mechanism.png
 *.nwb

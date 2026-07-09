@@ -386,6 +386,83 @@ Reproduce in Colab:
 [`notebooks/crossscale_timescales.ipynb`](notebooks/crossscale_timescales.ipynb)
 (set `ONE_PER_MODALITY` for a quick pass).
 
+## The oddball index across techniques — and why the raw sign reverses
+
+With windows in hand, we can finally put the feature-oddball response on one footing
+across all three techniques. One more paradigm fact sets the usable window: in the
+mismatch block, gratings recur on a **fixed ~701 ms cycle** (367 ms grating + ~334 ms
+gap), contiguously. So the ~1700 ms *response*-capture window above spans ~2.4 stimuli
+and cannot isolate a single deviant — the isolatable per-stimulus window is capped at
+one cycle. We therefore integrate each technique over one cycle: **spikes 0–500 ms,
+calcium 0–700 ms**, on responsive cells. (For spikes this loses nothing — the response
+is over by ~500 ms; for calcium the slow tail beyond 700 ms is genuinely confounded by
+the next stimulus and cannot be attributed to the deviant.)
+
+**Two indices** (from the pre-registration):
+`OI = (R_oddball − R_standard)/(|R_oddball|+|R_standard|)` — oddball vs the *frequent*
+standard (all three techniques); and
+`DvI = (R_oddball − R_control)/(|R_oddball|+|R_control|)` — oddball vs the *physically
+identical* 90° grating in the equiprobable control block, where it is not surprising
+(Neuropixels + mesoscope; SLAP2 has no equiprobable control block).
+
+![Oddball index across techniques](figures/crossscale_oddball_index.png)
+
+The top row (response time-courses of standard / oddball / control on responsive cells)
+makes the bottom row (per-cell index violins) legible. The result splits by index:
+
+- **OI reverses sign across techniques** — mildly positive in spikes (**+0.13**),
+  strongly negative in both calcium methods (**−1.00** mesoscope, **−0.47** SLAP2).
+- **DvI stays positive wherever it can be computed** — **+0.39** spikes, **+0.11**
+  mesoscope (all sessions positive). SLAP2: not computable (no control block).
+
+### Why OI reverses — a population tuning-sampling effect, not a technique difference
+
+The sign reversal looks alarming but has a concrete, benign cause. Digging in by
+tuning, area, and response type shows it is **not** a difference in how the techniques
+report prediction error — it is a difference in **which cells each technique samples**.
+
+![Mechanism of the OI reversal](figures/crossscale_mechanism.png)
+
+- **OI tracks each cell's orientation preference** (panels A–B). Measuring preference
+  *independently* in the control block (TPI: +1 = prefers the 90° deviant orientation,
+  −1 = prefers the 0° standard orientation), OI correlates with tuning within *every*
+  technique — Neuropixels ρ = +0.54, mesoscope ρ = +0.59 (both p ≪ 1e-30). A cell that
+  prefers 90° has positive OI; a cell that prefers 0° has negative OI. Same law in
+  spikes and calcium.
+- **The cause is the sampled population** (panel C). Neuropixels samples a *balanced*
+  population (median TPI −0.05, 46% prefer 90°). Two-photon imaging is strongly
+  **0°-biased** — mesoscope median TPI −0.83 (only 26% prefer 90°), SLAP2 −0.47 —
+  because it over-samples neurons tuned to the frequent standard. That drags the
+  population-median OI negative even though individual cells obey the same OI–tuning
+  law.
+- **Split by preference, the reversal vanishes** (panel D): 0°-preferring cells have
+  negative OI and 90°-preferring cells have positive OI *in both techniques*
+  (ecephys −0.37 / +0.59; mesoscope −1.00 / +0.70). Same cells, same signs — only the
+  *mix* differs.
+- **DvI is tuning-independent** (panel E): mesoscope DvI ~ tuning ρ = −0.00 (p = 0.98).
+  Referencing the physically identical grating in the control block cancels the tuning
+  bias that dominates OI — which is exactly why DvI transfers across scales and OI does
+  not.
+- **Response type** (panel F): Neuropixels retains genuinely *suppressive* cells
+  (~28%); the calcium responsive-cell definition admits only *excitatory* ones (dF/F
+  suppression below an already-low baseline is hard to detect — a second, smaller
+  sampling bias). Suppressive ephys cells have high OI (+0.74, a cell suppressed by the
+  standard is relatively released by the deviant) but their DvI stays positive (+0.29).
+  The deviance signal survives across response type.
+
+**The lesson, for humans and for models reusing this repo:** never compare a raw
+oddball-vs-standard contrast across recording techniques that sample cells differently
+— the population tuning bias will masquerade as a change in the effect. Always
+reference an equiprobable control of the *physically identical* stimulus. On that
+footing, feature-oddball deviance detection is a genuine, positive, cross-scale
+phenomenon. **SLAP2 caveat:** with no equiprobable control block, its OI and its tuning
+index derive from the same 0°-vs-90° comparison, so tuning and deviance cannot be
+separated independently there — the clean dissociation rests on Neuropixels + mesoscope.
+
+Reproduce in Colab:
+[`notebooks/crossscale_oddball_index.ipynb`](notebooks/crossscale_oddball_index.ipynb)
+(set `ONE_PER_MODALITY` for a quick pass).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in
