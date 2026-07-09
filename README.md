@@ -342,6 +342,71 @@ contrast.
 
 ---
 
+## Result 3 — Sensorimotor mismatch (motor-based prediction error)
+
+Results 1–2 test **sensory** prediction error. The sensorimotor paradigm tests a
+different prediction: how the animal's own movement should change what it sees.
+Visual flow is coupled to running on a wheel (closed loop); a `motor_halt` freezes
+the flow mid-run, a `motor_omission` drops it, orientation deviants rotate it — each
+violating the **motor–sensory** contingency. The designed control is `Control block 4`
+(`open_loop_prerecorded`): the identical visual events played back **decoupled** from
+running, so *closed-loop − open-loop* isolates the motor-based error.
+
+**This paradigm is power-limited by locomotion, and we report it honestly.** A
+motor–sensory mismatch only exists while the animal runs, but these mice are
+stationary most of the time (median speed 0; running >1 cm/s in 5–49 % of the session
+for 7 of 8 mice), and the open-loop control block has only **8 events per type**.
+Running has to coincide with those 8 events — across 8 CCF sessions it does so cleanly
+in only one (sub-830794). So we give two contrasts of differing power.
+
+### Within-block deviance — well-powered (8 sessions)
+
+![Sensorimotor within-block deviance](figures/sensorimotor_within_block.png)
+
+Each deviant's response is measured against the ongoing standard flow (the pre-event
+window *is* the standard). All three visual/omission deviants drive robust responses,
+confirming deviance detection operates in the sensorimotor block as it does in the
+standard-oddball block — on >1300 units across 8 mice:
+
+| deviant | running (median) | rest (median) | p (rest) | % positive |
+|---|---|---|---|---|
+| orientation 90° | +0.75 Hz | +2.67 Hz | ~1e-101 | 77 % |
+| orientation 45° | +0.40 Hz | +1.29 Hz | ~1e-68 | 71 % |
+| omission | ~0 Hz | +0.76 Hz | ~1e-61 | 65 % |
+
+(Deviance is larger at rest because locomotion elevates the ongoing baseline the
+deviant is measured against; both states are highly significant.)
+
+The **flow-halt is the one purely motor-contingent event**, and it behaves unlike the
+visual deviants (panels B–C): at rest, halting the flow *reduces* firing (median
+−0.12 Hz, negative in 6 of 7 sessions — freezing the flow removes visual drive), but
+during running that response is pushed up toward positive. A locomotion-dependent
+positive component at the halt is the signature of a motor-based prediction error.
+It is directionally consistent (paired +0.14 Hz, running > rest) but underpowered —
+only 3 sessions carry both running and rest halts (p = 0.18).
+
+### Closed-loop vs open-loop — the designed contrast, single powered session
+
+![Sensorimotor closed-vs-open, power-limited](figures/sensorimotor_diagnostic.png)
+
+Where the fully-designed contrast is computable (sub-830794, which ran 88 % of the
+session), the **omission** closed-loop response significantly exceeds the open-loop
+playback (Δ = +0.35 Hz, 95 % CI [+0.03, +0.58]), while the purely-visual orientation
+deviants — which carry information with or without the motor loop — show no
+closed/open difference. The halt points the same way (Δ = +0.01 Hz) but its CI crosses
+zero, so it is suggestive, not significant. That dissociation (motor-contingent events
+differ from playback, purely-visual events don't) is exactly the motor-prediction
+signature, but it rests on one mouse.
+
+**Bottom line:** the sensorimotor block *confirms* deviance detection at the population
+level and is *consistent with* a motor-based prediction error in the two places it can
+be measured, without yet establishing the latter at population scale — an honest
+boundary set by the released data (low locomotion, small control block), not the
+analysis. It awaits sessions with more running. Reproduce:
+[`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
+
+---
+
 ## Cross-technique methods — why the raw numbers mislead, and how we correct
 
 The single most important thing to understand before comparing responses across

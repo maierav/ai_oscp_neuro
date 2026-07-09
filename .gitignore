@@ -30,3 +30,5 @@ figures/*.png
 !figures/responsiveness_matching.png
 !figures/timeseries_and_adaptation.png
 *.nwb
+!figures/sensorimotor_within_block.png
+!figures/sensorimotor_diagnostic.png
