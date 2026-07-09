@@ -228,7 +228,16 @@ session-stratified bootstrap CIs and FDR correction across the area × layer gri
   **13/15** area × layer cells, with a superficial-heavy gradient (L2/3 ≈ +0.68 →
   L6a ≈ +0.37; panel F).
 
-A single example session (sub-830851) is worked end-to-end in
+A single example session (sub-830851, 141 responsive visual units) shows the same
+structure at the individual level — the 90° oddball exceeds both the identical
+equiprobable control and the frequent standard, the deviance is present in the
+adaptation-free DvI (not just the naive OI), and it scales with feature distance
+(orthogonal 90° strongly significant, median DvI ≈ +0.34, p ≈ 9×10⁻⁹; intermediate
+45° not):
+
+![Feature-oddball prediction error, example Neuropixels session](figures/oddball_ecephys_single_session.png)
+
+The example is worked end-to-end in
 [`notebooks/oddball_prediction_error_ecephys.ipynb`](notebooks/oddball_prediction_error_ecephys.ipynb);
 the confirmatory pool is in
 [`notebooks/oddball_confirmatory_ecephys.ipynb`](notebooks/oddball_confirmatory_ecephys.ipynb).
