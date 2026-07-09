@@ -546,6 +546,93 @@ Reproduce in Colab:
 [`notebooks/omission_crossscale.ipynb`](notebooks/omission_crossscale.ipynb)
 (set `ONE_PER_MODALITY` for a quick pass).
 
+## Cross-technique correction principles (and why the mesoscope differs)
+
+The oddball and omission analyses above kept running into the same obstacle: the three
+recording techniques do not sample neurons the same way, so a raw response comparison
+across them is not meaningful. This section consolidates *why* they differ and *how* to
+compare them fairly — the methodological capstone of the oddball work, and the single
+most important thing for a future user (or LMM) to understand before comparing across
+scales.
+
+### Why the mesoscope data looks so different — four compounding factors
+
+![Mesoscope difference diagnostic](figures/mesoscope_difference_diagnostic.png)
+
+1. **Detection sensitivity.** Neuropixels finds ~91% of visual units responsive to the
+   standard; the mesoscope ~51%, SLAP2 ~42%. Calcium imaging only sees cells whose
+   spiking crosses the indicator threshold, silently dropping the weakly-driven majority.
+2. **A definitional asymmetry.** The ephys responsiveness rule (Wilcoxon p<0.05) admits
+   suppressed-by-standard cells (28% of responsive ephys units); the imaging rule
+   (p<0.05 **and mean>0**) excludes them. The techniques were not analyzing the same
+   *kind* of cell.
+3. **Indicator kinetics.** Spikes are transient and adapting; calcium is slow and
+   sustained. The standard trace dips below baseline late in ephys but stays elevated in
+   calcium.
+4. **Calcium nonlinearity sharpens apparent tuning.** 58% of mesoscope cells pile at
+   |TPI|>0.9 vs 37% in ephys — a cell responds to its preferred orientation and goes
+   *invisible* for the orthogonal one, saturating the tuning index toward ±1. This is the
+   proximate cause of the −1.00 raw mesoscope OI. Note the mesoscope images depths
+   62–385 µm (superficial through L5), so this is *not* a "superficial-layer" artifact —
+   it is technique-intrinsic.
+
+### The correction principle — match responsiveness AND tuning
+
+![Responsiveness matching](figures/responsiveness_matching.png)
+
+> **Cross-technique comparisons of neural responses must be matched on both what fraction
+> of cells you detect (the responsiveness floor) and which cells among them you keep (the
+> tuning distribution).** Controlling tuning alone is insufficient, because the detection
+> threshold silently pre-selects a tuning-biased subset.
+
+Three levels of the correction, applied to the feature-oddball index:
+
+1. **Matched responsiveness criterion.** Applying the same excitatory-only rule to all
+   three techniques (rather than the asymmetric one) moves the ephys tuning bias from
+   −0.05 to −0.18 — the asymmetric rule had flattered ephys. DvI is untouched
+   (+0.39 → +0.40).
+2. **Detection-floor test.** Restricting ephys to progressively stronger-responding cells
+   *trends* its tuning bias toward the mesoscope's (TPI −0.18 → −0.37 at the strongest
+   quartile), showing the population skew is partly a shared detection-threshold effect.
+   The imaging-matched ~50% fraction alone does **not** flip ephys OI negative (OI still
+   +0.03 there); only a stricter cut does. The calcium *saturation* (|TPI|>0.9 ≈ 58%) is
+   not reproduced at any ephys threshold — that piece is calcium-specific.
+3. **Joint balancing (responsiveness × tuning).** Balancing on both flips the mesoscope
+   OI from −1.00 to **+0.16** (95% CI [+0.04, +0.23]) and gives ephys +0.20 — both
+   positive under the fully-matched comparison. **SLAP2 stays negative** (−0.12): with no
+   independent control block its tuning index *is* its oddball index, so the two cannot be
+   separated (the known SLAP2 caveat).
+
+### Time series, not just summary stats
+
+![Time series and adaptation control](figures/timeseries_and_adaptation.png)
+
+The joint-balanced result as time-courses (top row): the oddball leads the standard
+throughout the stimulus window in every technique, including the mesoscope whose raw OI
+was −1.00.
+
+The bottom row is the **adaptation control** for the omission response — the alternative
+a reviewer would raise: is the (positive, large) mesoscope omission response merely
+*release from adaptation*? If so, the standard response should decline across the standard
+train, and the omission should not exceed the un-adapted (early) standard. **Neither
+holds.** Splitting the standard by position in the train (early/mid/late), the traces are
+essentially superimposed — no adaptation (mesoscope window means 0.018 → 0.016 → 0.022
+dF/F; ephys 4.1 → 4.6 Hz). And the omission (0.088 dF/F) exceeds even the earliest,
+least-adapted standard (0.018) by ~4–5×. There is no adaptation to be released from, and
+the response dwarfs the thing it would release toward — an active, positively-signed
+prediction-error signal, not passive rebound. (SLAP2's contrast-0 blanks have no labelled
+standard-train structure, so the position analysis is not applicable there.)
+
+**Bottom line:** three confound-free routes — control-referenced DvI, tuning-free
+omission, and joint-balanced OI — all agree on a positive cross-scale prediction-error
+signal, and the omission survives its most likely artifactual explanation. This is a
+substantially stronger footing for a **common** deviance-detection mechanism (H1 of
+`arXiv:2504.09614`) than any single contrast.
+
+Reproduce in Colab:
+[`notebooks/crosstechnique_corrections.ipynb`](notebooks/crosstechnique_corrections.ipynb)
+(set `ONE_PER_MODALITY` for a quick pass).
+
 ## Why a CCF package
 
 The raw NWB CCF fields are awkward to use directly for the two reasons detailed in

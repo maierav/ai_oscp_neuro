@@ -26,4 +26,7 @@ figures/*.png
 !figures/subsample_balanced_timecourses.png
 !figures/subsample_balanced_summary.png
 !figures/omission_crossscale.png
+!figures/mesoscope_difference_diagnostic.png
+!figures/responsiveness_matching.png
+!figures/timeseries_and_adaptation.png
 *.nwb
