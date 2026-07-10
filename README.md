@@ -37,12 +37,12 @@ headline scientific result: **every kind of violated expectation we can test —
 whether the surprise is defined by stimulus frequency, motor contingency, learned
 sequence order, or learned timing — evokes a positively-signed prediction-error
 response**, and the feature-oddball form survives three independent confound
-controls and generalizes across recording scales. One direction across five
-dimensions of violation favours the common-mechanism reading (H1).
+controls and generalizes across recording scales. One direction across four
+kinds of violated expectation favours the common-mechanism reading (H1).
 
 ## Results at a glance
 
-![Common deviance-detection signal across five dimensions of prediction violation](figures/capstone_synthesis.png)
+![Common deviance-detection signal across four kinds of violated expectation, generalizing across recording scales](figures/capstone_synthesis.png)
 
 The project's five prediction-error results, on one axis. Each row of panel A is a
 different way of making a stimulus *unexpected*; the index is the deviant response
@@ -374,8 +374,8 @@ DvI, tuning-free omission, and responsiveness×tuning-balanced OI), all yield a
 effect across scales, error types, and confound controls is a substantially
 stronger footing for a **common** deviance-detection mechanism (H1) than any single
 contrast. Results 3–5 extend this to three further kinds of violated expectation
-(motor contingency, sequence order, timing); the combined five-way picture is in
-[**Results at a glance**](#results-at-a-glance).
+(motor contingency, sequence order, timing); the combined four-error-type picture,
+plus the cross-scale generalization, is in [**Results at a glance**](#results-at-a-glance).
 
 ---
 
