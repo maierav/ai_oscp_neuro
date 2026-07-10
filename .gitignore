@@ -35,3 +35,5 @@ figures/*.png
 !figures/sequence_mismatch.png
 !figures/duration_mismatch.png
 !figures/capstone_synthesis.png
+!figures/h1h0_pe_timecourses_area.png
+!figures/h1h0_anatomical_test.png

@@ -513,6 +513,47 @@ strongest form of a prediction-error signal — a fourth error type pointing the
 others. Reproduce:
 [`notebooks/duration_mismatch_ecephys.ipynb`](notebooks/duration_mismatch_ecephys.ipynb).
 
+
+---
+
+## Result 6 — A shared laminar substrate across error types (partial H1 test)
+
+Results 1–5 show that every kind of violated expectation drives a positive prediction-error
+response. But "all positive" is equally consistent with H1 (one common deviance-detection
+mechanism) and H0 (separate circuits, each tuned to its own error type). The test that
+distinguishes them: **do the same anatomical populations carry different error types?** Five
+animals (830794, 830795, 830848, 830851, 830852) were recorded across the feature-oddball,
+sequence, and duration paradigms — in separate sessions, but with probes targeting the same
+visual areas — so we can compare the PE's anatomical profile across error types using the CCF
+area/layer labels.
+
+![Prediction-error time courses by visual area](figures/h1h0_pe_timecourses_area.png)
+
+The time courses (deviant − matched control, in Hz, same 5 animals) show the actual PE dynamics
+per area, not a collapsed summary. VISa is consistently the weakest carrier; VISp/VISl/VISlm carry
+the bulk of the signal in all three paradigms. (The duration panel plots the omission's response
+at the expected time — the correct analog of "extra response to the unexpected event," since the
+omission has no stimulus to subtract.)
+
+![Testing H1 vs H0 anatomically](figures/h1h0_anatomical_test.png)
+
+**The one robust finding — a shared coarse laminar signature.** All three error types concentrate
+the PE in the **granular/infragranular layers (L4–L6)**, with superficial L1–3 weakest (panel A).
+A common laminar bias, independent of how the expectation was violated, is what H1 predicts.
+
+**The honest caveat.** At full area×layer resolution the profiles only *lean* the same way —
+feature-oddball vs sequence Spearman ρ = +0.56, vs duration ρ = +0.53 (panels B–C), both
+**not significant** at n = 10 anatomical cells, and sequence vs duration is essentially
+uncorrelated (ρ = +0.19). The peak layer even differs across types (oddball L5, sequence L6,
+duration L4). So this is **partial support for H1, not a confirmation**: the shared L4–L6 bias
+points toward a common substrate, but the fine anatomical alignment is loose and the sample
+(5 animals, separate sessions per paradigm) is underpowered to settle it. A clean test would need
+the same units recorded across paradigms in one session — which this dataset does not provide — or
+many more CCF sessions. Reproduce:
+[`notebooks/h1h0_shared_substrate_ecephys.ipynb`](notebooks/h1h0_shared_substrate_ecephys.ipynb);
+profiles in [`data/h1h0_laminar_profiles.csv`](data/h1h0_laminar_profiles.csv) and
+[`data/h1h0_area_layer_profiles.csv`](data/h1h0_area_layer_profiles.csv).
+
 ---
 
 ## Cross-technique methods — why the raw numbers mislead, and how we correct
