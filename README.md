@@ -30,12 +30,47 @@ laid out in the community white paper:
 preliminary Allen CCF alignment usable and attachable to any downstream analysis;
 (2) a set of pipeline **validations** (receptive fields, direction tuning) that
 pass before any prediction-error claim is trusted; and (3) the **prediction-error
-analyses** themselves — feature-oddball and omission — carried across all three
-recording scales, with the cross-technique confounds explicitly measured and
-controlled. The headline scientific result: **a feature-oddball and a stimulus
-omission both evoke a positive prediction-error response at every scale**, and it
-survives three independent confound controls — favouring the common-mechanism
-reading (H1).
+analyses** themselves — feature-oddball, omission, sensorimotor, sequence, and
+timing — carried across the three recording scales where the paradigm allows,
+with the cross-technique confounds explicitly measured and controlled. The
+headline scientific result: **every kind of violated expectation we can test —
+whether the surprise is defined by stimulus frequency, motor contingency, learned
+sequence order, or learned timing — evokes a positively-signed prediction-error
+response**, and the feature-oddball form survives three independent confound
+controls and generalizes across recording scales. One direction across five
+dimensions of violation favours the common-mechanism reading (H1).
+
+## Results at a glance
+
+![Common deviance-detection signal across five dimensions of prediction violation](figures/capstone_synthesis.png)
+
+The project's five prediction-error results, on one axis. Each row of panel A is a
+different way of making a stimulus *unexpected*; the index is the deviant response
+relative to a physically-matched control (bounded −1…+1, so techniques and
+paradigms are comparable). All four are positive with confidence intervals
+excluding zero — the deviance signal does not depend on *how* the expectation was
+set:
+
+| error type | expectation set by | PE index | sessions | cells positive |
+|---|---|---|---|---|
+| **Feature-oddball** | stimulus frequency | **+0.45** | 9 | 79 % |
+| **Sequence** | learned temporal order | **+0.21** | 7 | 59 % |
+| **Duration / timing** | learned interval timing | **+0.32** | 6 | 74 % |
+| **Sensorimotor** | motor–visual contingency | **+0.09** | 1 (power-limited) | 56 % |
+
+Panel B shows the feature-oddball form generalizing across recording scales
+(Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission contrast).
+The sensorimotor row is deliberately flagged: its designed closed-loop/open-loop
+contrast is only cleanly computable in one high-locomotion session (see Result 3),
+so it enters this summary as suggestive, not established. The full logic, controls,
+and caveats for each row are in the Result sections below.
+
+The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
+and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv); each is recomputed
+from its paradigm's per-unit table by the corresponding Result notebook
+(`oddball_confirmatory_ecephys`, `sequence_mismatch_ecephys`, `duration_mismatch_ecephys`,
+`sensorimotor_mismatch_ecephys`, and the cross-scale set), which stream the NWB files
+directly from DANDI.
 
 ## What's in this repository
 
@@ -338,7 +373,9 @@ DvI, tuning-free omission, and responsiveness×tuning-balanced OI), all yield a
 **positive prediction-error response at every recording scale**. One direction of
 effect across scales, error types, and confound controls is a substantially
 stronger footing for a **common** deviance-detection mechanism (H1) than any single
-contrast.
+contrast. Results 3–5 extend this to three further kinds of violated expectation
+(motor contingency, sequence order, timing); the combined five-way picture is in
+[**Results at a glance**](#results-at-a-glance).
 
 ---
 
