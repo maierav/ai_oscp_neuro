@@ -65,6 +65,15 @@ contrast is only cleanly computable in one high-locomotion session (see Result 3
 so it enters this summary as suggestive, not established. The full logic, controls,
 and caveats for each row are in the Result sections below.
 
+"All positive," though, is consistent with **both** a single common deviance-detection
+mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
+[**Result 6**](#result-6--a-shared-laminar-substrate-across-error-types-partial-h1-test)
+tests this anatomically, using the CCF area/layer labels on the five animals recorded
+across the feature-oddball, sequence, and duration paradigms: all three concentrate the
+prediction error in the granular/infragranular layers (L4–L6), a shared laminar signature
+consistent with H1 — but the finer area×layer alignment is only partial and underpowered,
+so it is **partial support, not a confirmation**.
+
 The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
 and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv); each is recomputed
 from its paradigm's per-unit table by the corresponding Result notebook
