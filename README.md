@@ -159,9 +159,13 @@ drifting-grating result "orientation tuning" is the mistake to avoid.
 Indexing `electrodes` directly assigns every unit to the first probe. Correct
 mapping (add the per-probe row offset) lives in `nwbio.unit_electrode_rows()`.
 `units.device_name` is a per-session device identifier, **not** an anatomical
-label — get area/layer from CCF. Real CCF alignment is present in **30 of 48**
-usable ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest
-carry placeholder `"unknown"` locations.
+label — get area/layer from CCF. Real CCF alignment is present in **57 of 60**
+ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest carry
+placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
+**CCF status is per-session, not per-subject** — `sub-832691` has one session with
+`"unknown"` for all 2880 channels and another with full CCF, so never infer a
+session's alignment from a sibling session of the same animal. Regenerate the
+registry with `python scripts/rebuild_session_index.py`.
 
 **CCF acronyms encode area *and* layer.** `electrodes.location` gives e.g. `VISp5`
 (area `VISp`, layer `5`), `DG-mo`, `CA1` (a hippocampal subfield, *not* a layer),
@@ -451,6 +455,18 @@ boundary set by the released data (low locomotion, small control block), not the
 analysis. It awaits sessions with more running. Reproduce:
 [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
 
+> **Update — those sessions now exist.** `scripts/audit_locomotion.py` scores all 16
+> SENSORYMOTOR sessions on the gating criterion (running >1 cm/s in the 1 s before each
+> of the 8 open-loop events per deviant type). **Six sessions clear ≥3 running events on
+> all four deviant types, all with real CCF** — `sub-848387` (8/8/8/8, ran 97 % of the
+> session), `sub-830848` (8/8/8/8), `sub-830794` (7/7/6/7, the session used above),
+> `sub-832691` (5/6/5/7), `sub-830847` (7/4/3/3), `sub-834686` (4/3/3/3). The remaining
+> ten sessions ran 7–38 % and carry ≤3 running open-loop events per type.
+> Note `sub-830848` was already in the registry, so even the earlier data supported more
+> than one session. **The closed-vs-open contrast has not yet been recomputed on this
+> set** — the inclusion rule should be pre-committed before it is, per
+> [`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md).
+
 
 ---
 
@@ -722,7 +738,15 @@ openscope_ccf/          package
   data/sidecars/          prebuilt per-session sidecars (Parquet), shipped with the package
 notebooks/              Colab notebooks (CCF figures, validation, prediction-error analyses)
 scripts/build_all.py    batch driver
+scripts/rebuild_session_index.py  re-sweep DANDI 001637 -> ccf_session_index.csv
+scripts/audit_locomotion.py       score sensorimotor sessions on open-loop running
 ```
+
+`rebuild_session_index.py` re-derives the registry from the live dandiset, so the
+index tracks new uploads instead of going stale. `audit_locomotion.py` scores every
+SENSORYMOTOR session on the criterion that gates Result 3 — how many of the 8
+`Control block 4` open-loop events per deviant type occurred while the animal was
+running (>1 cm/s in the preceding 1 s).
 
 `load_ccf`/`attach` resolve sidecars from `./data/sidecars` if present, else fall
 back to the copy shipped inside the installed package — so they work from a clone
