@@ -46,6 +46,7 @@ subject,date,paradigm,n_units,gb,aid,ccf,ccf_xyz,n_vis_chans
 834686,2026-03-26-16-15-13,sensorimotor,3163,12.9,41767a03-31fc-4ceb-90eb-d31228f3c3cc,True,True,297
 834687,2026-03-16-16-33-30,sequence,3670,13.8,7fbb5805-b423-4dba-b7d6-9a4af48a2023,True,True,313
 834687,2026-03-17-16-18-25,duration,3701,13.7,3cbaa2f1-687c-438f-adea-358b4893383f,True,True,326
+834687,2026-03-18-15-50-10,standard_oddball,3133,12.7,c7d17fac-69ad-4fcd-9409-18c01181e6d4,True,True,280
 834691,2026-02-16-11-02-15,sensorimotor,4234,14.4,0cc012fd-e92c-4087-95ef-150d00d59b42,True,True,311
 834691,2026-02-17-10-49-35,standard_oddball,2971,11.2,9a3f32bf-ee7f-4b36-ae05-6f8217d8a1f0,True,True,282
 848387,2026-05-04-16-19-01,sensorimotor,3428,13.4,641156f5-4e54-42b2-9017-1134cf3115ea,True,True,228
