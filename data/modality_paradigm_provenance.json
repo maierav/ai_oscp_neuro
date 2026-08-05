@@ -1,0 +1,1064 @@
+{
+ "ecephys": [
+  {
+   "path": "sub-832691/sub-832691_ses-ecephys-832691-2026-03-23-11-28-47_ecephys.nwb",
+   "aid": "ed0a9668-90f7-45bd-9b2f-c62905a24f07",
+   "subject": "832691",
+   "paradigm": "sequence",
+   "ccf": false
+  },
+  {
+   "path": "sub-834687/sub-834687_ses-ecephys-834687-2026-03-19-16-06-07_ecephys.nwb",
+   "aid": "bf725c9c-38cd-4c41-b632-5347bcc18954",
+   "subject": "834687",
+   "paradigm": "sensorimotor",
+   "ccf": false
+  },
+  {
+   "path": "sub-830795/sub-830795_ses-ecephys-830795-2026-02-26-16-01-33_ecephys.nwb",
+   "aid": "c9024a36-e476-4ffc-9e12-666e6ed3aec7",
+   "subject": "830795",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-820459/sub-820459_ses-ecephys-820459-2025-11-10-15-07-13_ecephys.nwb",
+   "aid": "e3cbee16-232a-4874-8b7e-cfbaebdfeeaf",
+   "subject": "820459",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830849/sub-830849_ses-ecephys-830849-2026-03-07-09-48-16_ecephys.nwb",
+   "aid": "ab8ec755-2b87-45c3-a29d-dd88955334b8",
+   "subject": "830849",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830794/sub-830794_ses-ecephys-830794-2026-01-28-11-01-44_ecephys.nwb",
+   "aid": "6068eec9-d614-471c-aa33-0ab27dc66475",
+   "subject": "830794",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830852/sub-830852_ses-ecephys-830852-2026-02-23-10-31-02_ecephys.nwb",
+   "aid": "e15084a4-6372-4a2a-90a7-64ef0e4450b0",
+   "subject": "830852",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830851/sub-830851_ses-ecephys-830851-2026-03-17-10-46-04_ecephys.nwb",
+   "aid": "9b9e8abe-7b43-47f1-b8e1-4114f87898a1",
+   "subject": "830851",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830848/sub-830848_ses-ecephys-830848-2026-03-05-16-07-50_ecephys.nwb",
+   "aid": "c53ec231-46f7-42d6-b89a-19e260b8eaa9",
+   "subject": "830848",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830848/sub-830848_ses-ecephys-830848-2026-03-04-15-34-54_ecephys.nwb",
+   "aid": "228c2c2e-1daf-4bf6-9f66-eb6b2bce5ba5",
+   "subject": "830848",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830846/sub-830846_ses-ecephys-830846-2026-03-09-10-32-54_ecephys.nwb",
+   "aid": "03973a42-cf55-476f-80d7-85bc402fa57b",
+   "subject": "830846",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-834691/sub-834691_ses-ecephys-834691-2026-02-16-11-02-15_ecephys.nwb",
+   "aid": "0cc012fd-e92c-4087-95ef-150d00d59b42",
+   "subject": "834691",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-834691/sub-834691_ses-ecephys-834691-2026-02-17-10-49-35_ecephys.nwb",
+   "aid": "9a3f32bf-ee7f-4b36-ae05-6f8217d8a1f0",
+   "subject": "834691",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830795/sub-830795_ses-ecephys-830795-2026-02-24-15-08-59_ecephys.nwb",
+   "aid": "1a3aac78-34f5-44c4-b644-7c16bc313ceb",
+   "subject": "830795",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830852/sub-830852_ses-ecephys-830852-2026-02-26-10-49-56_ecephys.nwb",
+   "aid": "3ffe2e3d-9c41-459f-819f-1b72ac5284a2",
+   "subject": "830852",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830794/sub-830794_ses-ecephys-830794-2026-01-27-11-25-31_ecephys.nwb",
+   "aid": "a23eba88-5d08-4e4b-89e1-a2a10fd143b5",
+   "subject": "830794",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830849/sub-830849_ses-ecephys-830849-2026-03-04-10-14-36_ecephys.nwb",
+   "aid": "fe5b6b44-12a6-4f59-a91f-953850564fb0",
+   "subject": "830849",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830848/sub-830848_ses-ecephys-830848-2026-03-02-15-05-26_ecephys.nwb",
+   "aid": "84b56f6e-7ade-4790-96e1-9bbc82cd5688",
+   "subject": "830848",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830794/sub-830794_ses-ecephys-830794-2026-01-29-11-12-57_ecephys.nwb",
+   "aid": "b383b4ff-a2b9-4497-8c8f-9f77de89e1b0",
+   "subject": "830794",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830848/sub-830848_ses-ecephys-830848-2026-03-03-14-02-09_ecephys.nwb",
+   "aid": "cc3b7c7b-d489-460c-b575-40b9edf59e2c",
+   "subject": "830848",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830851/sub-830851_ses-ecephys-830851-2026-03-16-10-18-07_ecephys.nwb",
+   "aid": "fc14f27c-4b7d-4332-8562-a4c824f757f3",
+   "subject": "830851",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830852/sub-830852_ses-ecephys-830852-2026-02-25-10-32-11_ecephys.nwb",
+   "aid": "6f14398a-7abc-446c-a5ab-c008f52c7129",
+   "subject": "830852",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830851/sub-830851_ses-ecephys-830851-2026-03-19-10-49-11_ecephys.nwb",
+   "aid": "0167df0a-b5f1-45bd-9659-c32ac132d875",
+   "subject": "830851",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830851/sub-830851_ses-ecephys-830851-2026-03-18-10-24-59_ecephys.nwb",
+   "aid": "24822bc8-01d9-473f-9eef-615fa01119d9",
+   "subject": "830851",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830846/sub-830846_ses-ecephys-830846-2026-03-11-10-19-32_ecephys.nwb",
+   "aid": "680d1c0c-e338-4d0b-ba29-4329436d2ae2",
+   "subject": "830846",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830847/sub-830847_ses-ecephys-830847-2026-03-10-16-32-25_ecephys.nwb",
+   "aid": "bc2150b9-c9af-43af-a9ea-31f53fd4c89e",
+   "subject": "830847",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830794/sub-830794_ses-ecephys-830794-2026-01-26-12-02-05_ecephys.nwb",
+   "aid": "0c67a84f-7da3-44b2-b707-72ab376a9034",
+   "subject": "830794",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830849/sub-830849_ses-ecephys-830849-2026-03-06-10-51-58_ecephys.nwb",
+   "aid": "ce62d153-644b-4da9-b5a7-823353bb7ccb",
+   "subject": "830849",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830795/sub-830795_ses-ecephys-830795-2026-02-25-16-03-31_ecephys.nwb",
+   "aid": "4095a089-8cb6-4101-821c-9d93e2c2dee7",
+   "subject": "830795",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830852/sub-830852_ses-ecephys-830852-2026-02-24-10-20-58_ecephys.nwb",
+   "aid": "b2f4bb1b-5092-4392-b4fa-b25802ea7769",
+   "subject": "830852",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-820459/sub-820459_ses-ecephys-820459-2025-11-12-14-34-33_ecephys.nwb",
+   "aid": "cfe8eaaf-2f55-4147-aa82-1103ad09274c",
+   "subject": "820459",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-832691/sub-832691_ses-ecephys-832691-2026-03-25-10-22-33_ecephys.nwb",
+   "aid": "2376172b-955a-4533-9342-fdb699cf92fc",
+   "subject": "832691",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-832691/sub-832691_ses-ecephys-832691-2026-03-26-10-51-37_ecephys.nwb",
+   "aid": "2255d7ed-7924-4b4f-9823-ac28d871463f",
+   "subject": "832691",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-834686/sub-834686_ses-ecephys-834686-2026-03-25-15-47-48_ecephys.nwb",
+   "aid": "8bafe4a5-40fc-42a4-a7c4-eea4acbc6fca",
+   "subject": "834686",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-834686/sub-834686_ses-ecephys-834686-2026-03-24-15-41-18_ecephys.nwb",
+   "aid": "62264fed-94d4-4115-a875-88625ffd2686",
+   "subject": "834686",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-834686/sub-834686_ses-ecephys-834686-2026-03-26-16-15-13_ecephys.nwb",
+   "aid": "41767a03-31fc-4ceb-90eb-d31228f3c3cc",
+   "subject": "834686",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-848387/sub-848387_ses-ecephys-848387-2026-05-07-15-46-10_ecephys.nwb",
+   "aid": "27b29de0-84f2-4eb5-9998-c32065b528d3",
+   "subject": "848387",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-848387/sub-848387_ses-ecephys-848387-2026-05-05-15-55-50_ecephys.nwb",
+   "aid": "c7ec7bc4-3836-467a-af53-33a6605a1d61",
+   "subject": "848387",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-848390/sub-848390_ses-ecephys-848390-2026-05-06-09-54-56_ecephys.nwb",
+   "aid": "0e5b530a-e22d-4bf8-a5d7-5108229c899a",
+   "subject": "848390",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-830795/sub-830795_ses-ecephys-830795-2026-02-23-15-03-59_ecephys.nwb",
+   "aid": "3f7f6abd-de5e-4e78-9473-efd672896ac4",
+   "subject": "830795",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-848390/sub-848390_ses-ecephys-848390-2026-05-05-10-08-25_ecephys.nwb",
+   "aid": "755840d4-f9e5-4517-83ad-4273521e548c",
+   "subject": "848390",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-832691/sub-832691_ses-ecephys-832691-2026-03-24-10-04-30_ecephys.nwb",
+   "aid": "e8dc5ef4-720b-4fb4-a493-e8dc2ef2b8d6",
+   "subject": "832691",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830849/sub-830849_ses-ecephys-830849-2026-03-05-10-41-20_ecephys.nwb",
+   "aid": "cdf63e04-05d0-457a-af66-2de1014eb1d4",
+   "subject": "830849",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-834687/sub-834687_ses-ecephys-834687-2026-03-17-16-18-25_ecephys.nwb",
+   "aid": "3cbaa2f1-687c-438f-adea-358b4893383f",
+   "subject": "834687",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-848390/sub-848390_ses-ecephys-848390-2026-05-07-10-22-45_ecephys.nwb",
+   "aid": "2ee1451c-987e-4dfb-b2eb-be5cd3d52adc",
+   "subject": "848390",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-834687/sub-834687_ses-ecephys-834687-2026-03-16-16-33-30_ecephys.nwb",
+   "aid": "7fbb5805-b423-4dba-b7d6-9a4af48a2023",
+   "subject": "834687",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-848387/sub-848387_ses-ecephys-848387-2026-05-06-15-09-10_ecephys.nwb",
+   "aid": "409f5707-a886-46d7-b392-578b55fa8517",
+   "subject": "848387",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-834686/sub-834686_ses-ecephys-834686-2026-03-23-17-08-31_ecephys.nwb",
+   "aid": "4b1a34e9-8ddf-4b70-a19c-eb9941e57e19",
+   "subject": "834686",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-848387/sub-848387_ses-ecephys-848387-2026-05-04-16-19-01_ecephys.nwb",
+   "aid": "641156f5-4e54-42b2-9017-1134cf3115ea",
+   "subject": "848387",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-820454/sub-820454_ses-ecephys-820454-2025-11-06-16-00-27_ecephys.nwb",
+   "aid": "013eb796-bbe5-4d02-82dd-6e2e5ce7034f",
+   "subject": "820454",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-820454/sub-820454_ses-ecephys-820454-2025-11-07-10-54-23_ecephys.nwb",
+   "aid": "51c29ef1-339d-449e-b1e5-c0b59f4d272e",
+   "subject": "820454",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-820454/sub-820454_ses-ecephys-820454-2025-11-04-14-59-22_ecephys.nwb",
+   "aid": "915bb67f-3d3e-45b1-86e5-a6fcf3bf8046",
+   "subject": "820454",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-820454/sub-820454_ses-ecephys-820454-2025-11-05-15-21-15_ecephys.nwb",
+   "aid": "f7057120-fc07-447c-80ba-bbbc425072b0",
+   "subject": "820454",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830846/sub-830846_ses-ecephys-830846-2026-03-12-11-09-13_ecephys.nwb",
+   "aid": "20e97927-bad3-406d-a4a9-4771bcf74b3e",
+   "subject": "830846",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-834687/sub-834687_ses-ecephys-834687-2026-03-18-15-50-10_ecephys.nwb",
+   "aid": "c7d17fac-69ad-4fcd-9409-18c01181e6d4",
+   "subject": "834687",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830847/sub-830847_ses-ecephys-830847-2026-03-12-17-14-42_ecephys.nwb",
+   "aid": "dc18d0ac-ded5-4a2a-ae81-e38f5015645e",
+   "subject": "830847",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  },
+  {
+   "path": "sub-830846/sub-830846_ses-ecephys-830846-2026-03-10-10-17-25_ecephys.nwb",
+   "aid": "77123ffa-5029-4485-a2e5-2eacac954f74",
+   "subject": "830846",
+   "paradigm": "duration",
+   "ccf": true
+  },
+  {
+   "path": "sub-830847/sub-830847_ses-ecephys-830847-2026-03-11-15-46-40_ecephys.nwb",
+   "aid": "6928e4f8-b9bd-4d89-b620-8a7e34fad6f3",
+   "subject": "830847",
+   "paradigm": "standard_oddball",
+   "ccf": true
+  },
+  {
+   "path": "sub-830847/sub-830847_ses-ecephys-830847-2026-03-09-16-23-49_ecephys.nwb",
+   "aid": "3d958caf-28eb-4cfd-ad81-58921f7f4e76",
+   "subject": "830847",
+   "paradigm": "sequence",
+   "ccf": true
+  },
+  {
+   "path": "sub-848390/sub-848390_ses-ecephys-848390-2026-05-04-10-22-33_ecephys.nwb",
+   "aid": "8a8dbc39-c57e-440b-a7c4-e9da32e02d7c",
+   "subject": "848390",
+   "paradigm": "sensorimotor",
+   "ccf": true
+  }
+ ],
+ "mesoscope": [
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-29-11-18-09_ophys.nwb",
+   "aid": "ab44a0f7-2864-4a30-8988-0b76aec28fa6",
+   "subject": "832700",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-03-11-46-14_ophys.nwb",
+   "aid": "5cfeb105-0ae0-4359-80b2-a3086642db09",
+   "subject": "843001",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-24-12-06-12_ophys.nwb",
+   "aid": "e82c3970-ef17-498e-9150-9d8bd7458bc4",
+   "subject": "832700",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-31-11-38-29_ophys.nwb",
+   "aid": "83e0c8f3-5208-417c-87c4-bc4617b0f834",
+   "subject": "832700",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-02-12-11-45-55_ophys.nwb",
+   "aid": "c6c5705d-daa7-44c8-af20-f0e5844a8e3c",
+   "subject": "832700",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-27-14-07-55_ophys.nwb",
+   "aid": "6288e7b0-5b44-4660-b36d-c14d19220e2c",
+   "subject": "845342",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-10-12-00-54_ophys.nwb",
+   "aid": "05967c3b-80ea-451b-a77e-c5ac43b08e9b",
+   "subject": "843000",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-20-14-41-02_ophys.nwb",
+   "aid": "cb909c00-5d32-40c2-a264-cd126f053368",
+   "subject": "843000",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-11-11-31-59_ophys.nwb",
+   "aid": "692ade92-bf22-43e6-8749-187d65cb5519",
+   "subject": "843001",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-18-11-39-01_ophys.nwb",
+   "aid": "960ad138-b280-46dd-ae18-a4d2c56b7bd1",
+   "subject": "843001",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-18-14-44-34_ophys.nwb",
+   "aid": "ab004f5f-cc27-44e3-a89c-5808d6aef1a3",
+   "subject": "843000",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-23-12-57-43_ophys.nwb",
+   "aid": "b425c043-ebf5-456c-83a9-1d99465224c6",
+   "subject": "837568",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-05-11-45-48_ophys.nwb",
+   "aid": "cb6b3893-90ae-442f-886f-58e4cffb5cef",
+   "subject": "839909",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-26-13-33-27_ophys.nwb",
+   "aid": "3ad17d44-8a2f-4a32-a1a7-39f2ae1fca45",
+   "subject": "845342",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-26-14-00-52_ophys.nwb",
+   "aid": "88ffbe80-7387-4fc9-94b8-88e28994fc1b",
+   "subject": "837568",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-24-11-35-15_ophys.nwb",
+   "aid": "71477fb0-a32b-4985-947d-b8ce88187a00",
+   "subject": "837568",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-21-11-43-22_ophys.nwb",
+   "aid": "5395b82a-5072-4fd2-baec-403291d13c84",
+   "subject": "843001",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-20-10-35-23_ophys.nwb",
+   "aid": "4899cef5-e772-4af8-a5c8-f414a950dd76",
+   "subject": "837568",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-11-14-27-49_ophys.nwb",
+   "aid": "f461336f-ebef-4e3a-a2fe-adf59686ef5e",
+   "subject": "843000",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-02-26-15-11-01_ophys.nwb",
+   "aid": "b980f6a1-0c34-4f2b-ba4e-72b2563e42de",
+   "subject": "839909",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-30-09-58-06_ophys.nwb",
+   "aid": "502db71d-8ca1-4584-b676-fb8e1bb6dd45",
+   "subject": "845342",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-17-12-23-04_ophys.nwb",
+   "aid": "de9fc0a6-246d-4a0a-8597-00a240b0d6ee",
+   "subject": "843000",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-19-15-05-20_ophys.nwb",
+   "aid": "40e012b2-cd12-4907-94bd-af362d14fc69",
+   "subject": "843000",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-20-12-32-09_ophys.nwb",
+   "aid": "2a7cb932-61cc-4698-a1e8-2d743d0a4084",
+   "subject": "839909",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-02-12-08-20_ophys.nwb",
+   "aid": "a9407200-ba17-4586-95eb-bcc26016542d",
+   "subject": "843001",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-03-05-14-14-51_ophys.nwb",
+   "aid": "80047d6b-6958-4124-a0c3-3cb67b791327",
+   "subject": "837568",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-02-07-11-18-06_ophys.nwb",
+   "aid": "f7996990-c3eb-4324-9d2c-6f451e529a33",
+   "subject": "832700",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-04-13-46-36_ophys.nwb",
+   "aid": "0fb50241-3e39-45fa-81cf-0f469885814a",
+   "subject": "843000",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-02-20-12-53-27_ophys.nwb",
+   "aid": "ed37002e-6626-4417-89cc-13fa087293e5",
+   "subject": "839909",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-03-09-11-43-41_ophys.nwb",
+   "aid": "4f252175-437d-4418-bb4f-68044e82ce3b",
+   "subject": "837568",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-19-13-22-26_ophys.nwb",
+   "aid": "cc63761d-360b-440f-ae0a-e2533334513f",
+   "subject": "837568",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-06-11-23-27_ophys.nwb",
+   "aid": "696cb7f7-ee37-4413-9c4f-15027fca828f",
+   "subject": "839909",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-19-12-45-42_ophys.nwb",
+   "aid": "84b36a7b-fe92-4be2-8b6b-46c48ff971e8",
+   "subject": "839909",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-30-09-32-25_ophys.nwb",
+   "aid": "8b7e9f4a-2544-4c47-b1a9-e65cb58e62cd",
+   "subject": "832700",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-02-13-11-45-59_ophys.nwb",
+   "aid": "d6080b13-5be9-445d-8a97-fd015bae054a",
+   "subject": "832700",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-03-06-13-39-00_ophys.nwb",
+   "aid": "e11c921f-48b5-412b-92eb-237e938f37ab",
+   "subject": "837568",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-03-12-18-14_ophys.nwb",
+   "aid": "94258c4f-7be6-413d-bcfd-06305e88c49b",
+   "subject": "843000",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-16-11-39-57_ophys.nwb",
+   "aid": "2ef209e8-63a9-40df-847a-19acdf3bb1de",
+   "subject": "837568",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-02-06-12-31-00_ophys.nwb",
+   "aid": "3a9c6e3d-1280-472a-9822-9f24d09eaaac",
+   "subject": "832700",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-25-14-20-33_ophys.nwb",
+   "aid": "81805de5-8986-42bc-bf83-eb2f6be18e17",
+   "subject": "845342",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-13-14-38-22_ophys.nwb",
+   "aid": "2db4b598-0dcd-48b5-a9fd-52b322aab893",
+   "subject": "837568",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-17-11-50-35_ophys.nwb",
+   "aid": "820021bf-6ae1-48d5-94b3-2950bac0816f",
+   "subject": "837568",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-02-27-14-04-04_ophys.nwb",
+   "aid": "6e9abda3-0fad-451e-acd2-d75fa4b5efe3",
+   "subject": "839909",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-19-13-01-20_ophys.nwb",
+   "aid": "670ff354-0d45-4e2d-b0a3-b5ef0616b87c",
+   "subject": "843001",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-27-09-47-06_ophys.nwb",
+   "aid": "6e6d26c0-96ec-4bec-9288-07134d22bedc",
+   "subject": "846289",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-15-13-55-19_ophys.nwb",
+   "aid": "457acda8-80a6-4de1-a003-df1b397e83f9",
+   "subject": "846289",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-04-03-13-57-42_ophys.nwb",
+   "aid": "2179371d-586e-4032-9a17-6be76aa07158",
+   "subject": "845342",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-04-24-10-05-17_ophys.nwb",
+   "aid": "84f0ac72-cf50-48c6-a3de-7ed4e6e53f58",
+   "subject": "842971",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-04-23-09-36-55_ophys.nwb",
+   "aid": "0638d78c-2d15-4c49-a3bf-4daeea012606",
+   "subject": "842971",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-16-13-56-40_ophys.nwb",
+   "aid": "6dc5f369-7199-4242-b0c9-3874f23e644e",
+   "subject": "846289",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-23-14-15-03_ophys.nwb",
+   "aid": "a1f4112f-4cb6-43fe-af9d-ea6e0a68c76c",
+   "subject": "846289",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-04-22-14-40-04_ophys.nwb",
+   "aid": "95655a9b-f412-4d51-8c9e-99b00cc8da30",
+   "subject": "839909",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-01-11-53-58_ophys.nwb",
+   "aid": "2ff44377-d2d4-43ce-a4e3-8411008f4bed",
+   "subject": "843001",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-04-01-14-12-13_ophys.nwb",
+   "aid": "bec909c9-69ce-40f6-a2b5-b1a13ac48dcb",
+   "subject": "845342",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-09-12-14-56_ophys.nwb",
+   "aid": "106e55d5-921c-445a-8778-cac33a0dc6bc",
+   "subject": "843001",
+   "paradigm": "duration"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-21-10-51-37_ophys.nwb",
+   "aid": "4b0e429f-4c14-4f64-818e-219c28bb9adb",
+   "subject": "846289",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-04-22-09-59-38_ophys.nwb",
+   "aid": "add24e7b-f7ca-4908-8ad6-342e8fd1b013",
+   "subject": "842971",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-11-13-05-48_ophys.nwb",
+   "aid": "75ee604b-885d-40c5-baa8-cebe13e467bb",
+   "subject": "843001",
+   "paradigm": "standard_oddball"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-20-11-49-37_ophys.nwb",
+   "aid": "2dc00822-d101-4e23-9539-3603eec2285b",
+   "subject": "846289",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-31-11-44-28_ophys.nwb",
+   "aid": "50d7cedb-a2ca-46bf-93a5-31e03264735f",
+   "subject": "845342",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-04-18-10-13-51_ophys.nwb",
+   "aid": "967dcfc6-f38f-4ec9-8512-bce3e9db3840",
+   "subject": "842971",
+   "paradigm": "sequence"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-13-11-49-19_ophys.nwb",
+   "aid": "dd20dbf2-15d5-4f20-a314-dd54c97cba76",
+   "subject": "846289",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-16-09-36-51_ophys.nwb",
+   "aid": "703521e4-b673-45de-8824-09dc8c37869f",
+   "subject": "843001",
+   "paradigm": "sensorimotor"
+  },
+  {
+   "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-10-14-12-11_ophys.nwb",
+   "aid": "9231dbfa-841f-4d43-a92b-e0fc6d72ee77",
+   "subject": "846289",
+   "paradigm": "sensorimotor"
+  }
+ ],
+ "slap2": [
+  {
+   "path": "sub-794237_ses-20250403T103830_image+ophys.nwb",
+   "aid": "ff65e279-c30f-4c92-8687-c8934d2b9342",
+   "subject": "794237",
+   "intervals": [
+    "stimulus_presentations"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-794237_ses-20250424T142019_image+ophys.nwb",
+   "aid": "4c105b81-0522-4139-b6d9-5f454e3a2076",
+   "subject": "794237",
+   "intervals": [
+    "stimulus_presentations"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-794237_ses-20250508T145040_image+ophys.nwb",
+   "aid": "1fccbd05-7ba2-4e40-9cb8-e8814119f756",
+   "subject": "794237",
+   "intervals": [
+    "stimulus_presentations"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-776270_ses-SLAP2-776270-2025-07-02-11-50-06_image+ophys.nwb",
+   "aid": "98e54c75-2b4a-41ca-b502-b58d63b1f6d5",
+   "subject": "776270",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-803496_ses-SLAP2-803496-2025-07-02-15-33-26_image+ophys.nwb",
+   "aid": "d23a03af-c3bd-4cf0-9492-6dca96fb201d",
+   "subject": "803496",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-801381_ses-SLAP2-801381-2025-06-05-14-57-42_image+ophys.nwb",
+   "aid": "2ecafd40-29a6-422f-92b0-32f7e940c783",
+   "subject": "801381",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-796630_ses-SLAP2-796630-2025-08-25-14-59-15_image+ophys.nwb",
+   "aid": "b8c05ec0-0a74-46f5-956d-e82af3cc5d27",
+   "subject": "796630",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-796630_ses-SLAP2-796630-2025-08-28-14-25-34_image+ophys.nwb",
+   "aid": "1b6509ef-70d7-46e4-9c8e-587bb6ace95f",
+   "subject": "796630",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-801381_ses-SLAP2-801381-2025-10-02-15-23-18_image+ophys.nwb",
+   "aid": "d5120d10-e8b5-469b-b7a1-0b03cef0a831",
+   "subject": "801381",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-801381_ses-SLAP2-801381-2025-09-26-14-17-56_image+ophys.nwb",
+   "aid": "22ad0a5a-c28c-45c7-af6f-98817ef16c54",
+   "subject": "801381",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-796630_ses-SLAP2-796630-2025-09-26-10-48-22_image+ophys.nwb",
+   "aid": "eb2eb08b-14b2-479d-ac1b-1259db054727",
+   "subject": "796630",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-796630_ses-SLAP2-796630-2025-10-01-14-23-25_image+ophys.nwb",
+   "aid": "44871646-ca8d-440d-b970-5756ed7cb47e",
+   "subject": "796630",
+   "intervals": [
+    "gratings"
+   ],
+   "n_intervals": 1
+  },
+  {
+   "path": "sub-828408_ses-828408-2025-11-18-14-44-48_image+ophys.nwb",
+   "aid": "686c579b-eddf-4e7d-b9b2-c633e2d1fb15",
+   "subject": "828408",
+   "intervals": [
+    "jitter_control",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control",
+    "standard_oddball"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-829704_ses-829704-2025-12-16-11-03-04_image+ophys.nwb",
+   "aid": "e136d355-5d49-4cc0-bcd4-b7539d639557",
+   "subject": "829704",
+   "intervals": [
+    "jitter_control",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "sequential_oddball",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-829704_ses-829704-2025-12-11-12-57-26_image+ophys.nwb",
+   "aid": "e36d24b2-ee5d-44d4-8119-b4f3f53e80d1",
+   "subject": "829704",
+   "intervals": [
+    "jitter_control",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control",
+    "standard_oddball"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-829704_ses-829704-2025-12-18-10-57-36_image+ophys.nwb",
+   "aid": "018a6c38-a3e6-4246-abb4-01c01281f392",
+   "subject": "829704",
+   "intervals": [
+    "jitter_control",
+    "jitter_oddball",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-829704_ses-829704-2025-12-10-13-47-47_image+ophys.nwb",
+   "aid": "983e5908-15f5-4235-b477-71f0ce47c1fc",
+   "subject": "829704",
+   "intervals": [
+    "jitter_control",
+    "motor_oddball",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-828408_ses-828408-2025-11-13-10-30-53_image+ophys.nwb",
+   "aid": "0929c67a-7eca-46d8-836d-430a8df136ae",
+   "subject": "828408",
+   "intervals": [
+    "jitter_control",
+    "motor_oddball",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-828409_ses-828409-2025-11-21-11-14-03_image+ophys.nwb",
+   "aid": "e03a3c9e-1699-4742-b352-7385c3a90610",
+   "subject": "828409",
+   "intervals": [
+    "jitter_control",
+    "jitter_oddball",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  },
+  {
+   "path": "sub-828409_ses-828409-2025-11-20-10-01-34_image+ophys.nwb",
+   "aid": "90509ad1-232a-4f9e-bc45-c5a194c6e994",
+   "subject": "828409",
+   "intervals": [
+    "jitter_control",
+    "movie",
+    "open_loop_prerecorded",
+    "rf_mapping",
+    "sequential_control_block",
+    "sequential_oddball",
+    "standard_control"
+   ],
+   "n_intervals": 7
+  }
+ ],
+ "slap2_structured_paradigms": {
+  "standard_oddball": [
+   "828408",
+   "829704"
+  ],
+  "sequence": [
+   "829704",
+   "828409"
+  ],
+  "duration": [
+   "829704",
+   "828409"
+  ],
+  "sensorimotor": [
+   "829704",
+   "828408"
+  ]
+ },
+ "scan_date": "2026-08-05",
+ "dandisets": {
+  "ecephys": "001637",
+  "mesoscope": "001768",
+  "slap2": "001424"
+ }
+}

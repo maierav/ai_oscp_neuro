@@ -106,22 +106,30 @@ windows, and statistics before any confirmatory p-value exists.
 
 The community project spans **three recording modalities** and **four
 predictive-processing paradigms**. The matrix shows what is available so far
-(sessions / mice per cell; CCF = sessions with preliminary Allen CCF alignment):
+(sessions / mice per cell; CCF = sessions with Allen CCF alignment). Counts
+were verified by a direct scan of all three dandisets on 2026-08-05
+(`data/modality_paradigm_provenance.json` records the per-session
+classification; regenerate with the paradigm-classification logic in
+`scripts/rebuild_session_index.py`):
 
 ![Data available across scales](figures/modality_paradigm_matrix.png)
 
-- **Neuropixels** (DANDI 001637) and **Mesoscope 2p** (001768) carry all four
-  paradigms with an identical named-block design (including an open-loop
-  prerecorded control block).
-- **SLAP2** (001424) stores its stimuli as a single monolithic `gratings` stream
-  rather than named blocks. It contains an embedded **orientation oddball** (a
-  dominant standard orientation with rarer deviants and omissions) plus tuning and
-  RF blocks, recoverable by segmenting the stream on orientation statistics — a
-  standard/feature-oddball contrast at dendritic glutamate (iGluSnFR) resolution.
-  The full four-paradigm SLAP2 set is expected in a later release.
+- **Neuropixels** (DANDI 001637, 60 sessions / 58 with CCF) and **Mesoscope 2p**
+  (001768, 64 sessions) carry all four paradigms with an identical named-block
+  design (including an open-loop prerecorded control block).
+- **SLAP2** (001424, 20 sessions) is in transition between two formats. **8
+  newer sessions** (subjects 828408 / 828409 / 829704) now use the **same
+  named-block design** as the other two modalities — 2 sessions each of
+  standard-oddball, sensorimotor, sequence, and duration — so the four-paradigm
+  SLAP2 set that was "expected in a later release" has begun to arrive. The
+  remaining **12 older sessions** store all stimuli in a single monolithic
+  `gratings` stream (†), with an embedded orientation oddball recoverable by
+  segmenting on orientation statistics. All SLAP2 is iGluSnFR glutamate at
+  dendritic resolution.
 - The **standard / feature oddball** (rare orientation deviant vs. frequent
-  standard) is the one contrast expressible in all three modalities; sensorimotor,
-  sequence, and duration exist in Neuropixels and mesoscope only.
+  standard) is expressible in all three modalities. Sensorimotor, sequence, and
+  duration are well-powered in Neuropixels and mesoscope; the SLAP2 versions
+  (2 sessions each) are new and not yet analyzed here.
 
 ## Data particulars & gotchas (read before analyzing)
 
