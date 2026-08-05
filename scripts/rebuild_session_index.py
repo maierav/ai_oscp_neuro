@@ -24,7 +24,20 @@ PARADIGM = {
 }
 
 def assets():
-    return requests.get(API.format(ds=DS), params={"page_size": 200}, timeout=60).json()["results"]
+    """All ecephys assets in the draft, de-duplicated by path.
+
+    DANDI can briefly list two assets for one path during a re-upload (the old
+    id is dropped once the new one lands). To stay deterministic even inside that
+    window, keep the most-recently-created asset per path.
+    """
+    raw = requests.get(API.format(ds=DS), params={"page_size": 200},
+                       timeout=60).json()["results"]
+    by_path = {}
+    for a in raw:
+        cur = by_path.get(a["path"])
+        if cur is None or a.get("created", "") > cur.get("created", ""):
+            by_path[a["path"]] = a
+    return list(by_path.values())
 
 def url(aid):
     return requests.get(API.format(ds=DS) + aid + "/download/",

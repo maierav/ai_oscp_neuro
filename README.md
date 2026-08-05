@@ -167,6 +167,18 @@ placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
 session's alignment from a sibling session of the same animal. Regenerate the
 registry with `python scripts/rebuild_session_index.py`.
 
+**DANDI asset ids are not stable — resolve by path, not by id.** 001637 is
+draft-only (no published version), and re-uploading a session file mints a *new*
+asset id while dropping the old one from the draft's asset list (the old id still
+resolves but is orphaned). The session **path** is stable across re-uploads, so
+every notebook resolves `(subject, date) -> current asset id` at run time via
+`resolve_asset()` rather than hard-coding an id. The shipped
+`ccf_session_index.csv` `aid` column is a snapshot; call
+`load_session_index(refresh_aids=True)` to re-resolve all ids from the live
+dandiset (adds an `aid_stale` flag), or `openscope_ccf.open_session(subject,
+date)` to stream a session id-free. This is why an `aid` in the index can differ
+from a fresh `rebuild_session_index.py` sweep without any data having changed.
+
 **CCF acronyms encode area *and* layer.** `electrodes.location` gives e.g. `VISp5`
 (area `VISp`, layer `5`), `DG-mo`, `CA1` (a hippocampal subfield, *not* a layer),
 or a fiber-tract code like `fi`. `ccf.py` decodes these; `electrodes.x/y/z` are

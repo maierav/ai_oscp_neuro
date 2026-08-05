@@ -38,6 +38,59 @@ def open_remote(asset_id: str, **kw) -> h5py.File:
     return h5py.File(remfile.File(s3_url(asset_id, **kw)), "r")
 
 
+# --- Path-based asset resolution -------------------------------------------
+# DANDI *asset ids* are not stable: a re-upload of the same session file mints a
+# new asset id and drops the old one from the draft's asset list (the old id
+# still resolves but is orphaned). The session *path* is stable across
+# re-uploads, so resolving path -> current asset id at run time is re-upload
+# proof. 001637 is draft-only (no published version), so any pinned asset id is
+# provisional; prefer these resolvers over hard-coded ids.
+
+_ASSETS = "https://api.dandiarchive.org/api/dandisets/{ds}/versions/{ver}/assets/"
+
+
+def session_path(subject: str, date: str) -> str:
+    """Canonical DANDI asset path for an ecephys session.
+
+    e.g. ``session_path("830847", "2026-03-11-15-46-40")`` ->
+    ``sub-830847/sub-830847_ses-ecephys-830847-2026-03-11-15-46-40_ecephys.nwb``.
+    """
+    stem = f"sub-{subject}_ses-ecephys-{subject}-{date}_ecephys.nwb"
+    return f"sub-{subject}/{stem}"
+
+
+def resolve_asset(subject: str, date: str, dandiset: str = DANDISET,
+                  version: str = "draft") -> str:
+    """Return the *current* DANDI asset id for a session, resolved by path.
+
+    Robust to re-uploads: always returns whatever asset id the dandiset holds
+    for this session path right now. The DANDI ``?path=`` filter is a *prefix*
+    match, so we filter for the exact path client-side.
+
+    Raises ``LookupError`` if no asset (or more than one) matches exactly.
+    """
+    path = session_path(subject, date)
+    r = requests.get(_ASSETS.format(ds=dandiset, ver=version),
+                     params={"path": path}, timeout=30)
+    r.raise_for_status()
+    hits = [a for a in r.json().get("results", []) if a["path"] == path]
+    if len(hits) != 1:
+        raise LookupError(
+            f"expected exactly 1 asset for {path!r}, found {len(hits)} "
+            f"in dandiset {dandiset}/{version}")
+    return hits[0]["asset_id"]
+
+
+def open_session(subject: str, date: str, dandiset: str = DANDISET,
+                 version: str = "draft") -> h5py.File:
+    """Resolve a session by path and open it — the re-upload-proof entry point.
+
+    Equivalent to ``open_remote(resolve_asset(subject, date))`` but in one call.
+    """
+    aid = resolve_asset(subject, date, dandiset=dandiset, version=version)
+    return open_remote(aid, dandiset=dandiset, version=version)
+
+
 def _decode(arr):
     return np.array([x.decode() if isinstance(x, bytes) else x for x in arr])
 
