@@ -165,3 +165,34 @@ is reported descriptively (no inferential claim).
 ---
 
 *Deviations from this plan in the executed analysis will be marked EXPLORATORY.*
+
+---
+
+## 12. Addendum (2026-08-05) — sensorimotor closed-loop/open-loop inclusion rule
+
+*Pre-committed before computing the multi-session contrast, per the discipline above.*
+
+Result 3 (sensorimotor mismatch) originally rested on a single high-locomotion
+session because the designed **closed-loop vs open-loop** contrast requires the
+animal to be **running during the open-loop events** (`Control block 4`,
+`open_loop_prerecorded`, 8 events per deviant type). The registry expansion
+(PR #1) added sessions; `scripts/audit_locomotion.py` scores every SENSORYMOTOR
+session on this criterion (running = mean |speed| > 1 cm/s in the 1 s before an
+event).
+
+**Inclusion rule (pre-committed):** a session enters the multi-session
+closed-vs-open analysis iff it has **≥ 3 running open-loop events on *all four*
+deviant types** (halt, omission, orientation_45, orientation_90). This guarantees
+every deviant type has a non-degenerate open-loop running comparison in every
+included session.
+
+Applying it to the 15 sensorimotor CCF sessions (audit 2026-08-05) yields **6
+sessions**: 830848 (8/8/8/8), 848387 (8/8/8/8), 830794 (7/7/6/7), 832691
+(5/6/5/7), 830847 (7/4/3/3), 834686 (4/3/3/3). The other 9 drop to 0 running
+open-loop events on at least one deviant type and are excluded.
+
+**Primary contrast:** per unit, closed-loop-running − open-loop-running response
+(baseline-subtracted, in the RESP window), per deviant type; population median
+with session-stratified bootstrap CI; a deviant type is called a prediction-error
+signal only if its CI excludes zero. This is the same DvI-style logic as the
+other Results, now with n=6 sessions instead of 1.
