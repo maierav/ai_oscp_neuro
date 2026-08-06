@@ -60,10 +60,11 @@ set:
 
 Panel B shows the feature-oddball form generalizing across recording scales
 (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission contrast).
-The sensorimotor row is deliberately flagged: its designed closed-loop/open-loop
-contrast is only cleanly computable in one high-locomotion session (see Result 3),
-so it enters this summary as suggestive, not established. The full logic, controls,
-and caveats for each row are in the Result sections below.
+The sensorimotor row was originally flagged as power-limited (one high-locomotion
+session); a pre-registered re-run on **6 locomotion-powered sessions** (Result 3) now
+establishes the closed-loop enhancement of the orientation-mismatch response (90°:
++0.33 Hz, CI [+0.14, +0.55], 5/6 sessions), so it is no longer a single-session result.
+The full logic, controls, and caveats for each row are in the Result sections below.
 
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
@@ -483,9 +484,35 @@ analysis. It awaits sessions with more running. Reproduce:
 > `sub-832691` (5/6/5/7), `sub-830847` (7/4/3/3), `sub-834686` (4/3/3/3). The remaining
 > ten sessions ran 7–38 % and carry ≤3 running open-loop events per type.
 > Note `sub-830848` was already in the registry, so even the earlier data supported more
-> than one session. **The closed-vs-open contrast has not yet been recomputed on this
-> set** — the inclusion rule should be pre-committed before it is, per
-> [`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md).
+> than one session.
+
+### Multi-session re-run (pre-registered)
+
+The inclusion rule was pre-committed before computing the contrast (§12 of
+[`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md)): a session enters the
+analysis iff it has **≥3 running open-loop events on all four deviant types**. Six
+sessions qualify (1,008 visual units). The contrast is the per-unit closed-loop-running
+minus open-loop-running response, pooled with a session-stratified bootstrap CI; a
+deviant type counts as a prediction-error signal only if its CI excludes zero.
+
+![Sensorimotor mismatch across 6 powered sessions](figures/sensorimotor_multisession.png)
+
+| deviant | closed − open Δ | 95 % CI | sessions | CI excludes 0 |
+|---|---|---|---|---|
+| **Orientation 90°** | **+0.33 Hz** | [+0.14, +0.55] | 6 | ✓ (5/6 sessions positive) |
+| **Orientation 45°** | **+0.23 Hz** | [+0.07, +0.49] | 5 | ✓ |
+| Halt | +0.09 Hz | [0.00, +0.24] | 5 | ✗ (touches 0) |
+| Omission | 0.00 Hz | [−0.06, +0.09] | 5 | ✗ |
+
+This is the key upgrade to Result 3: the closed-loop enhancement of the **orientation
+mismatch** response — the signature that the visual response is amplified when it
+violates a motor-driven prediction — is now **robust across 5–6 sessions** (p ≈ 6×10⁻⁷
+for 90°), where the original result rested on a single session. Halt and omission remain
+below the significance bar, consistent with the single-session finding that halt was
+borderline. Reproduce: `scripts/audit_locomotion.py` for the inclusion set, then the
+extraction in
+[`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb);
+values in [`data/sensorimotor_multisession_summary.csv`](data/sensorimotor_multisession_summary.csv).
 
 
 ---
