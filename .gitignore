@@ -39,3 +39,4 @@ figures/*.png
 !figures/h1h0_anatomical_test.png
 !figures/sensorimotor_multisession.png
 !figures/slap2_fourparadigm.png
+!figures/sequence_crossscale_area.png

@@ -658,6 +658,38 @@ values in [`data/slap2_fourparadigm_summary.csv`](data/slap2_fourparadigm_summar
 
 ---
 
+## Result 8 — Mesoscope sequence-mismatch is an area dissociation (VISl, not V1)
+
+Result 4 established a robust sequence prediction-error signal in Neuropixels spiking
+(DvI ≈ +0.21). Does it survive in mesoscope 2-photon? The **pooled** mesoscope answer looks
+weak (+0.04) — but that number is an artifact of averaging over cortical areas. Broken down by
+area (16 sessions, 31,081 somatic ROIs, `is_soma`-gated), the signal is carried almost entirely
+by the **higher-order lateral area (VISl)**, not primary visual cortex (VISp):
+
+![Mesoscope sequence area dissociation](figures/sequence_crossscale_area.png)
+
+| area | sequence DvI (90°) | 95% CI | sessions positive |
+|---|---|---|---|
+| **VISl** (lateral, higher-order) | **+0.18** | [+0.16, +0.21] | 13/16 |
+| **VISp** (primary V1) | **−0.08** | [−0.11, −0.05] | 7/16 |
+
+Within-session paired, **VISl > VISp in 14/16 sessions** (Wilcoxon p = 0.001). VISl matches the
+Neuropixels magnitude; VISp shows no sequence-PE, if anything slight suppression.
+
+**Why this matters.** (1) It is a within-modality analogue of the predictive-processing
+prediction that deviance/error signals concentrate in higher-order cortex. (2) It **reframes the
+apparent cross-scale attenuation** (Result 2, Result 7): the sequence signal is not weak in
+2-photon per se — it is weak *where V1 is oversampled*. The pooled cross-modal comparison mixed
+a strong VISl signal with a null/negative VISp one. When the areas are separated, mesoscope-VISl
+sits right alongside Neuropixels. A per-subject magnitude spread remains on top of the consistent
+area ordering (a few sessions are negative in both areas) — a candidate for a behavioral-state
+analysis as more sessions accrue. Reproduce:
+[`notebooks/mesoscope_sequence_area.ipynb`](notebooks/mesoscope_sequence_area.ipynb) (QUICK mode
+runs 4 sessions); values in
+[`data/meso_sequence_area_summary.csv`](data/meso_sequence_area_summary.csv).
+
+---
+
 ## Cross-technique methods — why the raw numbers mislead, and how we correct
 
 The single most important thing to understand before comparing responses across
