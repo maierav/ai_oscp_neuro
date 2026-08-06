@@ -56,7 +56,7 @@ set:
 | **Feature-oddball** | stimulus frequency | **+0.45** | 9 | 79 % |
 | **Sequence** | learned temporal order | **+0.21** | 7 | 59 % |
 | **Duration / timing** | learned interval timing | **+0.32** | 6 | 74 % |
-| **Sensorimotor** | motor–visual contingency | **+0.09** | 1 (power-limited) | 56 % |
+| **Sensorimotor** | motor–visual contingency | **+0.10** | 6 | 55 % |
 
 Panel B shows the feature-oddball form generalizing across recording scales
 (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission contrast).
