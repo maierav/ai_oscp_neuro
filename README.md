@@ -66,17 +66,20 @@ establishes the closed-loop enhancement of the orientation-mismatch response (90
 +0.33 Hz, CI [+0.14, +0.55], 5/6 sessions), so it is no longer a single-session result.
 The full logic, controls, and caveats for each row are in the Result sections below.
 
-The cross-scale picture has since been sharpened by two further analyses. Paradigm-matched
-SLAP2 data has begun to arrive, and a first look at the dendritic-glutamate scale
+The cross-scale picture has since been complicated — honestly — by two further analyses.
+Paradigm-matched SLAP2 data has begun to arrive, and a first look at the dendritic-glutamate scale
 ([**Result 7**](#result-7--paradigm-matched-slap2-first-look-preliminary-n2paradigm)) finds no
 prediction-error signal in any of the four paradigms — but at n = 2 sessions each, this cannot
-yet separate a genuine input/output dissociation from underpowering. More importantly, the
-mesoscope cross-scale number is not a single value:
-[**Result 8**](#result-8--mesoscope-sequence-mismatch-is-an-area-dissociation-visl-not-v1) shows
-the mesoscope *sequence* signal is an **area dissociation** — robust in higher-order lateral
-cortex (VISl, +0.18, matching Neuropixels) but absent in primary V1 (VISp, −0.08). The pooled
-mesoscope +0.09 masks this split; the apparent "imaging attenuates the signal" reading is partly
-an averaging artifact over a VISp-dominated population.
+yet separate a genuine input/output dissociation from underpowering. And when the *sequence*
+paradigm is broken down by cortical area in both modalities
+([**Result 8**](#result-8--sequence-mismatch-a-cross-modality-areal-discrepancy-in-v1)), the
+Neuropixels and mesoscope signals **disagree in sign in V1**: spiking finds the sequence-PE
+*strongest* in primary V1 (+0.25), while mesoscope 2-photon finds it *absent/negative* there
+(−0.08), positive only in lateral cortex. Only part of this is explained by mesoscope's
+superficial laminar sampling. So the cross-scale generalization in panel B holds for the
+*feature-oddball* contrast (spikes and mesoscope both positive on responsive cells), but the
+finer area-resolved comparison is a **caution against treating the calcium DvI as
+interchangeable with the spiking DvI** — not a clean reconciliation.
 
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
@@ -674,35 +677,52 @@ values in [`data/slap2_fourparadigm_summary.csv`](data/slap2_fourparadigm_summar
 
 ---
 
-## Result 8 — Mesoscope sequence-mismatch is an area dissociation (VISl, not V1)
+## Result 8 — Sequence-mismatch: a cross-modality areal discrepancy in V1
 
 Result 4 established a robust sequence prediction-error signal in Neuropixels spiking
-(DvI ≈ +0.21). Does it survive in mesoscope 2-photon? The **pooled** mesoscope answer looks
-weak (+0.04) — but that number is an artifact of averaging over cortical areas. Broken down by
-area (16 sessions, 31,081 somatic ROIs, `is_soma`-gated), the signal is carried almost entirely
-by the **higher-order lateral area (VISl)**, not primary visual cortex (VISp):
+(pooled DvI ≈ +0.21). Does it survive in mesoscope 2-photon? Answering this correctly requires
+breaking **both** modalities down by cortical area — and when we do, the two do **not** agree
+where it matters most.
 
-![Mesoscope sequence area dissociation](figures/sequence_crossscale_area.png)
+![Sequence-mismatch area comparison across modalities](figures/sequence_crossscale_area.png)
 
-| area | sequence DvI (90°) | 95% CI | sessions positive |
-|---|---|---|---|
-| **VISl** (lateral, higher-order) | **+0.18** | [+0.16, +0.21] | 13/16 |
-| **VISp** (primary V1) | **−0.08** | [−0.11, −0.05] | 7/16 |
+Comparing the same paradigm (position-3 90° deviant vs. the equiprobable Control-block-2 90°
+control, same DvI) in the two areas mesoscope samples:
 
-Within-session paired, **VISl > VISp in 14/16 sessions** (Wilcoxon p = 0.001). VISl matches the
-Neuropixels magnitude; VISp shows no sequence-PE, if anything slight suppression.
+| area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
+|---|---|---|
+| **VISp** (primary V1) | **+0.25** [+0.15, +0.33] — *strongest area* | **−0.08** [−0.11, −0.05] — negative |
+| **VISl** (lateral) | +0.16 [−0.06, +0.41] — n.s. (n=99) | +0.18 [+0.16, +0.21] |
 
-**Why this matters.** (1) It is a within-modality analogue of the predictive-processing
-prediction that deviance/error signals concentrate in higher-order cortex. (2) It **reframes the
-apparent cross-scale attenuation** (Result 2, Result 7): the sequence signal is not weak in
-2-photon per se — it is weak *where V1 is oversampled*. The pooled cross-modal comparison mixed
-a strong VISl signal with a null/negative VISp one. When the areas are separated, mesoscope-VISl
-sits right alongside Neuropixels. A per-subject magnitude spread remains on top of the consistent
-area ordering (a few sessions are negative in both areas) — a candidate for a behavioral-state
-analysis as more sessions accrue. Reproduce:
-[`notebooks/mesoscope_sequence_area.ipynb`](notebooks/mesoscope_sequence_area.ipynb) (QUICK mode
-runs 4 sessions); values in
-[`data/meso_sequence_area_summary.csv`](data/meso_sequence_area_summary.csv).
+**In V1 the two modalities disagree in sign.** Spiking finds the sequence-PE *strongest* in
+primary V1 (+0.25, present across all areas); mesoscope 2-photon finds it *absent/negative* in
+V1 (−0.08) and positive only in lateral cortex. The apparent VISl agreement (+0.16 vs +0.18) is
+not a match to lean on — the Neuropixels VISl estimate is not significant (only 99 units). So
+the honest headline is a **cross-modality areal discrepancy**, not a reconciliation. The same
+direction holds for feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49),
+while mesoscope feature-oddball is weak pooled (Result 2, +0.11).
+
+**Is it just laminar sampling?** Mesoscope images ~46–428 µm (L2/3 through upper L5, **missing
+L6**), while Neuropixels samples all layers. The Neuropixels V1 sequence-PE *is* deep-biased
+(L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14), so depth explains part of the magnitude gap.
+But it does **not** explain the sign flip: restricting Neuropixels V1 to the superficial layers
+mesoscope can actually see still gives **+0.19 (positive)**, versus mesoscope's **−0.08**
+(panel C). Depth-matching narrows the gap but the modalities still point in opposite directions
+in V1.
+
+**What this means.** The calcium DvI is **not interchangeable** with the spiking DvI —
+especially in V1, where a strong spiking deviance signal (concentrated in deep layers) does not
+appear in the superficial 2-photon signal. Candidate causes this dataset cannot yet
+adjudicate: indicator nonlinearity/thresholding suppressing small deviance signals, neuropil
+contamination, or a genuine transformation between somatic spiking output and the dendritic/
+somatic calcium proxy. This is a caution for anyone pooling deviance indices across techniques,
+and it sharpens (rather than resolves) the cross-scale question raised in Results 2 and 7.
+A per-subject magnitude spread sits on top of the area pattern (a few mesoscope sessions are
+negative in both areas) — a candidate for a behavioral-state analysis as more data accrues.
+Reproduce: [`notebooks/mesoscope_sequence_area.ipynb`](notebooks/mesoscope_sequence_area.ipynb)
+(QUICK mode runs 4 sessions); values in
+[`data/seq_area_comparison.csv`](data/seq_area_comparison.csv) and
+[`data/seq_visp_layers.csv`](data/seq_visp_layers.csv).
 
 ---
 
