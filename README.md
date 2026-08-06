@@ -66,6 +66,18 @@ establishes the closed-loop enhancement of the orientation-mismatch response (90
 +0.33 Hz, CI [+0.14, +0.55], 5/6 sessions), so it is no longer a single-session result.
 The full logic, controls, and caveats for each row are in the Result sections below.
 
+The cross-scale picture has since been sharpened by two further analyses. Paradigm-matched
+SLAP2 data has begun to arrive, and a first look at the dendritic-glutamate scale
+([**Result 7**](#result-7--paradigm-matched-slap2-first-look-preliminary-n2paradigm)) finds no
+prediction-error signal in any of the four paradigms — but at n = 2 sessions each, this cannot
+yet separate a genuine input/output dissociation from underpowering. More importantly, the
+mesoscope cross-scale number is not a single value:
+[**Result 8**](#result-8--mesoscope-sequence-mismatch-is-an-area-dissociation-visl-not-v1) shows
+the mesoscope *sequence* signal is an **area dissociation** — robust in higher-order lateral
+cortex (VISl, +0.18, matching Neuropixels) but absent in primary V1 (VISp, −0.08). The pooled
+mesoscope +0.09 masks this split; the apparent "imaging attenuates the signal" reading is partly
+an averaging artifact over a VISp-dominated population.
+
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
 [**Result 6**](#result-6--a-shared-laminar-substrate-across-error-types-partial-h1-test)
@@ -369,8 +381,10 @@ treats all three fairly. Reproduce:
 ![Oddball index across techniques](figures/crossscale_oddball_index.png)
 
 - The adaptation-controlled **DvI stays positive wherever it can be computed** —
-  **+0.39** spikes, **+0.11** mesoscope (all sessions positive). SLAP2 has no
-  equiprobable control block, so DvI is not computable there.
+  **+0.39** spikes, **+0.11** mesoscope (all sessions positive). SLAP2's *original*
+  monolithic sessions had no equiprobable control block, so DvI was not computable there;
+  the newer paradigm-matched SLAP2 sessions do, and are analyzed in
+  [**Result 7**](#result-7--paradigm-matched-slap2-first-look-preliminary-n2paradigm).
 - The naive **OI reverses sign** — mildly positive in spikes (+0.13), strongly
   negative in both calcium methods (−1.00 mesoscope, −0.47 SLAP2). **This reversal
   is a population-sampling artifact, not a real difference** — the raw OI must never
@@ -408,7 +422,9 @@ DvI, tuning-free omission, and responsiveness×tuning-balanced OI), all yield a
 effect across scales, error types, and confound controls is a substantially
 stronger footing for a **common** deviance-detection mechanism (H1) than any single
 contrast. Results 3–5 extend this to three further kinds of violated expectation
-(motor contingency, sequence order, timing); the combined four-error-type picture,
+(motor contingency, sequence order, timing); Result 6 tests H0/H1 anatomically; and
+Results 7–8 return to the cross-scale question with newly-arrived paradigm-matched SLAP2
+data and an area-resolved mesoscope analysis. The combined four-error-type picture,
 plus the cross-scale generalization, is in [**Results at a glance**](#results-at-a-glance).
 
 ---
