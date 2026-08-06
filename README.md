@@ -628,6 +628,36 @@ profiles in [`data/h1h0_laminar_profiles.csv`](data/h1h0_laminar_profiles.csv) a
 
 ---
 
+## Result 7 — Paradigm-matched SLAP2, first look (preliminary, n=2/paradigm)
+
+The SLAP2 dendritic-glutamate dataset (DANDI 001424, iGluSnFR) was originally a single
+monolithic gratings stream. **8 newer sessions** (subjects 828408 / 828409 / 829704) now
+carry the **same named-block design** as the Neuropixels and mesoscope datasets — 2 sessions
+each of standard-oddball, sequence, duration, and sensorimotor. This is the four-paradigm SLAP2
+set that was "expected in a later release," and it has begun to arrive. We compute the
+prediction-error index in each paradigm at dendritic-glutamate resolution for the first time.
+
+![Paradigm-matched SLAP2, four error types](figures/slap2_fourparadigm.png)
+
+**At n = 2 sessions per paradigm, none of the four SLAP2 paradigms reproduces the positive
+prediction-error index that Neuropixels spiking shows** — all sit at or below zero (oddball
+−0.02, sequence −0.06, duration +0.01, sensorimotor −0.24). This extends the Result 2 cross-scale
+finding (imaging modalities show weak/absent oddball effects) to the dendritic-glutamate scale
+and to the non-oddball paradigms.
+
+**This is explicitly preliminary and we do not over-read it.** A null at n = 2 has two candidate
+explanations that this sample cannot separate: (i) a genuine dissociation between input glutamate
+(iGluSnFR, dendritic) and somatic spiking output — plausible, since the two measure different
+stages of the same circuit — or (ii) simple underpowering. The sensorimotor contrast is the
+weakest of the four (only ~5 open-loop running events per session, the same locomotion limit as
+Result 3), so its apparent negative value should not be read as a real suppression. The SLAP2
+dataset is actively growing; this analysis is built to re-run as the paradigm-matched set expands.
+Reproduce:
+[`notebooks/slap2_fourparadigm_ecephys.ipynb`](notebooks/slap2_fourparadigm_ecephys.ipynb);
+values in [`data/slap2_fourparadigm_summary.csv`](data/slap2_fourparadigm_summary.csv).
+
+---
+
 ## Cross-technique methods — why the raw numbers mislead, and how we correct
 
 The single most important thing to understand before comparing responses across
