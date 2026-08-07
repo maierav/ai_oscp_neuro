@@ -103,7 +103,8 @@ and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv); each is reco
 from its paradigm's per-unit table by the corresponding Result notebook
 (`oddball_confirmatory_ecephys`, `sequence_mismatch_ecephys`, `duration_mismatch_ecephys`,
 `sensorimotor_mismatch_ecephys`, and the cross-scale set), which stream the NWB files
-directly from DANDI.
+directly from DANDI. The capstone figure itself is regenerated from those two CSVs by
+[`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) (no NWB streaming).
 
 ## What's in this repository
 
