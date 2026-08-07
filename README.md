@@ -548,12 +548,18 @@ then units).
 
 ![Sensorimotor mismatch across 6 powered sessions — a null effect](figures/sensorimotor_multisession.png)
 
+Primary criterion: **all VIS-area units, no responsiveness cut** (threshold-independent, the
+most defensible choice); the CSV also stores a responsiveness-threshold sweep for orientation-90.
+
 | deviant | closed − open DvI | 95 % CI (hierarchical) | sessions + | reaches sig. |
 |---|---|---|---|---|
-| Orientation 90° | +0.02 | [−0.12, +0.18] | 4/6 | no |
-| Orientation 45° | −0.09 | [−0.26, +0.08] | 2/5 | no |
-| Halt | −0.18 | [−0.50, +0.16] | 2/6 | no |
-| Omission | −0.09 | [−0.43, +0.12] | 2/5 | no |
+| Orientation 90° | 0.00 | [0.00, +0.09] | 2/6 | no |
+| Orientation 45° | 0.00 | [0.00, +0.04] | 1/5 | no |
+| Halt | 0.00 | [−0.19, +0.14] | 2/6 | no |
+| Omission | 0.00 | [−0.02, +0.04] | 1/5 | no |
+
+(At a responsiveness cut of >0.1 Hz — ~267 units — orientation-90 is +0.02 [−0.12, +0.18]; the
+sweep in the CSV shows it staying null at every threshold: +0.00 → +0.02 → −0.02 → +0.05.)
 
 **Honest status: null.** Under the clean pipeline the closed-loop/open-loop contrast shows
 **no prediction-error signal** for any deviant type — every CI includes zero, and the

@@ -1,5 +1,9 @@
-deviant,dvi,ci_lo,ci_hi,n_sessions,sess_positive,n_units
-motor_orientation_90,0.020043938123724406,-0.11844549220979711,0.1764554020647765,6,4,267
-motor_orientation_45,-0.08572314369092553,-0.2605166051430378,0.07454388930818331,5,2,257
-motor_halt,-0.17792236924299665,-0.5016949152203092,0.15921939173223543,6,2,267
-motor_omission,-0.09393627953821507,-0.4325842695451754,0.12355848430729577,5,2,257
+deviant,threshold_Hz,dvi,ci_lo,ci_hi,n_units,n_sessions,sess_positive
+motor_orientation_90,0.0,0.0,0.0,0.0864,1917,6,2
+motor_orientation_45,0.0,0.0,0.0,0.0364,1743,5,1
+motor_halt,0.0,0.0,-0.1861,0.1409,1917,6,2
+motor_omission,0.0,0.0,-0.0189,0.041,1743,5,1
+motor_orientation_90_sweep,0.0,0.0,0.0,0.0864,1917,6,2
+motor_orientation_90_sweep,0.1,0.02,-0.1184,0.1765,267,6,4
+motor_orientation_90_sweep,0.25,-0.0201,-0.2238,0.2582,93,6,5
+motor_orientation_90_sweep,0.5,0.0505,-0.2983,0.3111,21,6,4
