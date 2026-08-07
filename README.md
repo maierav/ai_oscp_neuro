@@ -416,10 +416,15 @@ average, each level carries a variance band and the shaded response window:
 
 The example channel's multiunit (panel A) is the most direct trigger/timebase check — a
 clean onset at t = 0 and the next grating appearing at ~400 ms (the 701 ms cadence) confirm
-the alignment. The 90° oddball (red) exceeds the physically-matched standard (blue) at every
-level, and all 9 per-session means move together in the grand average (panel D) — the effect
-is not carried by one animal, and the response window sits on the peak. Computed by the
-`MAKE_PSTH_FIG` cell in the confirmatory notebook.
+the alignment. The 90° oddball (red) exceeds the frequent **standard** (blue) at every level,
+and all 9 per-session means move together in the grand average (panel D) — the effect is not
+carried by one animal, and the response window sits on the peak. **Note on the contrast shown:**
+this PSTH plots the oddball against the *frequent standard* — the adaptation view, which makes the
+onset/trigger check legible and shows the oddball riding above the fatigued standard response. It
+is **not** the equiprobable `standard_control` used for the adaptation-free deviance index (DvI)
+above; the standard is more suppressed than the equiprobable control, so this display is, if
+anything, a generous upper bound on the raw difference and is shown for its dynamics, not as the
+effect-size estimate. Computed by the `MAKE_PSTH_FIG` cell in the confirmatory notebook.
 
 ### Population dynamics and laminar timing
 
