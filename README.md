@@ -322,19 +322,30 @@ toward spiky one-pixel maps) nor render with `vmin=0` (crushes the graded surrou
 to black) — both make real RFs look artificially point-like.
 
 **Are these RFs real, or just structure we selected for?** Because the examples are
-hand-picked, we test against three noise controls that do not depend on the
-selection: split-half reliability, a per-unit trial-label permutation null, and a
-negative control (non-visual units for ecephys; responses re-aligned to random
-times for imaging).
+hand-picked, we test against noise controls that do not depend on the selection:
+split-half reliability and a per-unit trial-label permutation null (300 shuffles, p-value
+floor 1/301), each run against a **negative control** in which the same responses are
+re-aligned to random onset times. The test is **executed live** in the notebook — it builds
+the per-trial response matrix for each modality and calls the helpers; the numbers below are
+the notebook's output, not a pre-entered table.
 
 ![RF significance across three modalities](figures/rf_significance_three_modalities.png)
 
-The RFs are stimulus-locked and reproducible: 16–18 % of units/ROIs carry a
-significant RF at true onsets in Neuropixels and mesoscope, collapsing to ~1–2 %
-(chance) in the controls — and for ecephys the significant RFs concentrate in
-visual cortex and thalamus while motor cortex and hippocampus sit at chance. SLAP2
-glutamate shows a real but weaker population effect (7 % vs. 5 % control; the panel
-uses an earlier low-yield session, so 7 % is a conservative lower bound). Reproduce:
+Over **all** quality units/ROIs (no responsiveness pre-selection), at p < 0.01:
+
+| modality | n | median split-half r | % sig (true) | % sig (random-onset control) |
+|---|---|---|---|---|
+| Neuropixels (spikes) | 1554 | 0.02 | **4.4 %** | 0.8 % |
+| Mesoscope (ΔF/F soma) | 358 | 0.09 | **15.6 %** | 0.8 % |
+| SLAP2 (glutamate) | 91 | 0.25 | **13.2 %** | 1.1 % |
+
+All three scales sit well above the ~1 % chance rate at true onsets and collapse to ~1 % in the
+shuffled-onset control — the dissociation noise cannot produce. Notably the SLAP2 dendritic ROIs
+are the **most reliable at the single-ROI level** (median split-half r = 0.25), so its lower
+population fraction is a margin statement, not a per-ROI weakness. (An earlier version of this
+section reported ~16–18 % for Neuropixels/mesoscope from a hard-coded table over a
+responsiveness-selected subset; those numbers are superseded by this executed, selection-free
+result.) Reproduce:
 [`notebooks/rf_sanity_check_three_modalities.ipynb`](notebooks/rf_sanity_check_three_modalities.ipynb).
 
 ### Direction tuning

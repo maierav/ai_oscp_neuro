@@ -1,0 +1,4 @@
+modality,n,median_splithalf_r,pct_sig_true,pct_sig_control
+Neuropixels (spikes),1554,0.024,4.4,0.8
+Mesoscope (dF/F soma),358,0.086,15.6,0.8
+SLAP2 (glutamate),91,0.246,13.2,1.1
