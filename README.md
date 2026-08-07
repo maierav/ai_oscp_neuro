@@ -152,9 +152,10 @@ classification; regenerate with the paradigm-classification logic in
   segmenting on orientation statistics. All SLAP2 is iGluSnFR glutamate at
   dendritic resolution.
 - The **standard / feature oddball** (rare orientation deviant vs. frequent
-  standard) is expressible in all three modalities. Sensorimotor, sequence, and
-  duration are well-powered in Neuropixels and mesoscope; the SLAP2 versions
-  (2 sessions each) are new and not yet analyzed here.
+  standard) is expressible in all three modalities. Sequence and duration are
+  well-powered in Neuropixels; the sensorimotor contrast is present but
+  locomotion-limited (its multi-session effect is null — see Result 3); the SLAP2
+  versions (2 sessions each) are new and preliminary.
 
 ## Data particulars & gotchas (read before analyzing)
 
@@ -454,7 +455,7 @@ plus the cross-scale generalization, is in [**Results at a glance**](#results-at
 
 ---
 
-## Result 3 — Sensorimotor mismatch (motor-based prediction error)
+## Result 3 — Sensorimotor mismatch (test of motor-based prediction error — null in released data)
 
 Results 1–2 test **sensory** prediction error. The sensorimotor paradigm tests a
 different prediction: how the animal's own movement should change what it sees.
