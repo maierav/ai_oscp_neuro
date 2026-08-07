@@ -217,7 +217,7 @@ lives in `nwbio.unit_electrode_rows()`; all notebooks use it.
 
 **Statistics — pooled p-values measure effect *presence*, not cross-animal
 robustness.** The tiny Wilcoxon/bootstrap p-values quoted per result (e.g. Result 1's
-p ≈ 4×10⁻¹¹⁵) pool units across animals and treat them as independent — they show the
+p ≈ 7×10⁻¹¹⁰) pool units across animals and treat them as independent — they show the
 pooled deviant response differs from control, nothing about generalisation across mice.
 For cross-animal robustness weigh the **hierarchical-bootstrap CI** (resample sessions,
 then units) and the **per-session-positive fraction** reported alongside each result;
@@ -373,7 +373,7 @@ session-stratified bootstrap CIs and FDR correction across the area × layer gri
   estimates drift by ~0.02 as the live DANDI draft re-uploads sessions; the CI covers it.) The
   cross-animal evidence is **9/9 mice positive** (per-subject medians +0.34…+0.75;
   exact sign test **p = 0.0039** for each), which is the number to weigh — *not* the
-  pooled per-unit Wilcoxon (p ≈ 4×10⁻¹¹⁵), which treats ~1,600 units from 9 mice as
+  pooled per-unit Wilcoxon (p ≈ 7×10⁻¹¹⁰), which treats ~1,600 units from 9 mice as
   independent and so measures effect *presence*, not cross-animal generalisation (see
   the statistics note under *Data particulars*). The hierarchical CI resamples mice, then units.
 - **Deviance is not a tuning artifact.** DvI₉₀ barely depends on a unit's
