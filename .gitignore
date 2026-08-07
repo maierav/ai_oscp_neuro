@@ -48,3 +48,4 @@ figures/*.png
 !figures/r8_psth_fourlevel.png
 !figures/r7_psth_fourlevel.png
 !figures/direction_selectivity_test.png
+!figures/h1_laminar_metric_comparison.png

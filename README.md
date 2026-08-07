@@ -100,12 +100,16 @@ strong deviance signal, 2-photon V1 does not.
 
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
-[**Result 6**](#result-6--a-shared-laminar-substrate-across-error-types-partial-h1-test)
+[**Result 6**](#result-6--is-there-a-shared-laminar-substrate-across-error-types-h1-test--inconclusive)
 tests this anatomically, using the CCF area/layer labels on the five animals recorded
-across the feature-oddball, sequence, and duration paradigms: all three concentrate the
-prediction error in the granular/infragranular layers (L4–L6), a shared laminar signature
-consistent with H1 — but the finer area×layer alignment is only partial and underpowered,
-so it is **partial support, not a confirmation**.
+across the feature-oddball, sequence, and duration paradigms. The result is a **negative /
+inconclusive** one: the apparent "shared L4–L6 laminar signature" is an artifact of using raw
+firing rate (deep layers fire harder) — on the repo's normalized index the feature-oddball
+gradient actually *reverses* to superficial-heavy, and the cross-paradigm correlations do not
+survive FDR on the n = 10 pooled anatomical cells. So the laminar data **cannot distinguish** a
+common H1 substrate from different circuits with positive average responses; the H1 evidence in
+this repo rests on the convergent *sign* of prediction error across four paradigms, not on shared
+anatomy.
 
 The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
 and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv); each is recomputed
@@ -833,7 +837,7 @@ learned-timing controls are in
 
 ---
 
-## Result 6 — A shared laminar substrate across error types (partial H1 test)
+## Result 6 — Is there a shared laminar substrate across error types? (H1 test — inconclusive)
 
 Results 1–5 show that every kind of violated expectation drives a positive prediction-error
 response. But "all positive" is equally consistent with H1 (one common deviance-detection
@@ -854,19 +858,41 @@ omission has no stimulus to subtract.)
 
 ![Testing H1 vs H0 anatomically](figures/h1h0_anatomical_test.png)
 
-**The one robust finding — a shared coarse laminar signature.** All three error types concentrate
-the PE in the **granular/infragranular layers (L4–L6)**, with superficial L1–3 weakest (panel A).
-A common laminar bias, independent of how the expectation was violated, is what H1 predicts.
+**The laminar pattern depends on the metric — shown both ways.** An earlier version of this
+section called a shared **granular/infragranular (L4–L6)** concentration "the one robust finding."
+That was computed on **raw PE response (Hz)**, and it does not survive scrutiny: on the *same*
+feature-oddball units the two metrics point in **opposite** directions.
 
-**The honest caveat.** At full area×layer resolution the profiles only *lean* the same way —
-feature-oddball vs sequence Spearman ρ = +0.56, vs duration ρ = +0.53 (panels B–C), both
-**not significant** at n = 10 anatomical cells, and sequence vs duration is essentially
-uncorrelated (ρ = +0.19). The peak layer even differs across types (oddball L5, sequence L6,
-duration L4). So this is **partial support for H1, not a confirmation**: the shared L4–L6 bias
-points toward a common substrate, but the fine anatomical alignment is loose and the sample
-(5 animals, separate sessions per paradigm) is underpowered to settle it. A clean test would need
-the same units recorded across paradigms in one session — which this dataset does not provide — or
-many more CCF sessions. Reproduce:
+![Laminar PE gradient is metric-dependent](figures/h1_laminar_metric_comparison.png)
+
+- **Normalized index (DvI-like — the repo's primary metric, panel A):** feature-oddball is
+  **superficial-heavy** (L2/3 ≈ +0.59 → L6 ≈ +0.37), consistent with Result 1's by-layer DvI.
+  Sequence and duration are flat-to-mixed with no clean gradient.
+- **Raw Hz (panel B):** feature-oddball is **deep-heavy** (L1–3 ≈ 1.2 Hz → L5 ≈ 4.5 Hz) — but this
+  simply tracks that deep layers fire harder, so a raw-Hz "PE" is largest wherever baseline firing
+  is largest. Normalizing by response magnitude (which is what DvI does) removes that and flips the
+  gradient.
+
+So the direction of the laminar gradient is an artifact of which metric you plot, and the two
+Results in this repo (Result 1 superficial-heavy DvI; the old Result 6 deep-heavy raw-Hz) were
+describing the same units through different lenses. We now show both and let the reader see the
+dependence rather than asserting one as "the" laminar signature.
+
+**What the cross-paradigm correlation actually shows.** At full area×layer resolution the raw-Hz
+profiles *lean* the same way — feature-oddball vs sequence Spearman ρ = +0.56 (p = 0.09), vs
+duration ρ = +0.53 (p = 0.12), sequence vs duration ρ = +0.19 (p = 0.60) — but with
+Benjamini–Hochberg FDR across the three tests **none is significant** (q = 0.17, 0.17, 0.60), and
+the whole comparison rests on only **n = 10 pooled anatomical cells with no animal-level
+uncertainty**. The peak layer differs across types (oddball L5, sequence L6, duration L4), and the
+duration signal is a raw omission Hz while the other two are deviant-minus-control — so the profiles
+are not even on the same footing.
+
+**Bottom line for H1 vs H0.** This analysis does **not** distinguish a common H1 mechanism from
+different circuits that each happen to produce a positive average response. The evidence for H1
+elsewhere in the repo is that four qualitatively different violations all yield positive prediction
+error; the *laminar* argument for a single shared substrate is not supported by these data. A clean
+test would need the same units recorded across paradigms in one session — which this dataset does
+not provide — or many more CCF sessions. Reproduce:
 [`notebooks/h1h0_shared_substrate_ecephys.ipynb`](notebooks/h1h0_shared_substrate_ecephys.ipynb);
 profiles in [`data/h1h0_laminar_profiles.csv`](data/h1h0_laminar_profiles.csv) and
 [`data/h1h0_area_layer_profiles.csv`](data/h1h0_area_layer_profiles.csv).
@@ -877,11 +903,14 @@ pooled over the 5 shared animals):
 
 ![Result 6 laminar PSTH: PE time-course by cortical layer for the three error types](figures/r6_psth_bylayer.png)
 
-This is where the "shared substrate" claim shows its honest limits. For **feature-oddball** the
-laminar ordering is clean — L5/L6 carry the largest PE, superficial layers weakest. For
-**sequence** and **duration** the layer traces are much more mixed (and the duration divergence is
-largely *post*-window, reflecting the omission's late build to the expected time). The time-courses
-support a *partial* shared laminar signature, not a uniform one — matching the scalar result.
+These time-courses are in **absolute Hz (deviant − control)**, so they share the raw-Hz metric's
+bias toward deep layers (which fire harder). Read that way, **feature-oddball** shows a clean
+ordering — L5/L6 largest, superficial weakest — while **sequence** and **duration** are much more
+mixed (the duration divergence is largely *post*-window, reflecting the omission's late build to the
+expected time). Only one of the three paradigms shows a clean laminar ordering even on the raw
+metric, and that ordering is the opposite of the normalized-index gradient (panel A above) — so the
+time-courses do **not** establish a shared laminar signature; they illustrate the same
+metric-dependence and paradigm heterogeneity as the scalar analysis.
 
 ---
 
