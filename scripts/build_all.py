@@ -30,7 +30,9 @@ def main():
     if not (args.sidecars or args.figures):
         ap.error("nothing to do: pass --sidecars and/or --figures")
 
-    idx = o.load_session_index()
+    # refresh_aids=True re-resolves each session's asset id from the live dandiset by path,
+    # so a stale snapshot id (re-upload drift) doesn't silently pull a superseded file.
+    idx = o.load_session_index(refresh_aids=True)
     if args.paradigm:
         idx = idx[idx.paradigm == args.paradigm]
     if args.subject:

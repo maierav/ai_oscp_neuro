@@ -30,8 +30,14 @@ def assets():
     id is dropped once the new one lands). To stay deterministic even inside that
     window, keep the most-recently-created asset per path.
     """
-    raw = requests.get(API.format(ds=DS), params={"page_size": 200},
-                       timeout=60).json()["results"]
+    raw = []
+    url = API.format(ds=DS)
+    params = {"page_size": 200}
+    while url:
+        j = requests.get(url, params=params, timeout=60).json()
+        raw.extend(j["results"])
+        url = j.get("next")   # follow pagination — the dandiset can exceed one page
+        params = None         # 'next' already carries the query string
     by_path = {}
     for a in raw:
         cur = by_path.get(a["path"])
