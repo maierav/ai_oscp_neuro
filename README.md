@@ -277,6 +277,19 @@ Three imaging quirks, all load-bearing:
   judging the modality (we use sub-796630 2025-10-01 DMD1). One early format
   (sub-794237) differs and is skipped.
 
+> **Which correction applies where (an audit clarified this).** The two corrections are
+> independent. (1) The **+0.115 s DMD1 onset offset** is a real acquisition lag and applies to
+> *every* SLAP2 session; the validated RF/tuning notebooks add it to stimulus onsets and Result 7's
+> `slap2_fourparadigm_ecephys.ipynb` now does the same via a single shared `SLAP2_DMD1_OFFSET`
+> constant (it previously applied none — a genuine gap, now fixed). Adding to onsets and the
+> cross-scale notebooks' adding-to-data-timestamps are the *same* physical shift (read the dFF that
+> occurs ~115 ms after the stimulus mark), not opposite directions. (2) The **compressed-timebase
+> reconstruction** is needed *only* when a DMD's stored clock is corrupt — that was true for the old
+> RF sessions (sub-796630/801381) but **not** for the paradigm-matched Result 7 sessions
+> (828408/828409/829704), whose DMD1/DMD2 timestamps are clean and span the full acquisition
+> (verified), so no reconstruction is applied or needed there. Applying the offset shifts the n=2
+> SLAP2 indices by ≤0.2 and does not change the "uninformative at n=2" conclusion.
+
 ---
 
 ## Validation — the pipeline reads real visual signals
