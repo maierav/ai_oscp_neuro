@@ -843,6 +843,18 @@ many more CCF sessions. Reproduce:
 profiles in [`data/h1h0_laminar_profiles.csv`](data/h1h0_laminar_profiles.csv) and
 [`data/h1h0_area_layer_profiles.csv`](data/h1h0_area_layer_profiles.csv).
 
+**Laminar time-course diagnostic (PE by layer).** The scalar profile is complemented by the
+prediction-error *time-course* in each coarse layer group, per error type (VIS units, mean ± SEM,
+pooled over the 5 shared animals):
+
+![Result 6 laminar PSTH: PE time-course by cortical layer for the three error types](figures/r6_psth_bylayer.png)
+
+This is where the "shared substrate" claim shows its honest limits. For **feature-oddball** the
+laminar ordering is clean — L5/L6 carry the largest PE, superficial layers weakest. For
+**sequence** and **duration** the layer traces are much more mixed (and the duration divergence is
+largely *post*-window, reflecting the omission's late build to the expected time). The time-courses
+support a *partial* shared laminar signature, not a uniform one — matching the scalar result.
+
 ---
 
 ## Result 7 — Paradigm-matched SLAP2, first look (preliminary, n=2/paradigm)
