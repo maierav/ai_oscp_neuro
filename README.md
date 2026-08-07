@@ -231,7 +231,13 @@ over *pooled units* and so treat units from all animals as independent — they 
 the pooled deviant response differs from the control, not that the effect generalises across
 mice. The evidence for cross-animal robustness is the **hierarchical-bootstrap CI** (resamples
 sessions) and the **per-session-positive fraction** reported alongside each result; those are
-the numbers to weigh for generalisation. Likewise, the sensorimotor closed/open contrast
+the numbers to weigh for generalisation. (Result 1's own bootstrap function, `strat_boot` in
+`oddball_confirmatory_ecephys.ipynb`, was a late catch — it had a *different name* from the
+`boot_ci_strat` fixed elsewhere and still resampled units within a fixed 9-mouse set; it now
+resamples mice then units, widening Result 1's DvI₉₀ CI from [+0.41,+0.49] to [+0.38,+0.55] — still
+excluding zero, and backed by a 9/9-mouse sign test, p=0.0039.) The per-bin area×layer FDR grid in
+that notebook likewise pools units and is flagged in-notebook as descriptive (which bins are
+positive), not mouse-level inference. Likewise, the sensorimotor closed/open contrast
 (Result 3) sits below the resolution of its 8-event open-loop arm (one spike in one event ≈
 0.4–0.7 Hz), so its near-zero medians and CI bounds that land exactly on 0.0 are tie-mass at the
 precision floor — consistent with, and reported as, a null. Real CCF alignment is present in **57 of 60**
@@ -351,9 +357,15 @@ session-stratified bootstrap CIs and FDR correction across the area × layer gri
 
 ![Confirmatory feature-oddball, 9 sessions](figures/oddball_confirmatory_9sessions.png)
 
-- **Pooled DvI₉₀ = +0.46** (95% CI +0.42…+0.50, p ≈ 7×10⁻¹¹⁰) and **DvI₄₅ = +0.26**
-  (p ≈ 3×10⁻⁵⁸) — both far above the adaptation-inflated naive OI ≈ +0.08. **All 9
-  sessions** are positive (panel B); the effect is not driven by one animal.
+- **Pooled DvI₉₀ ≈ +0.43–0.45** (hierarchical 95% CI ≈ [+0.36, +0.55]) and **DvI₄₅ ≈ +0.27**
+  (≈ [+0.17, +0.37]) — both far above the adaptation-inflated naive OI ≈ +0.09. (Point
+  estimates drift by ~0.02 as the live DANDI draft re-uploads sessions; the CI covers it.) The
+  cross-animal evidence is **9/9 mice positive** (per-subject medians +0.34…+0.75;
+  exact sign test **p = 0.0039** for each), which is the number to weigh — *not* the
+  pooled per-unit Wilcoxon (p ≈ 4×10⁻¹¹⁵), which treats ~1,600 units from 9 mice as
+  independent and so measures effect *presence*, not cross-animal generalisation (see
+  the audit note under *Data particulars*). The hierarchical CI resamples mice (then
+  units); an earlier units-only bootstrap gave a spuriously tight [+0.41, +0.49].
 - **Deviance is not a tuning artifact.** DvI₉₀ barely depends on a unit's
   orientation preference (r = −0.13, panel C); tuned and untuned units carry equal
   deviance (+0.47 vs +0.45, panel D); and resampling to equalize the
