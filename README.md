@@ -72,11 +72,10 @@ excluding zero (sensorimotor is null):
 | Sensorimotor *(null)* | motor–visual contingency | +0.02 | [−0.12, +0.18] | 6 | 51 % |
 
 **Three** of the four error types carry a positive prediction-error index with a CI excluding
-zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** — when
-its closed/open contrast is re-derived through a clean, documented pipeline (see Result 3), the
-effect vanishes (+0.02, CI spans zero); an earlier "+0.10 trend" came from interactive code
-whose criterion was never committed and did not reproduce. It is italicised and flagged as null
-here. So the convergence claim is honest about its scope: deviance detection appears across
+zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** (+0.02,
+CI spans zero; see Result 3) — limited by low locomotion and a block-order confound, so it is
+italicised and flagged as null here. So the convergence claim is honest about its scope: deviance
+detection appears across
 frequency-, order-, and timing-based expectations, while the motor-contingency case is not
 established in the released data. Panel B shows the feature-oddball form generalizing across
 recording scales (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission
@@ -121,8 +120,12 @@ directly from DANDI. The capstone figure itself is regenerated from those two CS
 
 ## What's in this repository
 
-The core toolkit turns the preliminary Allen CCF alignment packaged into the DANDI
-NWB files into two reusable products:
+The preliminary Allen CCF alignment now ships **inside** the DANDI NWB files
+(`electrodes.location`/`x`/`y`/`z`), but two properties make it awkward to use directly: the
+acronyms need decoding into area + layer + tissue class, and the per-probe
+`extremum_channel_index` must be offset before it indexes the stacked `electrodes` table
+(see *Data particulars*). The core toolkit solves both once and turns the result into two
+reusable products:
 
 1. **Attachable CCF sidecars** — small per-session Parquet tables (one per unit,
    one per channel) that carry area / layer / coarse group / CCF coordinates,
@@ -207,50 +210,25 @@ Indexing `electrodes` directly assigns every unit to the first probe. Correct
 mapping (add the per-probe row offset) lives in `nwbio.unit_electrode_rows()`.
 `units.device_name` is a per-session device identifier, **not** an anatomical
 label — get area/layer from CCF. **Match `device_name` to the electrode
-`group_name` by exact equality, never by substring** — an earlier version of the
-per-notebook extractors used `device[-1].lower() in group.lower()`, which maps e.g.
-`ProbeE` onto `ProbeB` (because "e" is a substring of "probeb") and mislabels
-8–16 % of units per session; it inflated `VISa` with motor-cortex units in the
-sequence sessions. All notebooks now use exact matching (equivalent to
-`nwbio.unit_electrode_rows()`). This audit fix left the headline conclusions intact
-(Result 8's VISp/VISl, Result 6's laminar profile, Result 5 duration were all on
-clean probes) but corrected the `VISa`/`VISrl` counts. Separately, session-level
-confidence intervals now use a **hierarchical bootstrap** (resample sessions, then
-units within each) rather than resampling units within a fixed session set — the
-older version produced intervals that were too tight; this widened some CIs (notably
-mesoscope V1 in Result 8, which moved from a significant negative to a null).
-A second audit pass tightened reproducibility: Result 8's Neuropixels side (by-area
-and by-layer DvI, superficial-matched) is now computed in
-`mesoscope_sequence_area.ipynb` rather than only committed as a CSV; that path uses the
-`default_qc` responsive-unit gate that produced the original numbers (VISp +0.25 n=580),
-and under the corrected probe mapping the VISl set grows (n 99 → 405, still +0.18).
-`audit_locomotion.py` now emits `open_running_min` and a `passes_rule` flag that encode
-the actual ≥3-on-all-four inclusion rule (it previously reported only the max), and
-paginates the DANDI asset list. The SLAP2 n=2 summary reports two per-session medians
-instead of an ROI-level CI (which had omitted between-animal variance). The index loader
-splits its refresh flag into `aid_changed` (healed) vs `aid_unresolved` (unverified).
-**Read the tiny pooled p-values as effect presence, not cross-animal robustness.** The
-Wilcoxon/bootstrap p-values quoted per result (e.g. Result 1's p ≈ 7×10⁻¹¹⁰) are computed
-over *pooled units* and so treat units from all animals as independent — they establish that
-the pooled deviant response differs from the control, not that the effect generalises across
-mice. The evidence for cross-animal robustness is the **hierarchical-bootstrap CI** (resamples
-sessions) and the **per-session-positive fraction** reported alongside each result; those are
-the numbers to weigh for generalisation. (Result 1's own bootstrap function, `strat_boot` in
-`oddball_confirmatory_ecephys.ipynb`, was a late catch — it had a *different name* from the
-`boot_ci_strat` fixed elsewhere and still resampled units within a fixed 9-mouse set; it now
-resamples mice then units, widening Result 1's DvI₉₀ CI from [+0.41,+0.49] to [+0.38,+0.55] — still
-excluding zero, and backed by a 9/9-mouse sign test, p=0.0039.) The per-bin area×layer FDR grid in
-that notebook likewise pools units and is flagged in-notebook as descriptive (which bins are
-positive), not mouse-level inference. Likewise, the sensorimotor closed/open contrast
-(Result 3) sits below the resolution of its 8-event open-loop arm (one spike in one event ≈
-0.4–0.7 Hz), so its near-zero medians and CI bounds that land exactly on 0.0 are tie-mass at the
-precision floor — consistent with, and reported as, a null. Real CCF alignment is present in **57 of 60**
-ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest carry
-placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
-**CCF status is per-session, not per-subject** — `sub-832691` has one session with
-`"unknown"` for all 2880 channels and another with full CCF, so never infer a
-session's alignment from a sibling session of the same animal. Regenerate the
-registry with `python scripts/rebuild_session_index.py`.
+`group_name` by exact equality, never by substring** — a substring match (e.g.
+`device[-1].lower() in group.lower()`) maps `ProbeE` onto `ProbeB` and mislabels
+8–16 % of units per session. The correct mapping (add the per-probe row offset)
+lives in `nwbio.unit_electrode_rows()`; all notebooks use it.
+
+**Statistics — pooled p-values measure effect *presence*, not cross-animal
+robustness.** The tiny Wilcoxon/bootstrap p-values quoted per result (e.g. Result 1's
+p ≈ 4×10⁻¹¹⁵) pool units across animals and treat them as independent — they show the
+pooled deviant response differs from control, nothing about generalisation across mice.
+For cross-animal robustness weigh the **hierarchical-bootstrap CI** (resample sessions,
+then units) and the **per-session-positive fraction** reported alongside each result;
+those are the numbers that count. Per-bin area×layer FDR grids likewise pool units and
+are descriptive (which bins are positive), not mouse-level inference.
+
+**CCF is present in 57 of 60 ecephys sessions** (`electrodes.location`/`x`/`y`/`z`
+populated); the rest carry placeholder `"unknown"` locations and omit `x`/`y`/`z`.
+**Status is per-session, not per-subject** — `sub-832691` has one `"unknown"` session
+and one fully-aligned session, so never infer a session's alignment from a sibling.
+Regenerate the registry with `python scripts/rebuild_session_index.py`.
 
 **DANDI asset ids are not stable — resolve by path, not by id.** 001637 is
 draft-only (no published version), and re-uploading a session file mints a *new*
@@ -281,25 +259,18 @@ Three imaging quirks, all load-bearing:
   judging the modality (we use sub-796630 2025-10-01 DMD1). One early format
   (sub-794237) differs and is skipped.
 
-> **Which correction applies where, and a sign inconsistency the audit correctly caught.** The two
-> corrections are independent. (1) The **+0.115 s DMD1 onset offset** is a real acquisition lag that
-> applies to *every* SLAP2 session; Result 7's `slap2_fourparadigm_ecephys.ipynb` previously applied
-> none (a genuine gap) and now applies it via a single shared `SLAP2_DMD1_OFFSET` constant, following
-> the validated RF/tuning convention (**add to stimulus onsets** → read the dFF ~115 ms *after* the
-> onset mark). **The audit was right that the two existing conventions point in opposite directions:**
-> the RF/tuning notebooks add +0.115 s to *onsets* (sampling data at `onset + 0.115`), while the
-> cross-scale notebooks (`crossscale_oddball_index`, `omission_crossscale`) add +0.115 s to *data
-> timestamps*, which is equivalent to sampling at `onset − 0.115` — the two differ by ~0.23 s for the
-> same nominal window. Only one can be physically correct; we cannot adjudicate the true sign from the
-> released files alone, so Result 7 commits to the RF/tuning convention (used for the validated,
-> ground-truthed RF and tuning results) and the cross-scale Result 2 SLAP2 comparison should be
-> treated as sign-unverified on this axis pending an acquisition-timing spec. This does not affect
-> Results 1/3/4/5/6/8 (Neuropixels/mesoscope). (2) The **compressed-timebase reconstruction** is
-> needed *only* when a DMD's stored clock is corrupt — true for the old RF sessions
-> (sub-796630/801381) but **not** for the paradigm-matched Result 7 sessions (828408/828409/829704),
-> whose DMD1/DMD2 timestamps are clean and span the full acquisition (verified), so no reconstruction
-> is applied or needed there. Applying the offset shifts the n=2 SLAP2 indices by ≤0.2 and does not
-> change the "uninformative at n=2" conclusion.
+> **Two independent timing corrections, and a sign caveat.** (1) The **+0.115 s DMD1 onset offset**
+> is a real acquisition lag on *every* SLAP2 session; apply it via the shared `SLAP2_DMD1_OFFSET`
+> constant, **added to stimulus onsets** (read the dFF ~115 ms after the onset mark), as in the
+> validated RF/tuning notebooks. One caveat to know: the older cross-scale notebooks
+> (`crossscale_oddball_index`, `omission_crossscale`) instead add the offset to *data timestamps*
+> (≈ sampling at `onset − 0.115`), the opposite direction — ~0.23 s apart. The released files can't
+> adjudicate the true sign, so the cross-scale Result 2 SLAP2 leg is **sign-unverified on this axis**;
+> Results 1/3/4/5/6/8 (Neuropixels/mesoscope) are unaffected. (2) The **compressed-timebase
+> reconstruction** is needed *only* when a DMD's stored clock is corrupt — true for the old RF
+> sessions (sub-796630/801381) but not for the paradigm-matched Result 7 sessions
+> (828408/828409/829704), whose timestamps are clean. The offset shifts the n=2 SLAP2 indices by
+> ≤0.2 and does not change the "uninformative at n=2" conclusion.
 
 ---
 
@@ -346,10 +317,7 @@ Over **all** quality units/ROIs (no responsiveness pre-selection), at p < 0.01:
 All three scales sit well above the ~1 % chance rate at true onsets and collapse to ~1 % in the
 shuffled-onset control — the dissociation noise cannot produce. Notably the SLAP2 dendritic ROIs
 are the **most reliable at the single-ROI level** (median split-half r = 0.25), so its lower
-population fraction is a margin statement, not a per-ROI weakness. (An earlier version of this
-section reported ~16–18 % for Neuropixels/mesoscope from a hard-coded table over a
-responsiveness-selected subset; those numbers are superseded by this executed, selection-free
-result.) Reproduce:
+population fraction is a margin statement, not a per-ROI weakness. Reproduce:
 [`notebooks/rf_sanity_check_three_modalities.ipynb`](notebooks/rf_sanity_check_three_modalities.ipynb).
 
 ### Direction tuning
@@ -375,15 +343,11 @@ DSI/OSI medians and tuning width (von Mises fit) on the responsive population, w
 
 All three show well-formed tuning with realistic half-widths (16–28° HWHM). Examples are selected by
 **von Mises fit quality** (not by a selectivity index, which over-selects near-line curves), and we
-report the fitted width so narrow curves are shown as narrow rather than driving the selection.
-**Two honesty corrections** (an earlier version of this section): the previously-reported
-"% direction-selective" of 11/53/24 % had *no producing code* and used a bare DSI > 0.5 cut on DSI/OSI
-medians taken over **all** cells (rectifying noisy near-zero curves inflates imaging selectivity). The
-values above are the executed test — a responsiveness gate plus a DSI permutation — giving 22/22/52 %;
-on these highly-responsive sessions the responsive-only medians barely differ from the all-cell ones,
-but the gate is the correct default. RF mapping validates *spatial* sensitivity; direction tuning
-validates *feature* sensitivity — together the pipeline reads real visual signals at all three scales.
-Reproduce:
+report the fitted width so narrow curves are shown as narrow rather than driving the selection. The
+direction-selective fraction is computed on the responsive population with a permutation test (not a
+bare DSI cut), since rectifying noisy near-zero curves would otherwise inflate imaging selectivity.
+RF mapping validates *spatial* sensitivity; direction tuning validates *feature* sensitivity —
+together the pipeline reads real visual signals at all three scales. Reproduce:
 [`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb);
 values in [`data/direction_selectivity_summary.csv`](data/direction_selectivity_summary.csv).
 
@@ -411,8 +375,7 @@ session-stratified bootstrap CIs and FDR correction across the area × layer gri
   exact sign test **p = 0.0039** for each), which is the number to weigh — *not* the
   pooled per-unit Wilcoxon (p ≈ 4×10⁻¹¹⁵), which treats ~1,600 units from 9 mice as
   independent and so measures effect *presence*, not cross-animal generalisation (see
-  the audit note under *Data particulars*). The hierarchical CI resamples mice (then
-  units); an earlier units-only bootstrap gave a spuriously tight [+0.41, +0.49].
+  the statistics note under *Data particulars*). The hierarchical CI resamples mice, then units.
 - **Deviance is not a tuning artifact.** DvI₉₀ barely depends on a unit's
   orientation preference (r = −0.13, panel C); tuned and untuned units carry equal
   deviance (+0.47 vs +0.45, panel D); and resampling to equalize the
@@ -603,70 +566,16 @@ but the effect is directional only (paired +0.14 Hz, running > rest) and not sig
 only 3 sessions carry both running and rest halts (p = 0.18). Read it as a hint to test with
 more data, not as evidence: the properly-powered closed/open contrast (Contrast 3) is null.
 
-### Closed-loop vs open-loop — the designed contrast, single powered session
-
-![Sensorimotor closed-vs-open, power-limited](figures/sensorimotor_diagnostic.png)
-
-In the one session where the fully-designed contrast was computable (sub-830794, which
-ran 88 % of the session), a pattern appeared that *looked* like a motor-prediction
-signature: the **omission** closed-loop response exceeded the open-loop playback
-(Δ = +0.35 Hz, single-session CI [+0.03, +0.58]) while the orientation deviants showed
-no closed/open difference and the halt was borderline. On one mouse that reads as a
-dissociation between motor-contingent and purely-visual events.
-
-> ⚠️ **This single-session pattern did *not* replicate — see the multi-session re-run
-> below, which supersedes it.** With six powered sessions the omission "signature" is a
-> null (−0.09, CI crosses zero), and the orientation contrast that looked like the
-> *negative control* here is the one that weakly persists (though it, too, is n.s.).
-> Session 830794 itself is slightly *negative* under the corrected pipeline. In other
-> words the n=1 dissociation was noise: do **not** read Contrast 2 as evidence for a
-> motor-based prediction error. It is retained only to show why more sessions were
-> needed. Reproduce:
-> [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
-
-**Time-course diagnostic (four-level PSTH).**
-
-![Result 3 four-level PSTH: motor 90° mismatch vs standard flow across 8 sessions](figures/r3_psth_fourlevel.png)
-
-The 90° orientation mismatch drives a clear **sensory** transient above the ongoing standard
-flow at every level — the neurons do respond, and the trigger alignment is clean. This panel
-shows the deviant-vs-flow sensory response, **not** the closed-loop/open-loop contingency
-contrast that defines the prediction-error test; that contrast is the **null** reported above.
-The PSTH is included as a trigger/timebase and response-shape check, and it confirms the null
-is not an artefact of a missing or misaligned response.
-
-> **Update — those sessions now exist.** `scripts/audit_locomotion.py` scores all 16
-> SENSORYMOTOR sessions on the gating criterion (running >1 cm/s in the 1 s before each
-> of the 8 open-loop events per deviant type). **Six sessions clear ≥3 running events on
-> all four deviant types, all with real CCF** — `sub-848387` (8/8/8/8, ran 97 % of the
-> session), `sub-830848` (8/8/8/8), `sub-830794` (7/7/6/7, the session used above),
-> `sub-832691` (5/6/5/7), `sub-830847` (7/4/3/3), `sub-834686` (4/3/3/3). The remaining
-> ten sessions ran 7–38 % and carry ≤3 running open-loop events per type.
-> Note `sub-830848` was already in the registry, so even the earlier data supported more
-> than one session.
-
-### Multi-session re-run (pre-registered)
-
-The inclusion rule was pre-committed before computing the contrast (§12 of
-[`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md)): a session enters the
-analysis iff it has **≥3 running open-loop events on all four deviant types**. Six
-sessions qualify (1,917 VIS-area units). The contrast is the per-unit closed-loop-running
-minus open-loop-running DvI, pooled with a **hierarchical bootstrap** (resample sessions,
-then units).
-
-> **This section was re-derived from scratch during a code audit (see *Data particulars*).**
-> The original Result 3 multi-session numbers (+0.33 Hz, "significant across 5–6 sessions")
-> came from interactive kernel code whose exact inclusion/window criterion was never committed,
-> and **they do not reproduce.** Re-run through a clean, documented pipeline — exact
-> probe→area mapping, running gate >1 cm/s, response window (0–0.3 s) vs baseline
-> (−0.2 to −0.01 s), hierarchical CI — the effect is **null.** We report the honest null and
-> flag that, as the panel-C sensitivity analysis shows, the estimate depends on the
-> responsiveness threshold (none of the values reach significance at any threshold).
+### Closed-loop vs open-loop — the designed contrast (6 powered sessions)
 
 ![Sensorimotor mismatch across 6 powered sessions — a null effect](figures/sensorimotor_multisession.png)
 
-Primary criterion: **visually-responsive VIS-area units** (standard-block evoked rate > 0.1 Hz —
-the field-standard practice of analysing units the stimulus actually drives; ~257–267 units):
+The inclusion rule was pre-committed (§12 of
+[`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md)): a session enters iff it has
+**≥3 running open-loop events on all four deviant types** (`scripts/audit_locomotion.py` scores
+all 16 sessions; six qualify, all with real CCF). The contrast is the per-unit
+closed-loop-running minus open-loop-running DvI, pooled with a hierarchical bootstrap. On
+visually-responsive VIS-area units:
 
 | deviant | closed − open DvI | 95 % CI (hierarchical) | sessions + | reaches sig. |
 |---|---|---|---|---|
@@ -675,46 +584,28 @@ the field-standard practice of analysing units the stimulus actually drives; ~25
 | Halt | −0.18 | [−0.50, +0.16] | 2/6 | no |
 | Omission | −0.09 | [−0.43, +0.12] | 2/5 | no |
 
-The null does not depend on that threshold: taking **all** VIS units (no responsiveness cut, the
-conservative floor) gives 0.00 for every deviant, and the orientation-90 sweep in the CSV stays
-null at every cut (+0.00 → +0.02 → −0.02 → +0.05 across >0/0.1/0.25/0.5 Hz).
-
-> **Note on the n=6 vs n=5 mismatch (and a pre-registration gap it exposed).** The table shows 6
-> sessions for orientation-90/halt but 5 for orientation-45/omission — `sub-830848` drops from those
-> two types. The pre-registered §12 rule gated only on **open-loop** running events (830848 has
-> 8/8/8/8, so it was correctly included), but the *contrast* also needs running events in the
-> **closed-loop** arm. In 830848 the closed-loop running counts are orient-90: 4, halt: 2,
-> orient-45: **0**, omission: **0**. The extractor drops a type only when a gated event list is
-> **empty** (0 events → the per-unit rate is undefined for every unit → the whole type is NaN); with
-> ≥1 event the type is retained. So orient-45 and omission (0 closed-running events) drop, while halt
-> (2) and orient-90 (4) survive — which is exactly the observed 6/6/5/5 pattern. This is a real gap
-> in the pre-registration: §12 should have required running events in **both** arms, and even then a
-> ≥1-event floor is far below the ≥3 the rule demanded. It makes the contrast even more
-> power-limited than the inclusion count suggests, though it does not change the null (every
-> surviving type is n.s.). The per-arm running counts are printed by the notebook.
-
-**Honest status: null.** Under the clean pipeline the closed-loop/open-loop contrast shows
-**no prediction-error signal** for any deviant type — every CI includes zero, and the
-per-session estimates are weak and sign-inconsistent (panel B; notably session 830794, the
-one that carried the original single-session result, is now slightly *negative*). Three
-things explain why the earlier claim was too strong: (1) the original units-only bootstrap
-treated ~1,000 units as independent and gave CIs that were far too tight; (2) in these six
-sessions the closed-loop block always runs *earlier* than the open-loop control, so
-within-session drift biases the difference positive; and (3) most of these sessions carry only
-placeholder CCF, so any area split is unreliable. The panel-C threshold sweep makes the
-fragility explicit — the orientation-90 estimate wanders between −0.02 and +0.05 as the
-responsiveness threshold moves, always with a CI spanning zero. **Bottom line:** the released
-sensorimotor data do **not** establish a motor-based prediction-error signal at the population
-level. The single-session dissociation (Contrast 2) did not survive — worse, it *inverted*: the
-omission "signature" went null and the orientation "negative control" is the contrast that weakly
-persists, so the n=1 pattern was noise, not a preview. What remains defensible is only the
-weak, non-significant hint of running-state gain on the orientation deviants — a **different**
-claim from the motor-prediction dissociation, and one this dataset cannot establish. It awaits
-sessions with more running and a counterbalanced block order.
-Reproduce: `scripts/audit_locomotion.py` for the inclusion set, then the extraction in
+**Honest status: null.** No deviant type shows a closed/open prediction-error signal — every CI
+includes zero, and per-session estimates are weak and sign-inconsistent. The null is robust to
+the responsiveness threshold (taking all VIS units gives 0.00 for every deviant; the
+orientation-90 sweep stays null at every cut). Two features cap what these data can show: the
+open-loop control arm has only 8 events per type (running must coincide with them), and the
+closed-loop block always runs *earlier* than the open-loop control, so within-session drift
+biases the difference positive. What remains is at most a weak, non-significant hint of
+running-state gain on the orientation deviants — a different and unestablished claim. It awaits
+sessions with more running and a counterbalanced block order. Reproduce:
+`scripts/audit_locomotion.py` for the inclusion set, then
 [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb);
-values (with the threshold sensitivity) in
+values in
 [`data/sensorimotor_multisession_summary.csv`](data/sensorimotor_multisession_summary.csv).
+
+**Time-course diagnostic (four-level PSTH).**
+
+![Result 3 four-level PSTH: motor 90° mismatch vs standard flow across 8 sessions](figures/r3_psth_fourlevel.png)
+
+The 90° orientation mismatch drives a clear **sensory** transient above the ongoing standard
+flow at every level, with clean trigger alignment. This is the deviant-vs-flow sensory response,
+**not** the closed-loop/open-loop contingency contrast (the null above) — it is shown to confirm
+the null is not an artefact of a missing or misaligned response.
 
 
 ---
@@ -858,10 +749,9 @@ omission has no stimulus to subtract.)
 
 ![Testing H1 vs H0 anatomically](figures/h1h0_anatomical_test.png)
 
-**The laminar pattern depends on the metric — shown both ways.** An earlier version of this
-section called a shared **granular/infragranular (L4–L6)** concentration "the one robust finding."
-That was computed on **raw PE response (Hz)**, and it does not survive scrutiny: on the *same*
-feature-oddball units the two metrics point in **opposite** directions.
+**The laminar pattern depends on the metric — shown both ways.** On the *same* feature-oddball
+units the two metrics point in **opposite** directions, so neither alone establishes a shared
+laminar signature:
 
 ![Laminar PE gradient is metric-dependent](figures/h1_laminar_metric_comparison.png)
 
@@ -873,10 +763,9 @@ feature-oddball units the two metrics point in **opposite** directions.
   is largest. Normalizing by response magnitude (which is what DvI does) removes that and flips the
   gradient.
 
-So the direction of the laminar gradient is an artifact of which metric you plot, and the two
-Results in this repo (Result 1 superficial-heavy DvI; the old Result 6 deep-heavy raw-Hz) were
-describing the same units through different lenses. We now show both and let the reader see the
-dependence rather than asserting one as "the" laminar signature.
+So the direction of the laminar gradient is an artifact of which metric you plot — the normalized
+DvI (Result 1's superficial-heavy gradient) and raw Hz describe the same units through different
+lenses. Both are shown rather than asserting one as "the" laminar signature.
 
 **What the cross-paradigm correlation actually shows.** At full area×layer resolution the raw-Hz
 profiles *lean* the same way — feature-oddball vs sequence Spearman ρ = +0.56 (p = 0.09), vs
@@ -972,8 +861,7 @@ where it matters most.
 
 Comparing the same paradigm (position-3 90° deviant vs. the equiprobable Control-block-2 90°
 control, same DvI) in the two areas mesoscope samples. All CIs are **hierarchical bootstraps**
-(resampling sessions, then units) so between-session variance is included — an earlier
-units-only bootstrap made these intervals too tight (fixed in the audit below):
+(resampling sessions, then units) so between-session variance is included:
 
 | area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
 |---|---|---|
@@ -994,8 +882,8 @@ feature-oddball is weak pooled (Result 2, +0.11).
 
 **Is it just laminar sampling?** Mesoscope images ~46–428 µm (L2/3 through upper L5, **missing
 L6**), while Neuropixels samples all layers. The Neuropixels V1 sequence-PE *is* deep-biased
-(L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14; panel B, computed with the corrected probe→area
-mapping — see audit note), so depth explains part of the magnitude gap. Restricting Neuropixels
+(L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14; panel B), so depth explains part of the magnitude
+gap. Restricting Neuropixels
 V1 to the superficial layers mesoscope can see gives +0.19 (point estimate positive) versus
 mesoscope's −0.08 — but with the honest hierarchical CI this superficial-matched comparison is
 **underpowered** (wide interval crossing zero), so depth-matching neither rescues nor cleanly
@@ -1010,18 +898,14 @@ contamination, or a genuine transformation between somatic spiking output and th
 somatic calcium proxy.
 
 > **Important caveat — this comparison is *not* tuning/responsiveness-balanced, and Result 2 shows
-> that matters.** Result 2 is the repo's demonstration that raw cross-technique indices are
-> dominated by tuning-biased cell sampling (the oddball index swings from −1.0 to +0.16 only after
-> joint balancing). Result 8 compares a raw per-ROI mesoscope DvI against a raw per-unit spiking DvI
-> **without** that balancing, and the mesoscope side has no responsiveness floor — so ROIs with
-> near-zero standard *and* deviant response push the DvI toward ±1 on noise (the 1e-9 denominator
-> guard does not prevent this), and the large n-asymmetry (VISl: 405 spiking units vs 14,806
-> mesoscope ROIs; VISp: 580 vs 16,275) alone drives part of the "spiking n.s. / mesoscope tight"
-> contrast. So the honest status of Result 8 is: the
-> *point-estimate* sign discrepancy in V1 is real in these raw indices, but **we have not ruled out
-> the sampling/normalization explanation that Result 2 characterizes** — the balancing correction has
-> not been applied here. Treat Result 8 as a flag for a balanced cross-modality re-analysis (a clear
-> next step), not as an established biological dissociation.
+> that matters.** Result 2 demonstrates that raw cross-technique indices are dominated by
+> tuning-biased cell sampling (the oddball index swings from −1.0 to +0.16 only after joint
+> balancing). Result 8 compares raw per-ROI and per-unit DvIs **without** that balancing: the
+> mesoscope side has no responsiveness floor (near-zero ROIs push the DvI toward ±1 on noise), and
+> the large n-asymmetry (VISp: 580 spiking units vs 16,275 mesoscope ROIs) alone drives part of the
+> "spiking n.s. / mesoscope tight" contrast. So the V1 sign discrepancy is real *in these raw
+> indices*, but the sampling/normalization explanation has **not** been ruled out. Treat Result 8 as
+> a flag for a balanced cross-modality re-analysis, not an established biological dissociation.
 
 This is a caution for anyone pooling deviance indices across techniques,
 and it sharpens (rather than resolves) the cross-scale question raised in Results 2 and 7.
@@ -1145,15 +1029,6 @@ prediction-error signal. Full analysis:
 [`notebooks/crosstechnique_corrections.ipynb`](notebooks/crosstechnique_corrections.ipynb).
 
 ---
-
-## Why a CCF package
-
-The raw NWB CCF fields are awkward to use directly for the two reasons detailed in
-*Data particulars* above — the acronyms need decoding into area + layer + tissue
-class, and the per-probe `extremum_channel_index` must be offset before indexing
-the stacked `electrodes` table. This package handles both once (`ccf.py`,
-`nwbio.unit_electrode_rows()`) and ships the results as attachable sidecars, so
-every downstream analysis inherits correct anatomy without re-solving them.
 
 ## Install
 
