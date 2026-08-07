@@ -112,15 +112,17 @@ anatomy.
 
 The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
 and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv). The reproducibility chain
-is two-stage: each Result notebook (`oddball_confirmatory_ecephys`, `sequence_mismatch_ecephys`,
-`duration_mismatch_ecephys`, `sensorimotor_mismatch_ecephys`, and the cross-scale set) streams
-its NWB files from DANDI and writes the **per-unit table** it computes (e.g.
-`data/oddball_confirmatory_units.parquet`, `data/sequence_units.parquet`,
-`data/duration_units.parquet`); the per-error-type index in the capstone CSV is the pooled
-DvI/timing-PE of that table. The capstone figure is then rendered from the two CSVs by
-[`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) (no NWB streaming).
-The committed CSVs are the authoritative snapshot; run a Result notebook with `QUICK = False`
-(the default) to regenerate its per-unit table.
+is two-stage. Three of the ecephys Result notebooks — `oddball_confirmatory_ecephys`,
+`sequence_mismatch_ecephys`, and `duration_mismatch_ecephys` — stream their NWB files from DANDI
+and write the **per-unit table** they compute (`data/oddball_confirmatory_units.parquet`,
+`data/sequence_units.parquet`, `data/duration_units.parquet`); the corresponding per-error-type
+index in the capstone CSV is the pooled DvI/timing-PE of that table. The sensorimotor row and the
+cross-scale columns are computed in their own notebooks (`sensorimotor_mismatch_ecephys` and the
+cross-scale set) but those do **not** yet persist a per-unit table — their capstone values trace to
+the committed summary CSVs, not to a regenerated parquet. The capstone figure is rendered from the
+two CSVs by [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) (no NWB
+streaming). The committed CSVs are the authoritative snapshot; run one of the three notebooks above
+with `QUICK = False` (the default) to regenerate its per-unit table.
 
 ## What's in this repository
 
