@@ -40,3 +40,7 @@ figures/*.png
 !figures/sensorimotor_multisession.png
 !figures/slap2_fourparadigm.png
 !figures/sequence_crossscale_area.png
+!figures/r1_psth_fourlevel.png
+!figures/r3_psth_fourlevel.png
+!figures/r4_psth_fourlevel.png
+!figures/r5_psth_fourlevel.png
