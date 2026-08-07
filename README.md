@@ -111,12 +111,16 @@ this repo rests on the convergent *sign* of prediction error across four paradig
 anatomy.
 
 The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
-and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv); each is recomputed
-from its paradigm's per-unit table by the corresponding Result notebook
-(`oddball_confirmatory_ecephys`, `sequence_mismatch_ecephys`, `duration_mismatch_ecephys`,
-`sensorimotor_mismatch_ecephys`, and the cross-scale set), which stream the NWB files
-directly from DANDI. The capstone figure itself is regenerated from those two CSVs by
+and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv). The reproducibility chain
+is two-stage: each Result notebook (`oddball_confirmatory_ecephys`, `sequence_mismatch_ecephys`,
+`duration_mismatch_ecephys`, `sensorimotor_mismatch_ecephys`, and the cross-scale set) streams
+its NWB files from DANDI and writes the **per-unit table** it computes (e.g.
+`data/oddball_confirmatory_units.parquet`, `data/sequence_units.parquet`,
+`data/duration_units.parquet`); the per-error-type index in the capstone CSV is the pooled
+DvI/timing-PE of that table. The capstone figure is then rendered from the two CSVs by
 [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) (no NWB streaming).
+The committed CSVs are the authoritative snapshot; run a Result notebook with `QUICK = False`
+(the default) to regenerate its per-unit table.
 
 ## What's in this repository
 
@@ -1116,6 +1120,13 @@ Two layers keep this automatic:
 * **GitHub Action** — `.github/workflows/clean-notebooks.yml` cleans and commits
   back on any pushed notebook, which covers saving from Colab straight to GitHub
   (that path bypasses local hooks).
+
+**Committed notebooks are stored un-run** (no cell outputs), except
+`ccf_penetration_figures.ipynb`. This is deliberate — the figures and CSVs they produce are
+committed under `figures/` and `data/`, and every analysis notebook defaults to `QUICK = False`,
+so a clean **Run All** regenerates the committed artifacts (streaming the NWB files from DANDI;
+allow several minutes per notebook). Set `QUICK = True` for a fast 3-session preview, which does
+**not** reproduce the committed full-cohort numbers.
 
 ## License
 
