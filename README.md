@@ -48,7 +48,9 @@ reading (H1), with the motor case still open pending better-powered data.
 
 ![Common deviance-detection signal across four kinds of violated expectation, generalizing across recording scales](figures/capstone_synthesis.png)
 
-The project's five prediction-error results, on one axis. Each row of panel A is a
+The project's four error-type prediction-error contrasts, on one axis (the eight
+numbered Results below expand these plus the cross-scale and anatomical analyses).
+Each row of panel A is a
 different way of making a stimulus *unexpected*; the index is the deviant response
 relative to a physically-matched control (bounded −1…+1, so techniques and
 paradigms are comparable). All four are positive with confidence intervals
@@ -216,7 +218,16 @@ the actual ≥3-on-all-four inclusion rule (it previously reported only the max)
 paginates the DANDI asset list. The SLAP2 n=2 summary reports two per-session medians
 instead of an ROI-level CI (which had omitted between-animal variance). The index loader
 splits its refresh flag into `aid_changed` (healed) vs `aid_unresolved` (unverified).
-Real CCF alignment is present in **57 of 60**
+**Read the tiny pooled p-values as effect presence, not cross-animal robustness.** The
+Wilcoxon/bootstrap p-values quoted per result (e.g. Result 1's p ≈ 7×10⁻¹¹⁰) are computed
+over *pooled units* and so treat units from all animals as independent — they establish that
+the pooled deviant response differs from the control, not that the effect generalises across
+mice. The evidence for cross-animal robustness is the **hierarchical-bootstrap CI** (resamples
+sessions) and the **per-session-positive fraction** reported alongside each result; those are
+the numbers to weigh for generalisation. Likewise, the sensorimotor closed/open contrast
+(Result 3) sits below the resolution of its 8-event open-loop arm (one spike in one event ≈
+0.4–0.7 Hz), so its near-zero medians and CI bounds that land exactly on 0.0 are tie-mass at the
+precision floor — consistent with, and reported as, a null. Real CCF alignment is present in **57 of 60**
 ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest carry
 placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
 **CCF status is per-session, not per-subject** — `sub-832691` has one session with
@@ -512,21 +523,22 @@ only 3 sessions carry both running and rest halts (p = 0.18).
 
 ![Sensorimotor closed-vs-open, power-limited](figures/sensorimotor_diagnostic.png)
 
-Where the fully-designed contrast is computable (sub-830794, which ran 88 % of the
-session), the **omission** closed-loop response significantly exceeds the open-loop
-playback (Δ = +0.35 Hz, 95 % CI [+0.03, +0.58]), while the purely-visual orientation
-deviants — which carry information with or without the motor loop — show no
-closed/open difference. The halt points the same way (Δ = +0.01 Hz) but its CI crosses
-zero, so it is suggestive, not significant. That dissociation (motor-contingent events
-differ from playback, purely-visual events don't) is exactly the motor-prediction
-signature, but it rests on one mouse.
+In the one session where the fully-designed contrast was computable (sub-830794, which
+ran 88 % of the session), a pattern appeared that *looked* like a motor-prediction
+signature: the **omission** closed-loop response exceeded the open-loop playback
+(Δ = +0.35 Hz, single-session CI [+0.03, +0.58]) while the orientation deviants showed
+no closed/open difference and the halt was borderline. On one mouse that reads as a
+dissociation between motor-contingent and purely-visual events.
 
-**Bottom line:** the sensorimotor block *confirms* deviance detection at the population
-level and is *consistent with* a motor-based prediction error in the two places it can
-be measured, without yet establishing the latter at population scale — an honest
-boundary set by the released data (low locomotion, small control block), not the
-analysis. It awaits sessions with more running. Reproduce:
-[`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
+> ⚠️ **This single-session pattern did *not* replicate — see the multi-session re-run
+> below, which supersedes it.** With six powered sessions the omission "signature" is a
+> null (−0.09, CI crosses zero), and the orientation contrast that looked like the
+> *negative control* here is the one that weakly persists (though it, too, is n.s.).
+> Session 830794 itself is slightly *negative* under the corrected pipeline. In other
+> words the n=1 dissociation was noise: do **not** read Contrast 2 as evidence for a
+> motor-based prediction error. It is retained only to show why more sessions were
+> needed. Reproduce:
+> [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb).
 
 > **Update — those sessions now exist.** `scripts/audit_locomotion.py` scores all 16
 > SENSORYMOTOR sessions on the gating criterion (running >1 cm/s in the 1 s before each
@@ -572,6 +584,20 @@ The null does not depend on that threshold: taking **all** VIS units (no respons
 conservative floor) gives 0.00 for every deviant, and the orientation-90 sweep in the CSV stays
 null at every cut (+0.00 → +0.02 → −0.02 → +0.05 across >0/0.1/0.25/0.5 Hz).
 
+> **Note on the n=6 vs n=5 mismatch (and a pre-registration gap it exposed).** The table shows 6
+> sessions for orientation-90/halt but 5 for orientation-45/omission — `sub-830848` drops from those
+> two types. The pre-registered §12 rule gated only on **open-loop** running events (830848 has
+> 8/8/8/8, so it was correctly included), but the *contrast* also needs running events in the
+> **closed-loop** arm. In 830848 the closed-loop running counts are orient-90: 4, halt: 2,
+> orient-45: **0**, omission: **0**. The extractor drops a type only when a gated event list is
+> **empty** (0 events → the per-unit rate is undefined for every unit → the whole type is NaN); with
+> ≥1 event the type is retained. So orient-45 and omission (0 closed-running events) drop, while halt
+> (2) and orient-90 (4) survive — which is exactly the observed 6/6/5/5 pattern. This is a real gap
+> in the pre-registration: §12 should have required running events in **both** arms, and even then a
+> ≥1-event floor is far below the ≥3 the rule demanded. It makes the contrast even more
+> power-limited than the inclusion count suggests, though it does not change the null (every
+> surviving type is n.s.). The per-arm running counts are printed by the notebook.
+
 **Honest status: null.** Under the clean pipeline the closed-loop/open-loop contrast shows
 **no prediction-error signal** for any deviant type — every CI includes zero, and the
 per-session estimates are weak and sign-inconsistent (panel B; notably session 830794, the
@@ -584,8 +610,12 @@ placeholder CCF, so any area split is unreliable. The panel-C threshold sweep ma
 fragility explicit — the orientation-90 estimate wanders between −0.02 and +0.05 as the
 responsiveness threshold moves, always with a CI spanning zero. **Bottom line:** the released
 sensorimotor data do **not** establish a motor-based prediction-error signal at the population
-level; the single high-locomotion session (Contrast 2 above) remains a suggestive anecdote, not
-a population result. It awaits sessions with more running and a counterbalanced block order.
+level. The single-session dissociation (Contrast 2) did not survive — worse, it *inverted*: the
+omission "signature" went null and the orientation "negative control" is the contrast that weakly
+persists, so the n=1 pattern was noise, not a preview. What remains defensible is only the
+weak, non-significant hint of running-state gain on the orientation deviants — a **different**
+claim from the motor-prediction dissociation, and one this dataset cannot establish. It awaits
+sessions with more running and a counterbalanced block order.
 Reproduce: `scripts/audit_locomotion.py` for the inclusion set, then the extraction in
 [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb);
 values (with the threshold sensitivity) in
@@ -716,8 +746,9 @@ prediction-error index in each paradigm at dendritic-glutamate resolution for th
 
 ![Paradigm-matched SLAP2, four error types](figures/slap2_fourparadigm.png)
 
-**At n = 2 sessions per paradigm, none of the four SLAP2 paradigms reproduces the positive
-prediction-error index that Neuropixels spiking shows** — the pooled medians sit at or below zero
+**At n = 2 sessions per paradigm the SLAP2 data are uninformative — no paradigm shows the positive
+prediction-error index that Neuropixels spiking shows, but the honest reading is "cannot tell yet,"
+not "reproduces a null."** The pooled medians sit at or below zero
 (oddball −0.02, sequence −0.06, duration +0.01, sensorimotor −0.24). With only two sessions we
 report the **two per-session medians** rather than a bootstrap CI (a within-subject ROI bootstrap
 would omit the between-animal variance that dominates at n = 2 and give a spuriously tight
@@ -785,7 +816,23 @@ especially in V1, where a strong spiking deviance signal (concentrated in deep l
 appear in the superficial 2-photon signal. Candidate causes this dataset cannot yet
 adjudicate: indicator nonlinearity/thresholding suppressing small deviance signals, neuropil
 contamination, or a genuine transformation between somatic spiking output and the dendritic/
-somatic calcium proxy. This is a caution for anyone pooling deviance indices across techniques,
+somatic calcium proxy.
+
+> **Important caveat — this comparison is *not* tuning/responsiveness-balanced, and Result 2 shows
+> that matters.** Result 2 is the repo's demonstration that raw cross-technique indices are
+> dominated by tuning-biased cell sampling (the oddball index swings from −1.0 to +0.16 only after
+> joint balancing). Result 8 compares a raw per-ROI mesoscope DvI against a raw per-unit spiking DvI
+> **without** that balancing, and the mesoscope side has no responsiveness floor — so ROIs with
+> near-zero standard *and* deviant response push the DvI toward ±1 on noise (the 1e-9 denominator
+> guard does not prevent this), and the large n-asymmetry (VISl: 405 spiking units vs 14,806
+> mesoscope ROIs; VISp: 580 vs 16,275) alone drives part of the "spiking n.s. / mesoscope tight"
+> contrast. So the honest status of Result 8 is: the
+> *point-estimate* sign discrepancy in V1 is real in these raw indices, but **we have not ruled out
+> the sampling/normalization explanation that Result 2 characterizes** — the balancing correction has
+> not been applied here. Treat Result 8 as a flag for a balanced cross-modality re-analysis (a clear
+> next step), not as an established biological dissociation.
+
+This is a caution for anyone pooling deviance indices across techniques,
 and it sharpens (rather than resolves) the cross-scale question raised in Results 2 and 7.
 A per-subject magnitude spread sits on top of the area pattern (a few mesoscope sessions are
 negative in both areas) — a candidate for a behavioral-state analysis as more data accrues.

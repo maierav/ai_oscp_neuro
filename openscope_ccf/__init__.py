@@ -49,7 +49,10 @@ def load_session_index(refresh_aids: bool = False) -> pd.DataFrame:
             cur.append(aid)
             changed.append(aid != row.aid)   # refreshed to a new id -> now fresh
             unresolved.append(False)
-        except LookupError:
+        except Exception:
+            # LookupError (path not found) OR a transient network/HTTP error
+            # (resolve_asset calls raise_for_status): flag this one row unverified
+            # rather than aborting the whole 58-session refresh on one 5xx.
             cur.append(row.aid)              # kept the shipped id, could not verify
             changed.append(False)
             unresolved.append(True)
