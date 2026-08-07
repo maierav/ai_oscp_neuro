@@ -50,12 +50,19 @@ reading (H1), with the motor case still open pending better-powered data.
 
 The project's four error-type prediction-error contrasts, on one axis (the eight
 numbered Results below expand these plus the cross-scale and anatomical analyses).
-Each row of panel A is a
-different way of making a stimulus *unexpected*; the index is the deviant response
-relative to a physically-matched control (bounded −1…+1, so techniques and
-paradigms are comparable). All four are positive with confidence intervals
-excluding zero — the deviance signal does not depend on *how* the expectation was
-set:
+Each row of panel A is a different way of making a stimulus *unexpected*, expressed
+as a bounded −1…+1 index so the four can share an axis. **The rows are not the
+identical construction, and the axis compares direction, not magnitude.** Three rows
+(feature-oddball, sequence, sensorimotor) are DvIs — the deviant response relative to
+a **physically-matched control stimulus**, (R_dev−R_ctrl)/(|R_dev|+|R_ctrl|). The
+duration row is a **timing-PE index** — the omission response at the expected onset
+time (there is *no* stimulus, so no physically-matched control is possible) normalized
+by the standard sensory response, om/(|om|+|std|). Both are bounded to −1…+1 and both
+put a surprise-related response over a response-magnitude denominator, but a duration
++0.32 and a feature-oddball +0.45 are not strictly the same quantity — so read the
+panel as **"which error types produce a positively-signed PE and how consistently,"**
+not as a strength ranking. On that reading, three of four are positive with CIs
+excluding zero (sensorimotor is null):
 
 | error type | expectation set by | PE index | 95 % CI (hierarchical) | sessions | cells + |
 |---|---|---|---|---|---|
