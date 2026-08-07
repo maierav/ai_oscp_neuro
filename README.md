@@ -886,6 +886,18 @@ stages of the same circuit — or (ii) simple underpowering. The sensorimotor co
 weakest of the four (only ~5 open-loop running events per session, the same locomotion limit as
 Result 3), so its apparent negative value should not be read as a real suppression. The SLAP2
 dataset is actively growing; this analysis is built to re-run as the paradigm-matched set expands.
+**Time-course diagnostic (four-level PSTH, ΔF/F).** Shown for the standard-oddball paradigm (the one
+with a matched equiprobable control):
+
+![Result 7 four-level PSTH: SLAP2 standard-oddball ΔF/F, n=2 sessions](figures/r7_psth_fourlevel.png)
+
+The iGluSnFR signal responds clearly and is well-triggered (clean transient at onset, ~200 ms
+glutamate kinetics) — the pipeline reads a real visual response. But the 90° oddball (red) does
+**not** exceed the equiprobable control (blue); if anything the control is marginally higher in the
+window. That is the time-course form of the near-zero oddball DvI. Panel D shows the two sessions as
+separate lines — at n=2 there is no meaningful across-session interval, and the figure is labelled
+accordingly.
+
 Reproduce:
 [`notebooks/slap2_fourparadigm_ecephys.ipynb`](notebooks/slap2_fourparadigm_ecephys.ipynb);
 values in [`data/slap2_fourparadigm_summary.csv`](data/slap2_fourparadigm_summary.csv).
