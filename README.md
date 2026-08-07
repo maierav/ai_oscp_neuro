@@ -206,6 +206,16 @@ confidence intervals now use a **hierarchical bootstrap** (resample sessions, th
 units within each) rather than resampling units within a fixed session set — the
 older version produced intervals that were too tight; this widened some CIs (notably
 mesoscope V1 in Result 8, which moved from a significant negative to a null).
+A second audit pass tightened reproducibility: Result 8's Neuropixels side (by-area
+and by-layer DvI, superficial-matched) is now computed in
+`mesoscope_sequence_area.ipynb` rather than only committed as a CSV; that path uses the
+`default_qc` responsive-unit gate that produced the original numbers (VISp +0.25 n=580),
+and under the corrected probe mapping the VISl set grows (n 99 → 405, still +0.18).
+`audit_locomotion.py` now emits `open_running_min` and a `passes_rule` flag that encode
+the actual ≥3-on-all-four inclusion rule (it previously reported only the max), and
+paginates the DANDI asset list. The SLAP2 n=2 summary reports two per-session medians
+instead of an ROI-level CI (which had omitted between-animal variance). The index loader
+splits its refresh flag into `aid_changed` (healed) vs `aid_unresolved` (unverified).
 Real CCF alignment is present in **57 of 60**
 ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest carry
 placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
@@ -707,8 +717,12 @@ prediction-error index in each paradigm at dendritic-glutamate resolution for th
 ![Paradigm-matched SLAP2, four error types](figures/slap2_fourparadigm.png)
 
 **At n = 2 sessions per paradigm, none of the four SLAP2 paradigms reproduces the positive
-prediction-error index that Neuropixels spiking shows** — all sit at or below zero (oddball
-−0.02, sequence −0.06, duration +0.01, sensorimotor −0.24). This extends the Result 2 cross-scale
+prediction-error index that Neuropixels spiking shows** — the pooled medians sit at or below zero
+(oddball −0.02, sequence −0.06, duration +0.01, sensorimotor −0.24). With only two sessions we
+report the **two per-session medians** rather than a bootstrap CI (a within-subject ROI bootstrap
+would omit the between-animal variance that dominates at n = 2 and give a spuriously tight
+interval). The per-session values are wide apart — e.g. sequence −0.79 / +0.01, sensorimotor
++0.04 / −0.44 — which is exactly why no CI is warranted yet. This extends the Result 2 cross-scale
 finding (imaging modalities show weak/absent oddball effects) to the dendritic-glutamate scale
 and to the non-oddball paradigms.
 
@@ -742,7 +756,7 @@ units-only bootstrap made these intervals too tight (fixed in the audit below):
 | area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
 |---|---|---|
 | **VISp** (primary V1) | **+0.25** [+0.01, +0.40] — *significant, strongest area* | **−0.08** [−0.28, +0.14] — **null** |
-| **VISl** (lateral) | +0.16 [−0.06, +0.41] — n.s. (n=99) | +0.18 [+0.03, +0.31] — significant |
+| **VISl** (lateral) | +0.18 [−0.01, +0.33] — n.s. (n=405) | +0.18 [+0.03, +0.31] — significant |
 
 **In V1 the two modalities give opposite point estimates, and where spiking is significantly
 positive, 2-photon is a null.** Spiking finds the sequence-PE *strongest* in primary V1 (+0.25,
@@ -750,8 +764,9 @@ significant, present across all areas); mesoscope 2-photon in V1 is a wide null 
 (9 of 16 sessions negative — the negative point estimate is *not* significant once between-session
 variance is counted). So the honest statement is a **cross-modality discrepancy in V1**: the
 spiking deviance signal that is strong and significant in V1 does not appear in the 2-photon
-signal there. The apparent VISl similarity (+0.16 vs +0.18) is not a match to lean on either —
-the Neuropixels VISl estimate is not significant (only 99 units). The same direction holds for
+signal there. In VISl the two modalities *agree* — both positive, +0.18 (Neuropixels) vs +0.18
+(mesoscope) — though the Neuropixels VISl estimate is not itself significant (its CI just
+includes zero even at n=405 under the corrected probe mapping). The same direction holds for
 feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49), while mesoscope
 feature-oddball is weak pooled (Result 2, +0.11).
 
@@ -775,7 +790,10 @@ and it sharpens (rather than resolves) the cross-scale question raised in Result
 A per-subject magnitude spread sits on top of the area pattern (a few mesoscope sessions are
 negative in both areas) — a candidate for a behavioral-state analysis as more data accrues.
 Reproduce: [`notebooks/mesoscope_sequence_area.ipynb`](notebooks/mesoscope_sequence_area.ipynb)
-(QUICK mode runs 4 sessions); values in
+computes **both** sides — the mesoscope area DvI *and* the Neuropixels area/layer/superficial
+breakdown (exact probe→area mapping, `default_qc` responsive units, hierarchical CI) — and writes
+both CSVs on a full run (QUICK mode is a result-blind first-N preview and does not overwrite the
+authoritative tables). Values in
 [`data/seq_area_comparison.csv`](data/seq_area_comparison.csv) and
 [`data/seq_visp_layers.csv`](data/seq_visp_layers.csv).
 

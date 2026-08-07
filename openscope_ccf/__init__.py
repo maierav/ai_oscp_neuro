@@ -30,25 +30,33 @@ def load_session_index(refresh_aids: bool = False) -> pd.DataFrame:
     session file is re-uploaded (the path is stable, the id is not), and 001637
     is draft-only so no id is permanent. Pass ``refresh_aids=True`` to re-resolve
     every row's asset id from the live dandiset by path — self-healing against
-    re-uploads at the cost of one API call per session. Rows whose path no longer
-    resolves keep their stored id and are flagged in a new ``aid_stale`` column.
+    re-uploads at the cost of one API call per session. Two flag columns are added
+    (these are *opposite* states, deliberately not merged into one ``stale`` flag):
+
+    - ``aid_changed``    : the live id differed from the shipped snapshot and was
+                           updated — the row is now FRESH (a re-upload was healed).
+    - ``aid_unresolved`` : the path did not resolve on the live dandiset, so the
+                           shipped id was kept UNVERIFIED (do not trust it blindly).
     """
     idx = pd.read_csv(files("openscope_ccf").joinpath("data/ccf_session_index.csv"))
     if not refresh_aids:
         return idx
     from .nwbio import resolve_asset
-    cur, stale = [], []
+    cur, changed, unresolved = [], [], []
     for _, row in idx.iterrows():
         try:
             aid = resolve_asset(str(row.subject), str(row.date))
             cur.append(aid)
-            stale.append(aid != row.aid)
+            changed.append(aid != row.aid)   # refreshed to a new id -> now fresh
+            unresolved.append(False)
         except LookupError:
-            cur.append(row.aid)
-            stale.append(True)
+            cur.append(row.aid)              # kept the shipped id, could not verify
+            changed.append(False)
+            unresolved.append(True)
     idx = idx.copy()
     idx["aid"] = cur
-    idx["aid_stale"] = stale
+    idx["aid_changed"] = changed
+    idx["aid_unresolved"] = unresolved
     return idx
 
 

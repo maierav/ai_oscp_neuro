@@ -13,7 +13,11 @@ API = "https://api.dandiarchive.org/api/dandisets/{ds}/versions/draft/assets/"
 RUN_THRESH = 1.0  # cm/s, matches repo's ">1 cm/s" running definition
 
 def assets(ds):
-    return requests.get(API.format(ds=ds), params={"page_size": 200}, timeout=60).json()["results"]
+    out, url_, params = [], API.format(ds=ds), {"page_size": 200}
+    while url_:                                  # follow pagination (dandiset can exceed one page)
+        j = requests.get(url_, params=params, timeout=60).json()
+        out.extend(j["results"]); url_ = j.get("next"); params = None
+    return out
 
 def url(ds, aid):
     return requests.get(API.format(ds=ds) + aid + "/download/",
@@ -37,8 +41,14 @@ def one(x):
         if "Sensory-motor mismatch block_presentations" not in iv:
             f.close(); out["skip"] = "not sensorimotor"; return out
 
-        # running speed on the session clock
-        rs = f["/processing/running/running_speed"]
+        # running speed on the session clock (tolerant key lookup — a missing key
+        # would otherwise land in the bare except and silently drop the session)
+        rgrp = f["/processing/running"]
+        rkey = "running_speed" if "running_speed" in rgrp else next(
+            (k for k in rgrp.keys() if "speed" in k.lower()), None)
+        if rkey is None:
+            f.close(); out["skip"] = "no running_speed"; return out
+        rs = rgrp[rkey]
         speed = rs["data"][:].astype(float)
         rt = rs["timestamps"][:].astype(float)
         out["frac_run_session"] = float((np.abs(speed) > RUN_THRESH).mean())
@@ -72,9 +82,17 @@ def one(x):
                           "n_rest": int(np.nansum(run <= RUN_THRESH))}
             res[label] = per
         out["blocks"] = res
-        # the gating number: running open-loop events for motor-contingent types
+        # the gating number. Pre-registration rule (plan §12) is >=3 running open-loop
+        # events on ALL FOUR motor-contingent deviant types -> the MIN across types is
+        # what the inclusion decision turns on. (open_running_max is kept for context
+        # only; a session with 8/0/0/0 has max=8 but min=0 and must be EXCLUDED.)
         op = res.get("open") or {}
-        out["open_running_max"] = max((v["n_running"] for v in op.values()), default=0)
+        motor = {k: v for k, v in op.items() if k.startswith("motor_")}
+        runs = [v["n_running"] for v in motor.values()]
+        out["open_running_min"] = min(runs) if len(motor) == 4 else 0
+        out["open_running_max"] = max(runs, default=0)
+        out["n_motor_types"] = len(motor)
+        out["passes_rule"] = bool(len(motor) == 4 and min(runs) >= 3)  # the committed inclusion set
         out["open_types"] = {k: (v["n"], v["n_running"]) for k, v in op.items()}
         f.close()
     except Exception as e:
@@ -93,4 +111,8 @@ if __name__ == "__main__":
         if "err" in r: print("ERR ", r["path"].split("/")[-1], r["err"]); continue
         if "skip" in r: continue
         print(f"{r['path'].split('/')[-1][:52]} run={r['frac_run_session']:.2f} "
-              f"open_running_max={r['open_running_max']} {r['open_types']}")
+              f"min={r.get('open_running_min')} max={r['open_running_max']} "
+              f"{'PASS' if r.get('passes_rule') else 'excl'} {r['open_types']}")
+    inc = [r['path'].split('/')[-1] for r in res if r.get("passes_rule")]
+    print(f"\n{len(inc)} sessions pass the >=3-on-all-4 rule (the committed inclusion set):")
+    for p in inc: print("  ", p)
