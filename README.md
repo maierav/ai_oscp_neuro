@@ -277,18 +277,25 @@ Three imaging quirks, all load-bearing:
   judging the modality (we use sub-796630 2025-10-01 DMD1). One early format
   (sub-794237) differs and is skipped.
 
-> **Which correction applies where (an audit clarified this).** The two corrections are
-> independent. (1) The **+0.115 s DMD1 onset offset** is a real acquisition lag and applies to
-> *every* SLAP2 session; the validated RF/tuning notebooks add it to stimulus onsets and Result 7's
-> `slap2_fourparadigm_ecephys.ipynb` now does the same via a single shared `SLAP2_DMD1_OFFSET`
-> constant (it previously applied none — a genuine gap, now fixed). Adding to onsets and the
-> cross-scale notebooks' adding-to-data-timestamps are the *same* physical shift (read the dFF that
-> occurs ~115 ms after the stimulus mark), not opposite directions. (2) The **compressed-timebase
-> reconstruction** is needed *only* when a DMD's stored clock is corrupt — that was true for the old
-> RF sessions (sub-796630/801381) but **not** for the paradigm-matched Result 7 sessions
-> (828408/828409/829704), whose DMD1/DMD2 timestamps are clean and span the full acquisition
-> (verified), so no reconstruction is applied or needed there. Applying the offset shifts the n=2
-> SLAP2 indices by ≤0.2 and does not change the "uninformative at n=2" conclusion.
+> **Which correction applies where, and a sign inconsistency the audit correctly caught.** The two
+> corrections are independent. (1) The **+0.115 s DMD1 onset offset** is a real acquisition lag that
+> applies to *every* SLAP2 session; Result 7's `slap2_fourparadigm_ecephys.ipynb` previously applied
+> none (a genuine gap) and now applies it via a single shared `SLAP2_DMD1_OFFSET` constant, following
+> the validated RF/tuning convention (**add to stimulus onsets** → read the dFF ~115 ms *after* the
+> onset mark). **The audit was right that the two existing conventions point in opposite directions:**
+> the RF/tuning notebooks add +0.115 s to *onsets* (sampling data at `onset + 0.115`), while the
+> cross-scale notebooks (`crossscale_oddball_index`, `omission_crossscale`) add +0.115 s to *data
+> timestamps*, which is equivalent to sampling at `onset − 0.115` — the two differ by ~0.23 s for the
+> same nominal window. Only one can be physically correct; we cannot adjudicate the true sign from the
+> released files alone, so Result 7 commits to the RF/tuning convention (used for the validated,
+> ground-truthed RF and tuning results) and the cross-scale Result 2 SLAP2 comparison should be
+> treated as sign-unverified on this axis pending an acquisition-timing spec. This does not affect
+> Results 1/3/4/5/6/8 (Neuropixels/mesoscope). (2) The **compressed-timebase reconstruction** is
+> needed *only* when a DMD's stored clock is corrupt — true for the old RF sessions
+> (sub-796630/801381) but **not** for the paradigm-matched Result 7 sessions (828408/828409/829704),
+> whose DMD1/DMD2 timestamps are clean and span the full acquisition (verified), so no reconstruction
+> is applied or needed there. Applying the offset shifts the n=2 SLAP2 indices by ≤0.2 and does not
+> change the "uninformative at n=2" conclusion.
 
 ---
 
