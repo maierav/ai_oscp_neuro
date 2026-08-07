@@ -33,12 +33,16 @@ pass before any prediction-error claim is trusted; and (3) the **prediction-erro
 analyses** themselves — feature-oddball, omission, sensorimotor, sequence, and
 timing — carried across the three recording scales where the paradigm allows,
 with the cross-technique confounds explicitly measured and controlled. The
-headline scientific result: **every kind of violated expectation we can test —
-whether the surprise is defined by stimulus frequency, motor contingency, learned
-sequence order, or learned timing — evokes a positively-signed prediction-error
-response**, and the feature-oddball form survives three independent confound
-controls and generalizes across recording scales. One direction across four
-kinds of violated expectation favours the common-mechanism reading (H1).
+headline scientific result: **three independent kinds of violated expectation —
+surprise defined by stimulus frequency, by learned sequence order, and by learned
+timing — each evoke a positively-signed prediction-error response** (CIs excluding
+zero under a session-level bootstrap), and the feature-oddball form survives three
+independent confound controls and generalizes across recording scales. The fourth
+case we can test — motor–visual contingency (sensorimotor) — is **null in the
+released data** (limited by low locomotion and a block-order confound; see Result 3),
+so it neither supports nor contradicts the common-mechanism reading. One consistent
+direction across the three establishable error types favours the common-mechanism
+reading (H1), with the motor case still open pending better-powered data.
 
 ## Results at a glance
 
@@ -56,14 +60,18 @@ set:
 | **Feature-oddball** | stimulus frequency | **+0.45** | excludes 0 | 9 | 79 % |
 | **Sequence** | learned temporal order | **+0.22** | [+0.10, +0.34] | 7 | 59 % |
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
-| Sensorimotor *(trend)* | motor–visual contingency | +0.10 | [+0.00, +0.16] | 6 | 55 % |
+| Sensorimotor *(null)* | motor–visual contingency | +0.02 | [−0.12, +0.18] | 6 | 51 % |
 
-The first three error types have CIs excluding zero under a session-level (hierarchical)
-bootstrap. The **sensorimotor row is a trend, not an established effect** — its CI touches
-zero and it carries a block-order confound (see Result 3); it is italicised here to mark
-that. Panel B shows the feature-oddball form generalizing across recording scales
-(Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission contrast).
-The full logic, controls, and caveats for each row are in the Result sections below.
+**Three** of the four error types carry a positive prediction-error index with a CI excluding
+zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** — when
+its closed/open contrast is re-derived through a clean, documented pipeline (see Result 3), the
+effect vanishes (+0.02, CI spans zero); an earlier "+0.10 trend" came from interactive code
+whose criterion was never committed and did not reproduce. It is italicised and flagged as null
+here. So the convergence claim is honest about its scope: deviance detection appears across
+frequency-, order-, and timing-based expectations, while the motor-contingency case is not
+established in the released data. Panel B shows the feature-oddball form generalizing across
+recording scales (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission
+contrast). The full logic, controls, and caveats for each row are in the Result sections below.
 
 The cross-scale picture has since been complicated — honestly — by two further analyses.
 Paradigm-matched SLAP2 data has begun to arrive, and a first look at the dendritic-glutamate scale
@@ -523,37 +531,46 @@ analysis. It awaits sessions with more running. Reproduce:
 The inclusion rule was pre-committed before computing the contrast (§12 of
 [`docs/oddball_analysis_plan.md`](docs/oddball_analysis_plan.md)): a session enters the
 analysis iff it has **≥3 running open-loop events on all four deviant types**. Six
-sessions qualify (1,008 visual units). The contrast is the per-unit closed-loop-running
-minus open-loop-running response. CIs are **hierarchical bootstraps** (resample sessions,
-then units) — an earlier units-only bootstrap made these intervals far too tight and is
-corrected here (see the audit note in *Data particulars*):
+sessions qualify (1,917 VIS-area units). The contrast is the per-unit closed-loop-running
+minus open-loop-running DvI, pooled with a **hierarchical bootstrap** (resample sessions,
+then units).
 
-![Sensorimotor mismatch across 6 powered sessions](figures/sensorimotor_multisession.png)
+> **This section was re-derived from scratch during a code audit (see *Data particulars*).**
+> The original Result 3 multi-session numbers (+0.33 Hz, "significant across 5–6 sessions")
+> came from interactive kernel code whose exact inclusion/window criterion was never committed,
+> and **they do not reproduce.** Re-run through a clean, documented pipeline — exact
+> probe→area mapping, running gate >1 cm/s, response window (0–0.3 s) vs baseline
+> (−0.2 to −0.01 s), hierarchical CI — the effect is **null.** We report the honest null and
+> flag that, as the panel-C sensitivity analysis shows, the estimate depends on the
+> responsiveness threshold (none of the values reach significance at any threshold).
 
-| deviant | closed − open Δ | 95 % CI (hierarchical) | sessions + | reaches sig. |
+![Sensorimotor mismatch across 6 powered sessions — a null effect](figures/sensorimotor_multisession.png)
+
+| deviant | closed − open DvI | 95 % CI (hierarchical) | sessions + | reaches sig. |
 |---|---|---|---|---|
-| **Orientation 90°** | **+0.33 Hz** | [+0.00, +0.86] | 5/6 | borderline (touches 0) |
-| Orientation 45° | +0.23 Hz | [−0.08, +0.76] | 3/5 | no |
-| Halt | +0.03 Hz | [−0.57, +0.48] | 2/6 | no |
-| Omission | 0.00 Hz | [−0.33, +0.22] | 1/5 | no |
+| Orientation 90° | +0.02 | [−0.12, +0.18] | 4/6 | no |
+| Orientation 45° | −0.09 | [−0.26, +0.08] | 2/5 | no |
+| Halt | −0.18 | [−0.50, +0.16] | 2/6 | no |
+| Omission | −0.09 | [−0.43, +0.12] | 2/5 | no |
 
-**Honest status, revised down from the earlier claim.** With the proper session-level
-bootstrap, the orientation-90 closed-loop enhancement is a **positive trend** — point
-estimate +0.33 Hz, positive in 5 of 6 sessions — but its CI now just touches zero, so it
-does **not** clear significance (an earlier version reported p ≈ 6×10⁻⁷, which came from a
-units-only bootstrap that treated 1,008 units as independent). Two further cautions apply:
-(1) in these six sessions the closed-loop block always runs *earlier* than the open-loop
-control block, so any within-session drift biases the closed−open difference positive — a
-confound that was tolerable when Result 3 was hedged as suggestive but is load-bearing now;
-and (2) most of these six sessions carry only placeholder CCF, so the per-area split is not
-anatomically reliable (the pooled contrast does not depend on it). **Bottom line:** the
-sensorimotor motor-prediction signature is a *consistent positive trend* (5/6 sessions) that
-the released data cannot yet establish at significance — better than the single-session
-Result but not the robust multi-session effect claimed before the audit. It awaits sessions
-with more running and a counterbalanced block order. Reproduce: `scripts/audit_locomotion.py`
-for the inclusion set, then the extraction in
+**Honest status: null.** Under the clean pipeline the closed-loop/open-loop contrast shows
+**no prediction-error signal** for any deviant type — every CI includes zero, and the
+per-session estimates are weak and sign-inconsistent (panel B; notably session 830794, the
+one that carried the original single-session result, is now slightly *negative*). Three
+things explain why the earlier claim was too strong: (1) the original units-only bootstrap
+treated ~1,000 units as independent and gave CIs that were far too tight; (2) in these six
+sessions the closed-loop block always runs *earlier* than the open-loop control, so
+within-session drift biases the difference positive; and (3) most of these sessions carry only
+placeholder CCF, so any area split is unreliable. The panel-C threshold sweep makes the
+fragility explicit — the orientation-90 estimate wanders between −0.02 and +0.05 as the
+responsiveness threshold moves, always with a CI spanning zero. **Bottom line:** the released
+sensorimotor data do **not** establish a motor-based prediction-error signal at the population
+level; the single high-locomotion session (Contrast 2 above) remains a suggestive anecdote, not
+a population result. It awaits sessions with more running and a counterbalanced block order.
+Reproduce: `scripts/audit_locomotion.py` for the inclusion set, then the extraction in
 [`notebooks/sensorimotor_mismatch_ecephys.ipynb`](notebooks/sensorimotor_mismatch_ecephys.ipynb);
-values in [`data/sensorimotor_multisession_summary.csv`](data/sensorimotor_multisession_summary.csv).
+values (with the threshold sensitivity) in
+[`data/sensorimotor_multisession_summary.csv`](data/sensorimotor_multisession_summary.csv).
 
 
 ---

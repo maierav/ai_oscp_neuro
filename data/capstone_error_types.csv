@@ -2,4 +2,4 @@ paradigm,expectation,metric,median,lo,hi,n,n_sess,frac_pos,p
 Feature-oddball,frequency,DvI (90°),0.4623245671885316,0.387493504243894,0.550497727394779,1534,9,0.787338660110633,0.0
 Sequence,learned order,DvI (90°),0.218,0.099,0.343,1104,7,0.5889724310776943,0.0004
 Duration / timing,learned timing,timing-PE index,0.321,0.255,0.429,744,6,0.7365591397849462,0.0
-Sensorimotor,motor contingency,closed−open DvI (90°),0.096,0.0,0.164,1008,6,0.5525793650793651,0.086
+Sensorimotor,motor contingency,closed−open DvI (90°),0.020043938123724406,-0.11844549220979711,0.1764554020647765,267,6,0.5056179775280899,0.8588
