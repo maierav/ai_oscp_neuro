@@ -958,6 +958,19 @@ This is a caution for anyone pooling deviance indices across techniques,
 and it sharpens (rather than resolves) the cross-scale question raised in Results 2 and 7.
 A per-subject magnitude spread sits on top of the area pattern (a few mesoscope sessions are
 negative in both areas) — a candidate for a behavioral-state analysis as more data accrues.
+
+**Time-course diagnostic (four-level PSTH, ΔF/F).**
+
+![Result 8 four-level PSTH: mesoscope sequence position-3 deviant vs equiprobable control across 16 sessions](figures/r8_psth_fourlevel.png)
+
+The example plane and ROI (panels A–B) show a clean, well-triggered ΔF/F transient with the
+expected ~200 ms calcium rise, and a strongly-positive example session (panel C). But the grand
+average (panel D) makes the **between-session heterogeneity** undeniable: the per-session means
+(thin) span far above and below zero and the deviant/control bands overlap — this is the visual
+form of the weak, sign-inconsistent pooled DvI. The dynamics confirm the mesoscope sequence signal
+does not robustly replicate the tight positive Neuropixels effect; the areal split (VISl positive,
+VISp not) is what structures the mess, not a uniform attenuation.
+
 Reproduce: [`notebooks/mesoscope_sequence_area.ipynb`](notebooks/mesoscope_sequence_area.ipynb)
 computes **both** sides — the mesoscope area DvI *and* the Neuropixels area/layer/superficial
 breakdown (exact probe→area mapping, `default_qc` responsive units, hierarchical CI) — and writes

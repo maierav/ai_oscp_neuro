@@ -71,7 +71,8 @@ def psth_by_layer(paradigms, smooth=1.5, resp_win=None, suptitle=None, savepath=
 
 def psth_three_level(cen, example, sessions, resp_win=None, dev_label="deviant",
                      ctl_label="control", dev_color="#c0392b", ctl_color="#3b6ea5",
-                     smooth=1.5, ylabel="firing rate (Hz)", suptitle=None, savepath=None):
+                     smooth=1.5, ylabel="firing rate (Hz)", suptitle=None, savepath=None,
+                     panelA_kind="channel MUA", panelA_ylabel="MUA rate (Hz)"):
     """
     Four-level PSTH diagnostic (systems-neuro standard):
       A example CHANNEL (MUA, all units on one channel) - trial mean +/- SEM  [trigger/timebase check]
@@ -98,9 +99,9 @@ def psth_three_level(cen, example, sessions, resp_win=None, dev_label="deviant",
             m = sm(np.nanmean(M, 0)); e = sm(_sem(M, 0))
             axA.plot(t, m, color=c, lw=1.8, label=f"{lab} ({M.shape[0]} tr)")
             axA.fill_between(t, m - e, m + e, color=c, alpha=0.22, lw=0)
-        axA.set_title(f"A · example channel MUA ({example['subject']} ch{example.get('mua_ch','?')})\n"
+        axA.set_title(f"A · example {panelA_kind} ({example['subject']} {example.get('mua_ch','?')})\n"
                       f"mean ± SEM across trials", loc="left", fontsize=8)
-    axA.set_ylabel("MUA rate (Hz)")
+    axA.set_ylabel(panelA_ylabel)
 
     # ---- Panel B: example unit, trial band ----
     for M, c, lab in [(example["dev_trials"], dev_color, dev_label),
