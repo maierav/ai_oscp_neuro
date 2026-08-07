@@ -515,9 +515,10 @@ The **flow-halt is the one purely motor-contingent event**, and it behaves unlik
 visual deviants (panels B–C): at rest, halting the flow *reduces* firing (median
 −0.12 Hz, negative in 6 of 7 sessions — freezing the flow removes visual drive), but
 during running that response is pushed up toward positive. A locomotion-dependent
-positive component at the halt is the signature of a motor-based prediction error.
-It is directionally consistent (paired +0.14 Hz, running > rest) but underpowered —
-only 3 sessions carry both running and rest halts (p = 0.18).
+positive component at the halt would be *consistent with* a motor-based prediction error,
+but the effect is directional only (paired +0.14 Hz, running > rest) and not significant —
+only 3 sessions carry both running and rest halts (p = 0.18). Read it as a hint to test with
+more data, not as evidence: the properly-powered closed/open contrast (Contrast 3) is null.
 
 ### Closed-loop vs open-loop — the designed contrast, single powered session
 
