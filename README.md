@@ -73,13 +73,14 @@ prediction-error signal in any of the four paradigms — but at n = 2 sessions e
 yet separate a genuine input/output dissociation from underpowering. And when the *sequence*
 paradigm is broken down by cortical area in both modalities
 ([**Result 8**](#result-8--sequence-mismatch-a-cross-modality-areal-discrepancy-in-v1)), the
-Neuropixels and mesoscope signals **disagree in sign in V1**: spiking finds the sequence-PE
-*strongest* in primary V1 (+0.25), while mesoscope 2-photon finds it *absent/negative* there
-(−0.08), positive only in lateral cortex. Only part of this is explained by mesoscope's
-superficial laminar sampling. So the cross-scale generalization in panel B holds for the
-*feature-oddball* contrast (spikes and mesoscope both positive on responsive cells), but the
-finer area-resolved comparison is a **caution against treating the calcium DvI as
-interchangeable with the spiking DvI** — not a clean reconciliation.
+Neuropixels and mesoscope signals **give opposite point estimates in V1**: spiking finds the
+sequence-PE *significantly positive and strongest* in primary V1 (+0.25), while mesoscope
+2-photon in V1 is a **null** (−0.08, wide CI crossing zero, 9/16 sessions negative). Only part
+of this is explained by mesoscope's superficial laminar sampling. So the cross-scale
+generalization in panel B holds for the *feature-oddball* contrast (spikes and mesoscope both
+positive on responsive cells), but the finer area-resolved comparison is a **caution against
+treating the calcium DvI as interchangeable with the spiking DvI** — where spiking V1 carries a
+strong deviance signal, 2-photon V1 does not.
 
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).
@@ -183,7 +184,20 @@ drifting-grating result "orientation tuning" is the mistake to avoid.
 Indexing `electrodes` directly assigns every unit to the first probe. Correct
 mapping (add the per-probe row offset) lives in `nwbio.unit_electrode_rows()`.
 `units.device_name` is a per-session device identifier, **not** an anatomical
-label — get area/layer from CCF. Real CCF alignment is present in **57 of 60**
+label — get area/layer from CCF. **Match `device_name` to the electrode
+`group_name` by exact equality, never by substring** — an earlier version of the
+per-notebook extractors used `device[-1].lower() in group.lower()`, which maps e.g.
+`ProbeE` onto `ProbeB` (because "e" is a substring of "probeb") and mislabels
+8–16 % of units per session; it inflated `VISa` with motor-cortex units in the
+sequence sessions. All notebooks now use exact matching (equivalent to
+`nwbio.unit_electrode_rows()`). This audit fix left the headline conclusions intact
+(Result 8's VISp/VISl, Result 6's laminar profile, Result 5 duration were all on
+clean probes) but corrected the `VISa`/`VISrl` counts. Separately, session-level
+confidence intervals now use a **hierarchical bootstrap** (resample sessions, then
+units within each) rather than resampling units within a fixed session set — the
+older version produced intervals that were too tight; this widened some CIs (notably
+mesoscope V1 in Result 8, which moved from a significant negative to a null).
+Real CCF alignment is present in **57 of 60**
 ecephys sessions (`electrodes.location`/`x`/`y`/`z` populated); the rest carry
 placeholder `"unknown"` locations and omit the `x`/`y`/`z` datasets entirely.
 **CCF status is per-session, not per-subject** — `sub-832691` has one session with
@@ -687,28 +701,35 @@ where it matters most.
 ![Sequence-mismatch area comparison across modalities](figures/sequence_crossscale_area.png)
 
 Comparing the same paradigm (position-3 90° deviant vs. the equiprobable Control-block-2 90°
-control, same DvI) in the two areas mesoscope samples:
+control, same DvI) in the two areas mesoscope samples. All CIs are **hierarchical bootstraps**
+(resampling sessions, then units) so between-session variance is included — an earlier
+units-only bootstrap made these intervals too tight (fixed in the audit below):
 
 | area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
 |---|---|---|
-| **VISp** (primary V1) | **+0.25** [+0.15, +0.33] — *strongest area* | **−0.08** [−0.11, −0.05] — negative |
-| **VISl** (lateral) | +0.16 [−0.06, +0.41] — n.s. (n=99) | +0.18 [+0.16, +0.21] |
+| **VISp** (primary V1) | **+0.25** [+0.01, +0.40] — *significant, strongest area* | **−0.08** [−0.28, +0.14] — **null** |
+| **VISl** (lateral) | +0.16 [−0.06, +0.41] — n.s. (n=99) | +0.18 [+0.03, +0.31] — significant |
 
-**In V1 the two modalities disagree in sign.** Spiking finds the sequence-PE *strongest* in
-primary V1 (+0.25, present across all areas); mesoscope 2-photon finds it *absent/negative* in
-V1 (−0.08) and positive only in lateral cortex. The apparent VISl agreement (+0.16 vs +0.18) is
-not a match to lean on — the Neuropixels VISl estimate is not significant (only 99 units). So
-the honest headline is a **cross-modality areal discrepancy**, not a reconciliation. The same
-direction holds for feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49),
-while mesoscope feature-oddball is weak pooled (Result 2, +0.11).
+**In V1 the two modalities give opposite point estimates, and where spiking is significantly
+positive, 2-photon is a null.** Spiking finds the sequence-PE *strongest* in primary V1 (+0.25,
+significant, present across all areas); mesoscope 2-photon in V1 is a wide null centred at −0.08
+(9 of 16 sessions negative — the negative point estimate is *not* significant once between-session
+variance is counted). So the honest statement is a **cross-modality discrepancy in V1**: the
+spiking deviance signal that is strong and significant in V1 does not appear in the 2-photon
+signal there. The apparent VISl similarity (+0.16 vs +0.18) is not a match to lean on either —
+the Neuropixels VISl estimate is not significant (only 99 units). The same direction holds for
+feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49), while mesoscope
+feature-oddball is weak pooled (Result 2, +0.11).
 
 **Is it just laminar sampling?** Mesoscope images ~46–428 µm (L2/3 through upper L5, **missing
 L6**), while Neuropixels samples all layers. The Neuropixels V1 sequence-PE *is* deep-biased
-(L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14), so depth explains part of the magnitude gap.
-But it does **not** explain the sign flip: restricting Neuropixels V1 to the superficial layers
-mesoscope can actually see still gives **+0.19 (positive)**, versus mesoscope's **−0.08**
-(panel C). Depth-matching narrows the gap but the modalities still point in opposite directions
-in V1.
+(L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14; panel B, computed with the corrected probe→area
+mapping — see audit note), so depth explains part of the magnitude gap. Restricting Neuropixels
+V1 to the superficial layers mesoscope can see gives +0.19 (point estimate positive) versus
+mesoscope's −0.08 — but with the honest hierarchical CI this superficial-matched comparison is
+**underpowered** (wide interval crossing zero), so depth-matching neither rescues nor cleanly
+refutes the discrepancy. What is robust is the *full-population* contrast: spiking V1 significantly
+positive, 2-photon V1 null.
 
 **What this means.** The calcium DvI is **not interchangeable** with the spiking DvI —
 especially in V1, where a strong spiking deviance signal (concentrated in deep layers) does not
