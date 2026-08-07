@@ -357,19 +357,31 @@ static-grating measurement (see gotcha above).
 
 ![Direction tuning across three recording scales](figures/direction_tuning_three_modalities.png)
 
-| Modality | median DSI | OSI (derived) | tuning HWHM | % direction-selective |
-|---|---|---|---|---|
-| Neuropixels (spikes) | 0.18 | 0.39 | 28° | 11 % |
-| Mesoscope (ΔF/F soma) | 0.42 | 0.64 | 16° | 53 % |
-| SLAP2 (glutamate) | 0.31 | 0.49 | 21° | 24 % |
+DSI/OSI medians and tuning width (von Mises fit) on the responsive population, with
+**direction-selective** now defined and *executed* as **responsive AND DSI above a 300-shuffle null
+(p < 0.05)** — not a bare DSI cut:
 
-All three show well-formed tuning with realistic half-widths (16–28° HWHM).
-Examples are selected by **von Mises fit quality** (not by a selectivity index,
-which over-selects near-line curves), and we report the fitted width so narrow
-curves are shown as narrow rather than driving the selection. RF mapping validates
-*spatial* sensitivity; direction tuning validates *feature* sensitivity — together
-the pipeline reads real visual signals at all three scales. Reproduce:
-[`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb).
+| Modality | n (resp/total) | median DSI (resp) | OSI (derived, resp) | tuning HWHM | % direction-selective |
+|---|---|---|---|---|---|
+| Neuropixels (spikes) | 230 / 277 | 0.21 | 0.42 | 28° | 22 % |
+| Mesoscope (ΔF/F soma) | 323 / 358 | 0.42 | 0.66 | 16° | 22 % |
+| SLAP2 (glutamate) | 80 / 91 | 0.33 | 0.54 | 21° | 52 % |
+
+![Direction selectivity significance test](figures/direction_selectivity_test.png)
+
+All three show well-formed tuning with realistic half-widths (16–28° HWHM). Examples are selected by
+**von Mises fit quality** (not by a selectivity index, which over-selects near-line curves), and we
+report the fitted width so narrow curves are shown as narrow rather than driving the selection.
+**Two honesty corrections** (an earlier version of this section): the previously-reported
+"% direction-selective" of 11/53/24 % had *no producing code* and used a bare DSI > 0.5 cut on DSI/OSI
+medians taken over **all** cells (rectifying noisy near-zero curves inflates imaging selectivity). The
+values above are the executed test — a responsiveness gate plus a DSI permutation — giving 22/22/52 %;
+on these highly-responsive sessions the responsive-only medians barely differ from the all-cell ones,
+but the gate is the correct default. RF mapping validates *spatial* sensitivity; direction tuning
+validates *feature* sensitivity — together the pipeline reads real visual signals at all three scales.
+Reproduce:
+[`notebooks/direction_tuning_three_modalities.ipynb`](notebooks/direction_tuning_three_modalities.ipynb);
+values in [`data/direction_selectivity_summary.csv`](data/direction_selectivity_summary.csv).
 
 ---
 

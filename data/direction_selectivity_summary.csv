@@ -1,0 +1,4 @@
+modality,n,n_responsive,median_DSI_all,median_DSI_resp,median_OSI_resp,pct_dirsel_all,pct_dirsel_of_resp
+Neuropixels (spikes),277,230,0.226,0.214,0.417,21.7,26.1
+Mesoscope (dF/F soma),358,323,0.419,0.423,0.657,21.8,24.1
+SLAP2 (glutamate),91,80,0.305,0.333,0.536,51.6,58.8
