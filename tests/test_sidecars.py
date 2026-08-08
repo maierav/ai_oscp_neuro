@@ -71,3 +71,44 @@ def test_load_ccf_missing_sidecar_raises_helpful():
     with pytest.raises(FileNotFoundError) as e:
         load_ccf("999999_2099-01-01-00-00-00", sidecar_dir=str(SD))
     assert "build_session_sidecars" in str(e.value)
+
+
+def test_build_aborts_when_provenance_cannot_be_pinned(tmp_path, monkeypatch):
+    """A provenance failure must ABORT the build (no untraceable parquets), not warn."""
+    import openscope_ccf.sidecar as sc
+    import openscope_ccf.provenance as prov
+
+    class _FH:  # dummy file handle; the builders are stubbed so it's never read
+        def close(self):
+            pass
+
+    monkeypatch.setattr(sc, "open_remote", lambda aid, **k: _FH())
+    monkeypatch.setattr(sc, "build_unit_sidecar", lambda fh, s, d, p: pd.DataFrame({"unit_index": [0, 1]}))
+    monkeypatch.setattr(sc, "build_channel_sidecar", lambda fh, s, d, p: pd.DataFrame({"electrode_row": [0]}))
+    # record() raises because the asset can't be pinned (e.g. replaced on the draft)
+    monkeypatch.setattr(prov, "record",
+                        lambda *a, **k: (_ for _ in ()).throw(prov.ProvenanceError("asset replaced")))
+
+    with pytest.raises(prov.ProvenanceError):
+        sc.build_session_sidecars("stale-aid", "830794", "2026-01-26-12-02-05", "sensorimotor",
+                                  outdir=str(tmp_path))
+    # no parquets and no manifest left behind
+    assert list(tmp_path.glob("*.parquet")) == []
+    assert not (tmp_path / "provenance.jsonl").exists()
+
+
+def test_build_can_opt_out_of_provenance(tmp_path, monkeypatch):
+    """record_provenance=False writes sidecars without touching DANDI/provenance."""
+    import openscope_ccf.sidecar as sc
+
+    class _FH:
+        def close(self):
+            pass
+
+    monkeypatch.setattr(sc, "open_remote", lambda aid, **k: _FH())
+    monkeypatch.setattr(sc, "build_unit_sidecar", lambda fh, s, d, p: pd.DataFrame({"unit_index": [0, 1]}))
+    monkeypatch.setattr(sc, "build_channel_sidecar", lambda fh, s, d, p: pd.DataFrame({"electrode_row": [0]}))
+    out = sc.build_session_sidecars("any-aid", "830794", "2026-01-26-12-02-05", "sensorimotor",
+                                    outdir=str(tmp_path), record_provenance=False)
+    assert out["units"].exists() and out["channels"].exists()
+    assert not (tmp_path / "provenance.jsonl").exists()

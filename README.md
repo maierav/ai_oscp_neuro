@@ -1269,11 +1269,25 @@ rec = provenance_record("830794", "2026-01-26-12-02-05", params={"resp_win": [0,
 append_manifest(rec, "data/sidecars/provenance.jsonl")
 ```
 
-Each record carries the resolved `asset_id`, the asset's **SHA-256 content digest** and
-byte size (from DANDI metadata — no download), the `dandiset`/`version`, the repo
-`code_sha`, the analysis `params`, and a UTC timestamp. `build_session_sidecars`
-appends one automatically to `<outdir>/provenance.jsonl`, so a batch build accumulates a
-full provenance log alongside the sidecars.
+Each record carries the `asset_id` **that was actually read**, the asset's **SHA-256
+content digest**, byte size and `path` (from DANDI metadata — no download), the
+`dandiset`/`version`, the repo `code_sha`, the analysis `params`, and a UTC timestamp.
+`build_session_sidecars` fingerprints the *exact* asset it opened (it passes that
+`asset_id` to `record` rather than re-resolving by path, so the manifest can never
+describe a different asset than the one read — a time-of-check/time-of-use hazard if the
+draft moves mid-build) and **verifies the asset's path matches the subject/date** before
+writing. If an immutable record cannot be built — asset replaced, path mismatch, or missing
+digest — the build **raises `ProvenanceError` and writes no sidecars**, so a file the docs
+call "traceable" is never produced without its manifest entry. A batch build thus
+accumulates a complete, verified provenance log alongside the sidecars (or fails loudly).
+
+**For publication, pin an immutable version, not the draft.** The records above trace a
+result to a specific content digest, but a reader re-running against the *draft* still gets
+whatever the draft holds that day. DANDI distinguishes the mutable draft from immutable,
+citable **published versions**; when these analyses are published, cite a DANDI published
+version (a fixed `versionId` with its own DOI) so the exact bytes are recoverable by
+identifier rather than by digest lookup. See the
+[DANDI publishing docs](https://docs.dandiarchive.org/user-guide-sharing/publish-a-dandiset/).
 
 ## Notebook hygiene (Colab ↔ GitHub)
 

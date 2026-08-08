@@ -44,22 +44,53 @@ def code_sha(repo_root=None) -> "str | None":
         return None
 
 
-def asset_provenance(subject: str, date: str, dandiset: str = DANDISET,
-                     version: str = "draft") -> dict:
-    """Resolve a session and return its immutable DANDI fingerprint fields.
+class ProvenanceError(RuntimeError):
+    """Raised when an immutable provenance record cannot be built for the asset read."""
 
-    Returns ``{asset_id, content_sha256, content_size, dandiset, version}``.
-    The SHA-256 comes from DANDI metadata — no file download.
+
+def _asset_meta(aid: str, dandiset: str, version: str) -> dict:
+    r = requests.get(_ASSET_META.format(ds=dandiset, ver=version, aid=aid), timeout=30)
+    if r.status_code != 200:
+        raise ProvenanceError(f"asset {aid} metadata HTTP {r.status_code} "
+                              f"(asset may have been replaced on the {version} draft)")
+    return r.json()
+
+
+def asset_provenance(subject: str, date: str, dandiset: str = DANDISET,
+                     version: str = "draft", asset_id: "str | None" = None) -> dict:
+    """Return the immutable DANDI fingerprint fields for a session's asset.
+
+    ``asset_id`` is the id that was **actually read**. Pass it so provenance
+    describes the exact asset opened — NOT a fresh path re-resolution, which
+    could return a different asset if the mutable draft moved between the read
+    and this call (a time-of-check/time-of-use hazard). When ``asset_id`` is
+    given, the asset's own ``path`` metadata is verified to contain the subject
+    (and, when present, the date); a mismatch raises :class:`ProvenanceError`.
+    When omitted, falls back to resolving by ``(subject, date)`` — only safe when
+    no read has happened yet.
+
+    Returns ``{asset_id, content_sha256, dandi_etag, content_size, path,
+    dandiset, version}``. The SHA-256 comes from DANDI metadata — no download.
     """
-    aid = resolve_asset(subject, date, dandiset=dandiset, version=version)
-    meta = requests.get(_ASSET_META.format(ds=dandiset, ver=version, aid=aid),
-                        timeout=30).json()
+    aid = asset_id or resolve_asset(subject, date, dandiset=dandiset, version=version)
+    meta = _asset_meta(aid, dandiset, version)
+    path = meta.get("path", "")
+    if asset_id is not None:
+        # Verify the asset we fingerprinted is the session we think it is.
+        if f"sub-{subject}" not in path:
+            raise ProvenanceError(f"asset {aid} path {path!r} does not match subject {subject}")
+        if str(date) and str(date) not in path:
+            raise ProvenanceError(f"asset {aid} path {path!r} does not match date {date}")
     digest = (meta.get("digest") or {})
+    sha = digest.get("dandi:sha2-256")
+    if sha is None and digest.get("dandi:dandi-etag") is None:
+        raise ProvenanceError(f"asset {aid} has no content digest in DANDI metadata")
     return dict(
         asset_id=aid,
-        content_sha256=digest.get("dandi:sha2-256"),
+        content_sha256=sha,
         dandi_etag=digest.get("dandi:dandi-etag"),
         content_size=meta.get("contentSize"),
+        path=path,
         dandiset=dandiset,
         version=version,
     )
@@ -67,9 +98,14 @@ def asset_provenance(subject: str, date: str, dandiset: str = DANDISET,
 
 def record(subject: str, date: str, params: "dict | None" = None,
            dandiset: str = DANDISET, version: str = "draft",
-           repo_root=None) -> dict:
-    """Build a full provenance record for a session + analysis params."""
-    prov = asset_provenance(subject, date, dandiset=dandiset, version=version)
+           repo_root=None, asset_id: "str | None" = None) -> dict:
+    """Build a full provenance record for a session + analysis params.
+
+    Pass ``asset_id`` = the id actually read so the digest describes that exact
+    asset (see :func:`asset_provenance`). Raises :class:`ProvenanceError` if an
+    immutable record cannot be built.
+    """
+    prov = asset_provenance(subject, date, dandiset=dandiset, version=version, asset_id=asset_id)
     prov.update(
         subject=str(subject), date=str(date),
         code_sha=code_sha(repo_root),

@@ -78,10 +78,14 @@ def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str
                            outdir="data/sidecars", record_provenance: bool = True) -> "dict[str, Path]":
     """Stream a session and write both sidecars as Parquet. Returns their paths.
 
-    When ``record_provenance`` is true (default), also append a provenance record
-    — resolved asset id, SHA-256 content digest, dandiset/version, code SHA, and
-    the ``asset_id`` actually used — to ``<outdir>/provenance.jsonl``, so the
-    sidecars are traceable to an immutable content state of the mutable draft.
+    When ``record_provenance`` is true (default), a provenance record for the
+    **exact asset read** — its id, SHA-256 content digest, byte size, path,
+    dandiset/version, and code SHA — is built *before* the parquets are written
+    and appended to ``<outdir>/provenance.jsonl``. If that record cannot be built
+    (asset replaced on the draft, path/subject/date mismatch, or missing digest),
+    the build **raises** ``ProvenanceError`` and writes no sidecars — a sidecar
+    the docs call "traceable to immutable content" is never produced without its
+    manifest entry. Pass ``record_provenance=False`` to opt out explicitly.
     """
     outdir = Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -94,16 +98,21 @@ def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str
     tag = f"{subject}_{date}"
     up = outdir / f"units_{tag}.parquet"
     cp = outdir / f"channels_{tag}.parquet"
+    # Build the provenance record for the EXACT asset we just read BEFORE writing the
+    # sidecars, so a provenance failure aborts the build rather than leaving untraceable
+    # parquets on disk. record() fingerprints `asset_id` itself (not a fresh path
+    # re-resolution) and verifies its path matches subject/date — closing the
+    # time-of-check/time-of-use gap where the draft could move between read and record.
+    rec = None
+    if record_provenance:
+        from .provenance import record  # raises ProvenanceError if it cannot pin the asset read
+        rec = record(subject, date, asset_id=asset_id,
+                     params=dict(paradigm=paradigm, n_units=len(us), n_channels=len(cs)))
     us.to_parquet(up, index=False)
     cs.to_parquet(cp, index=False)
-    if record_provenance:
-        try:
-            from .provenance import record, append_manifest
-            rec = record(subject, date, params=dict(paradigm=paradigm, n_units=len(us),
-                                                     n_channels=len(cs), asset_id_used=asset_id))
-            append_manifest(rec, outdir / "provenance.jsonl")
-        except Exception as e:  # provenance is best-effort; never fail a build over it
-            print(f"[warn] provenance record skipped for {tag}: {str(e)[:80]}")
+    if rec is not None:
+        from .provenance import append_manifest
+        append_manifest(rec, outdir / "provenance.jsonl")
     return {"units": up, "channels": cp}
 
 
