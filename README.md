@@ -140,21 +140,30 @@ this repo rests on the convergent *sign* of prediction error across four paradig
 anatomy.
 
 The plotted indices are in [`data/capstone_error_types.csv`](data/capstone_error_types.csv)
-and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv). The reproducibility chain
-is two-stage. Three of the ecephys Result notebooks — `oddball_confirmatory_ecephys`,
-`sequence_mismatch_ecephys`, and `duration_mismatch_ecephys` — stream their NWB files from DANDI
-and write the **per-unit table** they compute (`data/oddball_confirmatory_units.parquet`,
-`data/sequence_units.parquet`, `data/duration_units.parquet`); the corresponding per-error-type
-index in the capstone CSV is the pooled DvI/timing-PE of that table. For duration specifically,
-the notebook also writes `data/duration_timing_pe.parquet` carrying the per-unit `om_pe`, `std_r`,
-**and** the bounded `timing_pe_index = om_pe/(|om_pe|+|std_r|)` — so the capstone's +0.32 timing-PE
-value has an explicit generating expression, distinct from the +0.97 Hz scalar the Result reports. The sensorimotor row and the
-cross-scale columns are computed in their own notebooks (`sensorimotor_mismatch_ecephys` and the
-cross-scale set) but those do **not** yet persist a per-unit table — their capstone values trace to
-the committed summary CSVs, not to a regenerated parquet. The capstone figure is rendered from the
-two CSVs by [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) (no NWB
-streaming). The committed CSVs are the authoritative snapshot; run one of the three notebooks above
-with `QUICK = False` (the default) to regenerate its per-unit table.
+and [`data/capstone_crossscale.csv`](data/capstone_crossscale.csv). **The reproducibility chain is
+three-stage, and the capstone CSVs are assembled by a script, not by a Result notebook** (an
+earlier version of this README implied each notebook wrote its own capstone row — it did not; that
+is fixed here):
+
+1. **Per-unit tables** — each Result notebook streams its NWB files from DANDI (with `QUICK=False`,
+   the default) and writes the per-unit table it computes: `oddball_confirmatory_units.parquet`,
+   `sequence_units.parquet`, `duration_timing_pe.parquet` (carrying `om_pe`, `std_r`, and the bounded
+   `timing_pe_index = om_pe/(|om_pe|+|std_r|)`), plus `sensorimotor_multisession_summary.csv` and
+   `meso_sequence_dvi.parquet` / `crossscale_mechanism.parquet`.
+2. **Table assembly** — [`scripts/build_summary_tables.py`](scripts/build_summary_tables.py) reads
+   those per-unit tables and assembles both capstone CSVs, **validates their schema**, and records
+   `data/summary_tables_provenance.json` (git SHA, package versions, per-source-table SHA-256, seed,
+   bootstrap N). `--check` recomputes in memory and diffs against the committed snapshot (feature
+   +0.42/committed +0.46, sequence +0.21/+0.22, duration +0.32/+0.32, sensorimotor −0.04/−0.04 —
+   all within tolerance, sign agreement 100%). The **sensorimotor** row is *read* from its own
+   notebook's gated summary CSV rather than re-derived (its QC + responsiveness gate lives in that
+   notebook; re-deriving from the raw units table would give a different number). By default the
+   script preserves the committed authoritative snapshot and only refreshes provenance; `--regenerate`
+   overwrites the CSVs from source (values then drift at the 2nd–3rd decimal — mutable DANDI draft +
+   gates — but sign and significance class are stable, which is why the committed CSVs remain the
+   authoritative snapshot).
+3. **Figure** — [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) renders
+   the two CSVs (no NWB streaming).
 
 ## What's in this repository
 
