@@ -1,18 +1,18 @@
 name: tests
 
-# Run the offline unit + sidecar-integrity suite on every push and PR.
-# These tests do not stream from DANDI (they use in-memory fakes and the
-# shipped sidecars), so they run in seconds with no network.
+# Offline CI on every push and PR. Nothing here streams from DANDI (fakes +
+# shipped sidecars + committed per-unit tables), so it runs in seconds with no
+# network. Runs on ANY change (no path filter) so edits to notebooks, scripts,
+# data tables, or figures cannot bypass CI — previously the push filter only
+# fired on package/tests/pyproject changes.
 on:
   push:
-    paths:
-      - "openscope_ccf/**"
-      - "tests/**"
-      - "pyproject.toml"
-      - ".github/workflows/tests.yml"
   pull_request:
 
 jobs:
+  # Cross-version COMPATIBILITY sweep — intentionally UNPINNED so each Python
+  # resolves a compatible dependency set (the pinned constraints target 3.11+ and
+  # would not install on 3.9). Answers "does the code run across Python versions".
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -29,3 +29,61 @@ jobs:
           pip install -e ".[dev]"
       - name: Run tests
         run: pytest -q
+
+  # REPRODUCIBILITY leg — the exact pinned environment (constraints.txt) on the
+  # canonical Python. This is the environment the committed results were produced
+  # under; it is the lockfile the audit asked for.
+  test-pinned:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + test deps (pinned)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -c constraints.txt -e ".[dev]"
+      - name: Run tests
+        run: pytest -q
+
+  # The capstone CSVs must equal a fresh rebuild from the committed per-unit
+  # tables (every median/CI/n/fraction/p, both tables). Guards against a hand-
+  # edited summary table drifting from its generating script.
+  summary-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package (pinned)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -c constraints.txt -e ".[dev]"
+      - name: build_summary_tables --check
+        run: python scripts/build_summary_tables.py --check
+
+  # Smoke-execute the two notebooks that read ONLY committed CSV/parquet inputs
+  # (no DANDI streaming): they must run end-to-end and emit their figures. The
+  # DANDI-streaming notebooks are deliberately NOT run in CI — they depend on the
+  # mutable remote archive and take minutes-to-hours; they carry their own
+  # QUICK-mode execution-validation in the dev workflow instead.
+  notebooks-offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + nbclient (pinned)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -c constraints.txt -e ".[dev]" nbclient nbformat ipykernel
+      - name: Execute offline notebooks
+        run: |
+          python -m ipykernel install --user --name python3
+          for nb in notebooks/capstone_synthesis.ipynb notebooks/robustness_diagnostics.ipynb; do
+            echo "== executing $nb =="
+            jupyter execute "$nb" --kernel_name=python3
+          done
