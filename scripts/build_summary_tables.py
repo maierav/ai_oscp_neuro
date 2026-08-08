@@ -67,6 +67,15 @@ def _boot_ci_subject(vals, subjects, n=5000, seed=0):
     return float(np.median(vals)), float(np.percentile(est, 2.5)), float(np.percentile(est, 97.5))
 
 
+def _both_fracs(df, idxcol, subjcol):
+    """Return (frac_cells_pos, frac_animals_pos): fraction of units with index>0, and fraction of
+    animals whose per-animal median index is >0. Kept as two distinct quantities — never mixed."""
+    cells = float((df[idxcol] > 0).mean())
+    am = df.groupby(subjcol)[idxcol].median()
+    animals = float((am > 0).mean())
+    return round(cells, 4), round(animals, 4)
+
+
 def build_error_types():
     """capstone_error_types.csv — one bounded PE index per error type, from per-unit tables."""
     rows, src = [], {}
@@ -83,47 +92,59 @@ def build_error_types():
                          "regenerate via oddball_confirmatory_ecephys.ipynb (QUICK=False)")
     G = OD[OD.responsive].dropna(subset=["DvI_90"])          # named population: QC & VIS & responsive
     m, lo, hi = _boot_ci_subject(G.DvI_90.values, G.subject.values)
+    fc, fa = _both_fracs(G, "DvI_90", "subject")
     rows.append(dict(paradigm="Feature-oddball", expectation="frequency", metric="DvI (90°)",
                      population="QC & VIS & responsive (resp_p<0.05)",
                      median=m, lo=lo, hi=hi, n=len(G), n_sess=int(G["subject"].nunique()),
-                     frac_pos=float((G.DvI_90 > 0).mean()), p=0.0))
+                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
 
     # 2. Sequence — DvI_90 over ALL QC & VIS units (no separate responsiveness gate; see README note).
     p = os.path.join(DATA, "sequence_units.parquet"); src["sequence"] = p
     SEQ = pd.read_parquet(p)
-    dvi = ((SEQ.R_odd90 - SEQ.R_c90) / (SEQ.R_odd90.abs() + SEQ.R_c90.abs() + 1e-9)).dropna()
-    m, lo, hi = _boot_ci_subject(dvi.values, SEQ.loc[dvi.index, "subject"].values)
+    S = SEQ.copy()
+    S["_idx"] = (S.R_odd90 - S.R_c90) / (S.R_odd90.abs() + S.R_c90.abs() + 1e-9)
+    S = S.dropna(subset=["_idx"])
+    m, lo, hi = _boot_ci_subject(S["_idx"].values, S.subject.values)
+    fc, fa = _both_fracs(S, "_idx", "subject")
     rows.append(dict(paradigm="Sequence", expectation="learned order", metric="DvI (90°)",
                      population="QC & VIS (all)",
-                     median=m, lo=lo, hi=hi, n=len(dvi), n_sess=int(SEQ["subject"].nunique()),
-                     frac_pos=float((dvi > 0).mean()), p=0.0))
+                     median=m, lo=lo, hi=hi, n=len(S), n_sess=int(S["subject"].nunique()),
+                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
 
     # 3. Duration/timing — bounded timing-PE index over ALL QC & VIS units (no separate resp. gate).
     p = os.path.join(DATA, "duration_timing_pe.parquet"); src["duration"] = p
     TPE = pd.read_parquet(p)
-    ti = (TPE["timing_pe_index"] if "timing_pe_index" in TPE.columns
-          else TPE.om_pe / (TPE.om_pe.abs() + TPE.std_r.abs() + 1e-9)).dropna()
-    m, lo, hi = _boot_ci_subject(ti.values, TPE.loc[ti.index, "subject"].values)
+    T = TPE.copy()
+    T["_idx"] = (T["timing_pe_index"] if "timing_pe_index" in T.columns
+                 else T.om_pe / (T.om_pe.abs() + T.std_r.abs() + 1e-9))
+    T = T.dropna(subset=["_idx"])
+    m, lo, hi = _boot_ci_subject(T["_idx"].values, T.subject.values)
+    fc, fa = _both_fracs(T, "_idx", "subject")
     rows.append(dict(paradigm="Duration / timing", expectation="learned timing", metric="timing-PE index",
                      population="QC & VIS (all)",
-                     median=m, lo=lo, hi=hi, n=len(ti), n_sess=int(TPE["subject"].nunique()),
-                     frac_pos=float((ti > 0).mean()), p=0.0))
+                     median=m, lo=lo, hi=hi, n=len(T), n_sess=int(T["subject"].nunique()),
+                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
 
     # 4. Sensorimotor — READ (not re-derive) the authoritative closed−open orient-90 row from its
     #    own notebook's summary CSV. This paradigm's value depends on a QC + responsiveness gate and
     #    per-session extraction that live in sensorimotor_mismatch_ecephys.ipynb; re-deriving it from
     #    the raw all-VIS units table (which is not gated) would produce a *different* number. So the
     #    traceable source for this row is the summary CSV that notebook writes, not a recompute here.
-    #    frac_pos here is the SESSION-positive fraction (the honest per-animal quantity at this n);
-    #    the other three rows report cell-positive fraction — flagged in the README caption.
+    #    Both fractions are read from that gated summary (cells_positive / n_units and
+    #    sess_positive / n_sessions) — same two columns every other row carries, no meaning-mixing.
     p = os.path.join(DATA, "sensorimotor_multisession_summary.csv"); src["sensorimotor"] = p
     SM = pd.read_csv(p)
     r = SM[SM.deviant == "motor_orientation_90"].iloc[0]
+    if "cells_positive" not in SM.columns:
+        raise ValueError("sensorimotor_multisession_summary.csv missing 'cells_positive' — "
+                         "regenerate via sensorimotor_mismatch_ecephys.ipynb (QUICK=False)")
     rows.append(dict(paradigm="Sensorimotor", expectation="motor contingency", metric="closed−open DvI (90°)",
                      population="QC & VIS & standard-responsive (>0.1 Hz)",
                      median=float(r.dvi), lo=float(r.ci_lo), hi=float(r.ci_hi),
                      n=int(r.n_units), n_sess=int(r.n_sessions),
-                     frac_pos=float(r.sess_positive) / float(r.n_sessions), p=float("nan")))
+                     frac_cells_pos=round(float(r.cells_positive) / float(r.n_units), 4),
+                     frac_animals_pos=round(float(r.sess_positive) / float(r.n_sessions), 4),
+                     p=float("nan")))
     return pd.DataFrame(rows), src
 
 
@@ -142,13 +163,13 @@ def build_crossscale():
             continue
         m, lo, hi = _boot_ci_subject(d.DvI.values, d.subject.values)
         rows.append(dict(technique=tech, median=m, lo=lo, hi=hi, n=len(d),
-                         frac_pos=float((d.DvI > 0).mean())))
+                         frac_cells_pos=round(float((d.DvI > 0).mean()), 4)))
     return pd.DataFrame(rows), src
 
 
 EXPECTED_SCHEMAS = {
-    "capstone_error_types.csv": ["paradigm", "expectation", "metric", "population", "median", "lo", "hi", "n", "n_sess", "frac_pos", "p"],
-    "capstone_crossscale.csv":  ["technique", "median", "lo", "hi", "n", "frac_pos"],
+    "capstone_error_types.csv": ["paradigm", "expectation", "metric", "population", "median", "lo", "hi", "n", "n_sess", "frac_cells_pos", "frac_animals_pos", "p"],
+    "capstone_crossscale.csv":  ["technique", "median", "lo", "hi", "n", "frac_cells_pos"],
 }
 
 

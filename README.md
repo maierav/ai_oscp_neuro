@@ -172,8 +172,8 @@ is fixed here):
    sequence = QC & VIS, duration = QC & VIS, sensorimotor = QC & VIS & **standard-responsive**
    (>0.1 Hz, read from its own gated notebook summary). `--check` re-runs the build and asserts
    **both** committed CSVs (error-types *and* cross-scale) equal a fresh rebuild across **every row
-   and every column** — numeric fields (median, CI, n, n_sess, frac_pos, p) within 1e-6, string
-   fields (metric, population) exactly, and it fails explicitly on a missing/extra row, a sign flip,
+   and every column** — numeric fields (median, CI, n, n_sess, frac_cells_pos, frac_animals_pos, p)
+   within 1e-6, string fields (metric, population) exactly, and it fails explicitly on a missing/extra row, a sign flip,
    or a CI-zero-crossing change (a CI that gains or loses zero). It passes
    exactly, because there is no intentional snapshot/script divergence. The numbers change only when
    a Result notebook rewrites its per-unit table (e.g. a DANDI draft re-upload); the fix is then to
@@ -290,9 +290,13 @@ robustness.** The tiny Wilcoxon/bootstrap p-values quoted per result (e.g. Resul
 p ≈ 7×10⁻¹¹⁰) pool units across animals and treat them as independent — they show the
 pooled deviant response differs from control, nothing about generalisation across mice.
 For cross-animal robustness weigh the **hierarchical-bootstrap CI** (resample sessions,
-then units) and the **per-session-positive fraction** reported alongside each result;
-those are the numbers that count. Per-bin area×layer FDR grids likewise pool units and
-are descriptive (which bins are positive), not mouse-level inference.
+then units) and the **per-animal-positive fraction** (`frac_animals_pos`) reported
+alongside each result; those are the numbers that count. The capstone table carries both
+`frac_cells_pos` (share of units with a positive index) and `frac_animals_pos` (share of
+mice whose per-animal median is positive) as **separate columns** — never mixed — and the
+capstone figure annotates the cell-level fraction uniformly across all four rows. Per-bin
+area×layer FDR grids likewise pool units and are descriptive (which bins are positive),
+not mouse-level inference.
 
 **CCF is present in 58 of 60 ecephys sessions** (`electrodes.location`/`x`/`y`/`z`
 populated — the 58 rows shipped in `ccf_session_index.csv`); the rest carry
