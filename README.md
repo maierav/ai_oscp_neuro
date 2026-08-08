@@ -79,7 +79,7 @@ excluding zero (sensorimotor is null):
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 50 % |
 
 **Three** of the four error types carry a positive prediction-error index with a CI excluding
-zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** (+0.02,
+zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** (−0.04,
 CI spans zero; see Result 3) — limited by low locomotion and a block-order confound, so it is
 italicised and flagged as null here. So the convergence claim is honest about its scope: deviance
 detection appears across
@@ -87,6 +87,21 @@ frequency-, order-, and timing-based expectations, while the motor-contingency c
 established in the released data. Panel B shows the feature-oddball form generalizing across
 recording scales (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission
 contrast). The full logic, controls, and caveats for each row are in the Result sections below.
+
+> **Unit-inclusion rule per paradigm (they are not identical, by design).** All four start from
+> the same base gate — `default_qc` **and** VIS-area — applied in every extractor. On top of that,
+> feature-oddball and sensorimotor add a **responsiveness gate** (feature-oddball: Wilcoxon
+> `resp_p < 0.05`; sensorimotor: standard evoked rate > 0.1 Hz), while sequence and duration use all
+> QC-passing VIS units with no separate responsiveness cut. This difference is deliberate and, for a
+> *normalised* index, largely immaterial: a non-responsive unit contributes a near-zero DvI/timing-PE
+> (tiny numerator over tiny denominator) and so barely moves the median. We verified this directly —
+> adding a responsiveness gate to the two ungated paradigms leaves the headline essentially unchanged
+> (**sequence** +0.20 → +0.22, 7/7 mice either way; **duration** +0.32 → +0.32, 6/6 mice either way).
+> The feature-oddball number is the one exception where responsiveness matters, and there the gate is
+> applied (an all-QC feature-oddball population dilutes the median because ~20 % of VIS units are
+> unresponsive to the standard). So the capstone axis compares indices computed on comparable
+> populations to within this robustness margin; the per-paradigm gate is stated in each Result
+> section and in the extractor cell of each notebook.
 
 **Is any headline carried by one mouse?** The forest below puts the *animal* — not the unit — as
 the visible unit of replication for every primary effect: each ● is one mouse's median, ◆ is the
