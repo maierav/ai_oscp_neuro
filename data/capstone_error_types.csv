@@ -1,5 +1,5 @@
-paradigm,expectation,metric,median,lo,hi,n,n_sess,frac_pos,p
-Feature-oddball,frequency,DvI (90°),0.4623245671885316,0.387493504243894,0.550497727394779,1534,9,0.787338660110633,0.0
-Sequence,learned order,DvI (90°),0.195,0.0992,0.3055,1514,7,0.5799,0.0004
-Duration / timing,learned timing,timing-PE index,0.321,0.255,0.429,744,6,0.7365591397849462,0.0
-Sensorimotor,motor contingency,closed−open DvI (90°),-0.0356,-0.1751,0.1101,200,6,0.475,0.3468
+paradigm,expectation,metric,population,median,lo,hi,n,n_sess,frac_pos,p
+Feature-oddball,frequency,DvI (90°),QC & VIS & responsive (resp_p<0.05),0.4263011659538968,0.3564140777255533,0.5401644855945793,1566,9,0.7918263090676884,0.0
+Sequence,learned order,DvI (90°),QC & VIS (all),0.19504186970342977,0.0992366411793941,0.305509181800364,1514,7,0.5799207397622193,0.0
+Duration / timing,learned timing,timing-PE index,QC & VIS (all),0.3240171111713179,0.21934422796626044,0.4534381223189662,1144,6,0.6984265734265734,0.0
+Sensorimotor,motor contingency,closed−open DvI (90°),QC & VIS & standard-responsive (>0.1 Hz),-0.0356,-0.1751,0.1101,200,6,0.6666666666666666,

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-08T16:49:35.358701+00:00",
-  "git_sha": "e9f0e2aebc42d419cd4be3bdd9be79f31b2c32c1",
+  "generated_at": "2026-08-08T17:21:22.865292+00:00",
+  "git_sha": "b746a47165e60f0d4633abecf94e29de2d69cbe6",
   "python": "3.11.15",
   "packages": {
     "numpy": "2.4.6",
@@ -8,6 +8,12 @@
   },
   "seed": 0,
   "bootstrap_n": 5000,
+  "populations": {
+    "Feature-oddball": "QC & VIS & responsive (resp_p<0.05)",
+    "Sequence": "QC & VIS (all)",
+    "Duration / timing": "QC & VIS (all)",
+    "Sensorimotor": "QC & VIS & standard-responsive (>0.1 Hz)"
+  },
   "source_tables": {
     "feature_oddball": {
       "path": "data/oddball_confirmatory_units.parquet",
@@ -30,5 +36,5 @@
       "sha256": "8704208f595e8f0acc38e22f295cf40e4902ad41e8b46aa32a3718b51bf9ec61"
     }
   },
-  "note": "Capstone CSVs assembled from committed per-unit tables. Values recomputed from the mutable DANDI draft may differ from the committed snapshot at the 2nd-3rd decimal (responsiveness/QC gates + draft drift); sign and significance class are stable."
+  "note": "Capstone CSVs are the deterministic output of this builder over the committed per-unit tables, with one named analysis population per result (see 'populations'). `--check` enforces committed == rebuild exactly. Point estimates change only when a Result notebook rewrites its per-unit table (e.g. DANDI draft re-upload)."
 }

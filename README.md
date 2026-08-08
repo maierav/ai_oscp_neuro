@@ -65,7 +65,7 @@ is that ratio put on the bounded scale — its **generating expression now lives
 `duration_mismatch_ecephys.ipynb`** (the `timing_pe_index` cell) and is persisted in
 `data/duration_timing_pe.parquet`, so the capstone value is traceable end-to-end. Both
 index families are bounded to −1…+1 and both put a surprise-related response over a
-response-magnitude denominator, but a duration +0.32 and a feature-oddball +0.45 are
+response-magnitude denominator, but a duration +0.32 and a feature-oddball +0.43 are
 **not the same quantity** (different denominators, different reference). Read the panel
 as **"which error types produce a positively-signed PE and how consistently,"** not as
 a strength ranking. On that reading, three of four are positive with CIs
@@ -73,7 +73,7 @@ excluding zero (sensorimotor is null):
 
 | error type | expectation set by | PE index | 95 % CI (hierarchical) | sessions | cells + |
 |---|---|---|---|---|---|
-| **Feature-oddball** | stimulus frequency | **+0.45** | excludes 0 | 9 | 79 % |
+| **Feature-oddball** | stimulus frequency | **+0.43** | [+0.36, +0.54] | 9 | 79 % |
 | **Sequence** | learned temporal order | **+0.20** | [+0.10, +0.31] | 7 | 58 % |
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 50 % |
@@ -165,17 +165,18 @@ is fixed here):
    `timing_pe_index = om_pe/(|om_pe|+|std_r|)`), plus `sensorimotor_multisession_summary.csv` and
    `meso_sequence_dvi.parquet` / `crossscale_mechanism.parquet`.
 2. **Table assembly** — [`scripts/build_summary_tables.py`](scripts/build_summary_tables.py) reads
-   those per-unit tables and assembles both capstone CSVs, **validates their schema**, and records
-   `data/summary_tables_provenance.json` (git SHA, package versions, per-source-table SHA-256, seed,
-   bootstrap N). `--check` recomputes in memory and diffs against the committed snapshot (feature
-   +0.42/committed +0.46, sequence +0.20/+0.20, duration +0.32/+0.32, sensorimotor −0.04/−0.04 —
-   all within tolerance, sign agreement 100%). The **sensorimotor** row is *read* from its own
-   notebook's gated summary CSV rather than re-derived (its QC + responsiveness gate lives in that
-   notebook; re-deriving from the raw units table would give a different number). By default the
-   script preserves the committed authoritative snapshot and only refreshes provenance; `--regenerate`
-   overwrites the CSVs from source (values then drift at the 2nd–3rd decimal — mutable DANDI draft +
-   gates — but sign and significance class are stable, which is why the committed CSVs remain the
-   authoritative snapshot).
+   those per-unit tables and **is the sole generator of both capstone CSVs** — the committed
+   `data/capstone_*.csv` files *are* this script's output, not a separate snapshot. It applies **one
+   named analysis population per result** (recorded in the CSV's `population` column and in
+   `summary_tables_provenance.json`): feature-oddball = QC & VIS & **responsive** (`resp_p<0.05`),
+   sequence = QC & VIS, duration = QC & VIS, sensorimotor = QC & VIS & **standard-responsive**
+   (>0.1 Hz, read from its own gated notebook summary). `--check` re-runs the build and asserts the
+   committed CSVs equal a fresh rebuild for **every median, CI, and n** (tolerance 1e-6) — it passes
+   exactly, because there is no intentional snapshot/script divergence. The numbers change only when
+   a Result notebook rewrites its per-unit table (e.g. a DANDI draft re-upload); the fix is then to
+   re-run this builder so the CSVs stay in lock-step, and `--check` passes again. Provenance
+   (git SHA, package versions, per-source-table SHA-256, seed, bootstrap N, and the population map)
+   is written to `data/summary_tables_provenance.json`.
 3. **Figure** — [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb) renders
    the two CSVs (no NWB streaming).
 
