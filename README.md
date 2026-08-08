@@ -694,12 +694,20 @@ logic as Result 1 — comparing the sequence deviant to the *physically identica
 equiprobably in the `sequential_control_block` (matched 0.25 s, TF = 2 Hz), where the same
 orientation carries no sequence expectation:
 
-| deviant | DvI (vs equiprobable) | 95 % CI | p | sessions positive |
+| deviant | DvI (vs equiprobable) | 95 % CI (hierarchical) | mice + (sign test) | pooled-cell p |
 |---|---|---|---|---|
-| 90° | **+0.21** | [+0.15, +0.27] | 7e-11 | 6/7 |
-| 45° | **+0.35** | [+0.24, +0.49] | 5e-06 | 6/7 |
+| 90° | **+0.21** | [+0.09, +0.33] | 6/7 (p = 0.13) | 7×10⁻¹¹ |
+| 45° | **+0.33** | [+0.07, +0.60] | 5/7 (p = 0.45) | 5×10⁻⁶ |
 
-A positive DvI means the *sequential context*, not the orientation, drives the extra response.
+The CIs here are **hierarchical bootstraps** (resample mice, then units) — the honest cross-animal
+intervals, wider than a units-only bootstrap. Both deviants have a positive pooled DvI whose
+hierarchical CI excludes zero, but **neither reaches significance by the conservative per-animal
+sign test** (90°: 6/7 mice, p = 0.13; 45°: 5/7 mice, p = 0.45) — the effect is real at the cell
+level and consistent in direction, but with 7 mice the animal-level test is underpowered. The
+pooled-cell p-values (7×10⁻¹¹, 5×10⁻⁶) treat ~1,200 cells as independent and index detection
+*presence*, not cross-animal generalisation — so read them as descriptive, and weigh the
+per-animal sign test for the cross-animal claim. A positive DvI means the *sequential context*,
+not the orientation, drives the extra response.
 The dynamics confirm it: the deviant response peaks later (~110 ms) than the equiprobable control
 (~50 ms), a prediction-error component riding on top of the sensory drive — the same signature as
 the standard-oddball, now with expectation set by learned order rather than frequency.
