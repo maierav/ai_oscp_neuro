@@ -170,8 +170,11 @@ is fixed here):
    named analysis population per result** (recorded in the CSV's `population` column and in
    `summary_tables_provenance.json`): feature-oddball = QC & VIS & **responsive** (`resp_p<0.05`),
    sequence = QC & VIS, duration = QC & VIS, sensorimotor = QC & VIS & **standard-responsive**
-   (>0.1 Hz, read from its own gated notebook summary). `--check` re-runs the build and asserts the
-   committed CSVs equal a fresh rebuild for **every median, CI, and n** (tolerance 1e-6) — it passes
+   (>0.1 Hz, read from its own gated notebook summary). `--check` re-runs the build and asserts
+   **both** committed CSVs (error-types *and* cross-scale) equal a fresh rebuild across **every row
+   and every column** — numeric fields (median, CI, n, n_sess, frac_pos, p) within 1e-6, string
+   fields (metric, population) exactly, and it fails explicitly on a missing/extra row, a sign flip,
+   or a CI-zero-crossing change (a CI that gains or loses zero). It passes
    exactly, because there is no intentional snapshot/script divergence. The numbers change only when
    a Result notebook rewrites its per-unit table (e.g. a DANDI draft re-upload); the fix is then to
    re-run this builder so the CSVs stay in lock-step, and `--check` passes again. Provenance

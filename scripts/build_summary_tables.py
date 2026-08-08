@@ -160,14 +160,65 @@ def validate_schema(name, df):
     return True
 
 
+def _check_table(name, rebuilt, key, tol):
+    """Assert the committed CSV equals a fresh rebuild — every row, every column.
+
+    Fails (returns False) on: missing/extra rows (outer join on `key`), any numeric column
+    differing by more than `tol`, any string column differing at all, a SIGN change of the point
+    estimate, or a CI-zero-crossing change (a CI that excluded zero now including it, or vice versa).
+    """
+    fp = os.path.join(DATA, name)
+    if not os.path.exists(fp):
+        print(f"  [FAIL] {name}: committed file absent")
+        return False
+    committed = pd.read_csv(fp)
+    # 1. row-key set equality (catches missing/extra rows an inner join would hide)
+    k_new, k_old = set(rebuilt[key]), set(committed[key])
+    ok = True
+    if k_new != k_old:
+        if k_old - k_new: print(f"  [FAIL] {name}: rows in committed but not rebuild: {sorted(k_old - k_new)}")
+        if k_new - k_old: print(f"  [FAIL] {name}: rows in rebuild but not committed: {sorted(k_new - k_old)}")
+        ok = False
+    merged = rebuilt.merge(committed, on=key, suffixes=("_new", "_old"), how="inner")
+    num_cols = [c for c in rebuilt.columns if c != key and pd.api.types.is_numeric_dtype(rebuilt[c])]
+    str_cols = [c for c in rebuilt.columns if c != key and not pd.api.types.is_numeric_dtype(rebuilt[c])]
+    for _, r in merged.iterrows():
+        rk = r[key]; problems = []
+        for c in num_cols:
+            a, b = r[f"{c}_new"], r[f"{c}_old"]
+            if pd.isna(a) and pd.isna(b):
+                continue
+            if pd.isna(a) != pd.isna(b) or abs(float(a) - float(b)) > tol:
+                problems.append(f"{c} {a}/{b}")
+        for c in str_cols:
+            if str(r[f"{c}_new"]) != str(r[f"{c}_old"]):
+                problems.append(f"{c} '{r[f'{c}_new']}'/'{r[f'{c}_old']}'")
+        # explicit inferential-status checks (independent of tol)
+        if "median" in num_cols:
+            if np.sign(r["median_new"]) != np.sign(r["median_old"]):
+                problems.append(f"SIGN FLIP {r['median_new']:+.3f}/{r['median_old']:+.3f}")
+        if {"lo", "hi"}.issubset(num_cols):
+            exc_new = (r["lo_new"] > 0) or (r["hi_new"] < 0)
+            exc_old = (r["lo_old"] > 0) or (r["hi_old"] < 0)
+            if exc_new != exc_old:
+                problems.append(f"CI-ZERO-CROSSING changed (excludes0 {exc_new}/{exc_old})")
+        if problems:
+            ok = False
+            print(f"  [FAIL] {name} · {rk}: " + "; ".join(problems))
+        else:
+            print(f"  [OK ] {name} · {rk}")
+    return ok
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
-                    help="rebuild in memory and diff against the committed CSVs (no writes); "
-                         "exit non-zero if any median/CI/n differs beyond --tol")
+                    help="rebuild in memory and verify BOTH committed CSVs equal the rebuild — every "
+                         "row and every column (numeric within --tol; strings exact; plus explicit "
+                         "sign-flip and CI-zero-crossing checks; fails on missing/extra rows). No writes.")
     ap.add_argument("--tol", type=float, default=1e-6,
-                    help="max |diff| in median/CI vs committed before --check fails (default 1e-6 "
-                         "— the committed CSVs ARE the builder output, so they must match exactly)")
+                    help="max |diff| for any numeric column vs committed before --check fails "
+                         "(default 1e-6 — the committed CSVs ARE the builder output, so they must match)")
     args = ap.parse_args()
 
     CAP, src_cap = build_error_types()
@@ -178,20 +229,13 @@ def main():
 
     if args.check:
         ok = True
-        committed = pd.read_csv(os.path.join(DATA, "capstone_error_types.csv"))
-        merged = CAP.merge(committed, on="paradigm", suffixes=("_new", "_old"))
-        for _, r in merged.iterrows():
-            dmed = abs(r["median_new"] - r["median_old"])
-            dn = int(r["n_new"]) - int(r["n_old"])
-            dlo = abs(r["lo_new"] - r["lo_old"]); dhi = abs(r["hi_new"] - r["hi_old"])
-            bad = (dmed > args.tol) or (dlo > args.tol) or (dhi > args.tol) or (dn != 0)
-            if bad:
-                ok = False
-            print(f"  [{'FAIL' if bad else 'OK '}] {r['paradigm']:18s} "
-                  f"median {r['median_new']:+.4f}/{r['median_old']:+.4f} "
-                  f"n {int(r['n_new'])}/{int(r['n_old'])} "
-                  f"CI[{r['lo_new']:+.3f},{r['hi_new']:+.3f}]/[{r['lo_old']:+.3f},{r['hi_old']:+.3f}]")
-        print("\nexact match:" , ok)
+        ok &= _check_table("capstone_error_types.csv", CAP, key="paradigm", tol=args.tol)
+        if CROSS is not None:
+            ok &= _check_table("capstone_crossscale.csv", CROSS, key="technique", tol=args.tol)
+        else:
+            print("  [FAIL] capstone_crossscale.csv: source table missing — cannot verify")
+            ok = False
+        print("\nexact match (all tables, all columns):", ok)
         sys.exit(0 if ok else 1)
 
     # CANONICAL WRITE — the committed CSVs ARE this script's output. There is no separate
