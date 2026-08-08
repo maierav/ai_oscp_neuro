@@ -52,16 +52,23 @@ The project's four error-type prediction-error contrasts, on one axis (the eight
 numbered Results below expand these plus the cross-scale and anatomical analyses).
 Each row of panel A is a different way of making a stimulus *unexpected*, expressed
 as a bounded −1…+1 index so the four can share an axis. **The rows are not the
-identical construction, and the axis compares direction, not magnitude.** Three rows
-(feature-oddball, sequence, sensorimotor) are DvIs — the deviant response relative to
-a **physically-matched control stimulus**, (R_dev−R_ctrl)/(|R_dev|+|R_ctrl|). The
-duration row is a **timing-PE index** — the omission response at the expected onset
-time (there is *no* stimulus, so no physically-matched control is possible) normalized
-by the standard sensory response, om/(|om|+|std|). Both are bounded to −1…+1 and both
-put a surprise-related response over a response-magnitude denominator, but a duration
-+0.32 and a feature-oddball +0.45 are not strictly the same quantity — so read the
-panel as **"which error types produce a positively-signed PE and how consistently,"**
-not as a strength ranking. On that reading, three of four are positive with CIs
+identical construction, and the axis compares direction and consistency, not magnitude
+— so the relative bar lengths are deliberately not interpretable as effect-size
+ranking.** Three rows (feature-oddball, sequence, sensorimotor, drawn ●) are DvIs — the
+deviant response relative to a **physically-matched control stimulus**,
+(R_dev−R_ctrl)/(|R_dev|+|R_ctrl|). The duration row (drawn ■, distinct marker) is a
+**timing-PE index** — the omission response at the expected onset time (there is *no*
+stimulus, so no physically-matched control is possible) normalized by the same units'
+**standard sensory response**, om_pe/(|om_pe|+|std_r|). The underlying duration Result
+is reported in Hz (+0.97 Hz omission response over +1.63 Hz standard); the +0.32 here
+is that ratio put on the bounded scale — its **generating expression now lives in
+`duration_mismatch_ecephys.ipynb`** (the `timing_pe_index` cell) and is persisted in
+`data/duration_timing_pe.parquet`, so the capstone value is traceable end-to-end. Both
+index families are bounded to −1…+1 and both put a surprise-related response over a
+response-magnitude denominator, but a duration +0.32 and a feature-oddball +0.45 are
+**not the same quantity** (different denominators, different reference). Read the panel
+as **"which error types produce a positively-signed PE and how consistently,"** not as
+a strength ranking. On that reading, three of four are positive with CIs
 excluding zero (sensorimotor is null):
 
 | error type | expectation set by | PE index | 95 % CI (hierarchical) | sessions | cells + |
@@ -138,7 +145,10 @@ is two-stage. Three of the ecephys Result notebooks — `oddball_confirmatory_ec
 `sequence_mismatch_ecephys`, and `duration_mismatch_ecephys` — stream their NWB files from DANDI
 and write the **per-unit table** they compute (`data/oddball_confirmatory_units.parquet`,
 `data/sequence_units.parquet`, `data/duration_units.parquet`); the corresponding per-error-type
-index in the capstone CSV is the pooled DvI/timing-PE of that table. The sensorimotor row and the
+index in the capstone CSV is the pooled DvI/timing-PE of that table. For duration specifically,
+the notebook also writes `data/duration_timing_pe.parquet` carrying the per-unit `om_pe`, `std_r`,
+**and** the bounded `timing_pe_index = om_pe/(|om_pe|+|std_r|)` — so the capstone's +0.32 timing-PE
+value has an explicit generating expression, distinct from the +0.97 Hz scalar the Result reports. The sensorimotor row and the
 cross-scale columns are computed in their own notebooks (`sensorimotor_mismatch_ecephys` and the
 cross-scale set) but those do **not** yet persist a per-unit table — their capstone values trace to
 the committed summary CSVs, not to a regenerated parquet. The capstone figure is rendered from the
