@@ -81,6 +81,23 @@ established in the released data. Panel B shows the feature-oddball form general
 recording scales (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission
 contrast). The full logic, controls, and caveats for each row are in the Result sections below.
 
+**Is any headline carried by one mouse?** The forest below puts the *animal* — not the unit — as
+the visible unit of replication for every primary effect: each ● is one mouse's median, ◆ is the
+pooled hierarchical-bootstrap CI, ⊢ is the leave-one-animal-out range (how far the pooled estimate
+moves when any single mouse is dropped), and the right margin gives an exact sign test on the
+per-animal medians (the most conservative honest statistic — N = number of mice).
+
+![Per-animal robustness of every primary effect](figures/per_animal_forest.png)
+
+The pattern is honest about its own strength: **feature-oddball** (9/9 mice positive, sign
+p = 0.004) and **duration/timing** (6/6, p = 0.031) survive the exact animal-level test and barely
+move under leave-one-out; **sequence** (6/7, p = 0.13) has a pooled CI that excludes zero but does
+*not* reach the conservative animal-level test at n = 7 mice; **sensorimotor** (5/6, p = 0.22, the
+closed−open index) is consistent with the null in the Result 3 headline. So the two strongest
+error types are robust at the animal level, and the weaker two are correctly reported as
+suggestive/null rather than established. Values in
+[`data/per_animal_effects.csv`](data/per_animal_effects.csv).
+
 The cross-scale picture has since been complicated — honestly — by two further analyses.
 Paradigm-matched SLAP2 data has begun to arrive, and a first look at the dendritic-glutamate scale
 ([**Result 7**](#result-7--paradigm-matched-slap2-first-look-preliminary-n2paradigm)) finds no

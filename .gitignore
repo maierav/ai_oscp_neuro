@@ -51,3 +51,4 @@ figures/*.png
 !figures/h1_laminar_metric_comparison.png
 !figures/area_layer_animal_support.png
 !figures/sensorimotor_behavioral_balance.png
+!figures/per_animal_forest.png
