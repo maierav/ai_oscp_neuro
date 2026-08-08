@@ -211,7 +211,10 @@ reusable products:
    Allen brain, and a per-probe laminar cross-check that overlays CCF region/layer
    boundaries on spontaneous LFP band power and a summed sorted-unit rate depth
    profile (a coarse spatial cross-check, not true MUA), so the alignment can be
-   validated against the recordings.
+   validated against the recordings. The LFP band power is estimated only on a
+   *full-length* stimulus-free window that fits inside the actual recording range;
+   if no such window exists, that probe's LFP panel is marked "LFP unavailable"
+   rather than estimated from a short or empty slice (`lfp_status` per probe).
 
 Alongside these are the **validation** and **prediction-error** notebooks
 documented below, each of which doubles as a worked example of streaming and

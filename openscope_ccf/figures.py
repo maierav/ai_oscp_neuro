@@ -26,17 +26,27 @@ from .nwbio import open_remote, unit_electrode_rows, _decode
 _TAB = None
 
 
-def _spontaneous_start(fh, window_s):
-    """Earliest stimulus-free start time offering at least ``window_s`` seconds.
+def _spontaneous_start(fh, window_s, t_lo=0.0, t_hi=None):
+    """Earliest stimulus-free start time offering a FULL ``window_s`` of recording.
 
-    Scans every ``intervals/*_presentations`` table for stimulus onsets and
-    returns the start of the first gap >= ``window_s`` (the pre-stimulus lead-in
-    if long enough, else the largest inter-block gap). Returns ``0.0`` only if
-    the file has no stimulus interval tables at all — in which case the caller's
-    window is genuinely spontaneous by default.
+    Enumerates stimulus-free spans and returns a start ``t`` such that
+    ``[t, t + window_s]`` is entirely stimulus-free AND lies within the actual
+    recording range ``[t_lo, t_hi]``. Candidate spans, in preference order:
+    the pre-stimulus lead-in, then each inter-block gap, then the post-stimulus
+    tail after the last block. Every candidate is clipped to ``t_hi`` and only
+    accepted if a full ``window_s`` still fits.
+
+    Returns ``None`` when no stimulus-free window of the requested length exists
+    within the recording — the caller must then treat LFP physiology as
+    unavailable rather than run Welch on a short/empty slice. Returns ``t_lo``
+    when the file has no stimulus interval tables at all (genuinely spontaneous),
+    provided the recording is long enough.
     """
-    onsets = []
-    stops = []
+    if t_hi is None:                     # unknown recording end -> cannot validate length
+        t_hi = float("inf")
+    if t_hi - t_lo < window_s:           # whole recording is shorter than one window
+        return None
+    onsets, stops = [], []
     iv = fh.get("intervals")
     if iv is not None:
         for k in iv.keys():
@@ -45,18 +55,22 @@ def _spontaneous_start(fh, window_s):
                 onsets.append(float(g["start_time"][0]))
                 stops.append(float(g["stop_time"][-1]) if "stop_time" in g else float(g["start_time"][-1]))
     if not onsets:
-        return 0.0
-    first_onset = min(onsets)
-    if first_onset >= window_s:          # pre-stimulus lead-in is long enough
-        return 0.0
-    # otherwise take the largest gap after a block's end and before the next onset
+        return t_lo                      # no stimulus at all; recording already known long enough
     edges = sorted(zip(onsets, stops))
-    best_t, best_gap = 0.0, -1.0
-    for (o1, s1), (o2, s2) in zip(edges, edges[1:]):
-        gap = o2 - s1
-        if gap > best_gap:
-            best_gap, best_t = gap, s1
-    return best_t if best_gap >= window_s else max(e[1] for e in edges)
+    first_onset = edges[0][0]
+    # 1) pre-stimulus lead-in [t_lo, first_onset]
+    if first_onset - t_lo >= window_s:
+        return t_lo
+    # 2) inter-block gaps [end of block i, onset of block i+1], largest first
+    gaps = [(s1, o2 - s1) for (o1, s1), (o2, s2) in zip(edges, edges[1:])]
+    for start, gap in sorted(gaps, key=lambda x: -x[1]):
+        if gap >= window_s and start + window_s <= t_hi:
+            return start
+    # 3) post-stimulus tail after the last block — ONLY if a full window fits before t_hi
+    tail_start = max(e[1] for e in edges)
+    if t_hi - tail_start >= window_s:
+        return tail_start
+    return None                          # no valid stimulus-free window of this length
 
 
 def _tab(n):
@@ -84,14 +98,18 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
         u_dv = ey[elrow]
         lfp_root = fh["processing/ecephys/LFP"]
         any_key = list(lfp_root.keys())[0]
-        dur = lfp_root[any_key]["timestamps"][-1]
+        _lfp_ts = lfp_root[any_key]["timestamps"]
+        lfp_lo = float(_lfp_ts[0])
+        dur = float(_lfp_ts[-1])
 
-        # Spontaneous window: a genuinely stimulus-free span, not an unchecked
-        # "first 30 s" (which usually overlaps the opening stimulus block). Find
-        # the earliest gap of >= welch_window_s before the first stimulus onset,
-        # else the largest inter-block gap; fall back to [0, welch_window_s] only
-        # if the file carries no stimulus intervals at all.
-        spont_t0 = _spontaneous_start(fh, welch_window_s)
+        # Spontaneous window: a genuinely stimulus-free span that FULLY fits inside
+        # the actual LFP recording range [lfp_lo, dur], not an unchecked "first 30 s"
+        # (which usually overlaps the opening stimulus block) nor a tail start with
+        # too little recording left. Returns None if no valid stimulus-free window of
+        # welch_window_s exists — in which case LFP band power is marked unavailable
+        # rather than estimated from a short/empty slice.
+        spont_t0 = _spontaneous_start(fh, welch_window_s, t_lo=lfp_lo, t_hi=dur)
+        lfp_available = spont_t0 is not None
 
         def nspk(i):
             lo = 0 if i == 0 else sti[i - 1]
@@ -122,11 +140,24 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
             ts = es["timestamps"]
             fs = 1.0 / np.median(np.diff(ts[:2000]))
             n = int(welch_window_s * fs)
-            i0 = int(np.searchsorted(ts[:], spont_t0))
-            data = es["data"][i0:i0 + n, :].astype(np.float32)
-            f, Pxx = signal.welch(data, fs=fs, nperseg=int(fs), axis=0)
-            bp_lf = Pxx[(f >= 1) & (f <= 100)].sum(0)
-            bp_gamma = Pxx[(f >= 30) & (f <= 90)].sum(0)
+            # LFP band power only when a full stimulus-free window is available AND a
+            # complete n-sample slice can actually be read (guards the short/empty-slice
+            # -> garbage-Welch path). Otherwise mark it unavailable rather than estimate it.
+            bp_lf = bp_gamma = None
+            lfp_status = "unavailable_no_spontaneous_window"
+            if lfp_available:
+                i0 = int(np.searchsorted(ts[:], spont_t0))
+                if i0 + n <= es["data"].shape[0]:
+                    data = es["data"][i0:i0 + n, :].astype(np.float32)
+                    if data.shape[0] == n:
+                        f, Pxx = signal.welch(data, fs=fs, nperseg=int(fs), axis=0)
+                        bp_lf = Pxx[(f >= 1) & (f <= 100)].sum(0)
+                        bp_gamma = Pxx[(f >= 30) & (f <= 90)].sum(0)
+                        lfp_status = "ok"
+                    else:
+                        lfp_status = "unavailable_short_slice"
+                else:
+                    lfp_status = "unavailable_short_slice"
             m = dev == p
             dvp, rp = u_dv[m], urate[m]
             dv_ch = ey[ch]
@@ -134,7 +165,8 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
             centers = (edges[:-1] + edges[1:]) / 2
             mua_prof, _ = np.histogram(dvp, bins=edges, weights=rp)
             out[p] = dict(ch_elidx=ch, ap=ex[ch], dv=dv_ch, ml=ez[ch], region=loc[ch],
-                          bp_lf=bp_lf, bp_gamma=bp_gamma,
+                          bp_lf=bp_lf, bp_gamma=bp_gamma, lfp_status=lfp_status,
+                          spont_t0=(float(spont_t0) if spont_t0 is not None else None),
                           mua_dv_centers=centers, mua_dv=mua_prof, n_units=int(m.sum()))
         return out
     finally:
@@ -221,7 +253,9 @@ def _draw_probe(ax_anat, ax_phys, probe_data, p, show_ylab, bg=None):
     d = probe_data[p]
     order = np.argsort(d["dv"])
     dv, reg = d["dv"][order], d["region"][order]
-    bp, gam = d["bp_lf"][order], d["bp_gamma"][order]
+    _lfp_ok = d.get("bp_lf") is not None and d.get("bp_gamma") is not None
+    bp = d["bp_lf"][order] if _lfp_ok else None
+    gam = d["bp_gamma"][order] if _lfp_ok else None
     cmap = _region_colors(reg, bg=bg)
     for i in range(len(dv)):
         y0 = dv[i] - 8 if i == 0 else (dv[i - 1] + dv[i]) / 2
@@ -242,8 +276,13 @@ def _draw_probe(ax_anat, ax_phys, probe_data, p, show_ylab, bg=None):
     if show_ylab:
         ax_anat.set_ylabel("DV depth (µm)")
     ax_anat.set_title(p, fontsize=8, pad=2)
-    ax_phys.plot(10 * np.log10(bp), dv, color="#1f77b4", lw=1.2)
-    ax_phys.plot(10 * np.log10(gam), dv, color="#d62728", lw=1.0)
+    if _lfp_ok:
+        ax_phys.plot(10 * np.log10(bp), dv, color="#1f77b4", lw=1.2)
+        ax_phys.plot(10 * np.log10(gam), dv, color="#d62728", lw=1.0)
+    else:
+        ax_phys.text(0.5, 0.5, f"LFP unavailable\n({d.get('lfp_status', 'no window')})",
+                     transform=ax_phys.transAxes, ha="center", va="center",
+                     fontsize=5.5, color="#888888")
     ax_phys.set_ylim(dv.max() + 50, dv.min() - 50)
     ax_phys.set_yticklabels([])
     ax_phys.set_xlabel("LFP (dB)", fontsize=6.5)
