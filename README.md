@@ -69,7 +69,7 @@ excluding zero (sensorimotor is null):
 | **Feature-oddball** | stimulus frequency | **+0.45** | excludes 0 | 9 | 79 % |
 | **Sequence** | learned temporal order | **+0.22** | [+0.10, +0.34] | 7 | 59 % |
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
-| Sensorimotor *(null)* | motor–visual contingency | +0.02 | [−0.12, +0.18] | 6 | 51 % |
+| Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 50 % |
 
 **Three** of the four error types carry a positive prediction-error index with a CI excluding
 zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** (+0.02,
@@ -581,19 +581,19 @@ The inclusion rule was pre-committed (§12 of
 **≥3 running open-loop events on all four deviant types** (`scripts/audit_locomotion.py` scores
 all 16 sessions; six qualify, all with real CCF). The contrast is the per-unit
 closed-loop-running minus open-loop-running DvI, pooled with a hierarchical bootstrap. On
-visually-responsive VIS-area units:
+QC-passing (`default_qc`), visually-responsive VIS-area units (>0.1 Hz standard evoked rate):
 
 | deviant | closed − open DvI | 95 % CI (hierarchical) | sessions + | reaches sig. |
 |---|---|---|---|---|
-| Orientation 90° | +0.02 | [−0.12, +0.18] | 4/6 | no |
-| Orientation 45° | −0.09 | [−0.26, +0.07] | 2/5 | no |
-| Halt | −0.18 | [−0.50, +0.16] | 2/6 | no |
-| Omission | −0.09 | [−0.43, +0.12] | 2/5 | no |
+| Orientation 90° | −0.04 | [−0.18, +0.11] | 4/6 | no |
+| Orientation 45° | −0.03 | [−0.17, +0.13] | 3/5 | no |
+| Halt | −0.30 | [−0.63, +0.07] | 1/6 | no |
+| Omission | −0.09 | [−0.36, +0.09] | 2/5 | no |
 
 **Honest status: null.** No deviant type shows a closed/open prediction-error signal — every CI
 includes zero, and per-session estimates are weak and sign-inconsistent. The null is robust to
-the responsiveness threshold (taking all VIS units gives 0.00 for every deviant; the
-orientation-90 sweep stays null at every cut). Two features cap what these data can show: the
+the responsiveness threshold (taking all QC-passing VIS units gives 0.00 for orientation-90; the
+sweep stays null at every cut, −0.04 → −0.04 → +0.05 across >0.1/0.25/0.5 Hz). Two features cap what these data can show: the
 open-loop control arm has only 8 events per type (running must coincide with them), and the
 closed-loop block always runs *earlier* than the open-loop control, so within-session drift
 biases the difference positive. What remains is at most a weak, non-significant hint of

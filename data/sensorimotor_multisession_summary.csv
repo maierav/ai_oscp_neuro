@@ -1,9 +1,9 @@
 deviant,criterion,dvi,ci_lo,ci_hi,n_units,n_sessions,sess_positive,floor_allVIS_dvi,floor_ci_lo,floor_ci_hi
-motor_orientation_90,responsive>0.1Hz,0.02,-0.1184,0.1765,267,6,4,0.0,0.0,0.0864
-motor_orientation_45,responsive>0.1Hz,-0.0857,-0.2605,0.0745,257,5,2,0.0,0.0,0.0364
-motor_halt,responsive>0.1Hz,-0.1779,-0.5017,0.1592,267,6,2,0.0,-0.1861,0.1409
-motor_omission,responsive>0.1Hz,-0.0939,-0.4326,0.1236,257,5,2,0.0,-0.0189,0.041
-motor_orientation_90_sweep,resp>0.0Hz,0.0,0.0,0.0864,1917,6,2,,,
-motor_orientation_90_sweep,resp>0.1Hz,0.02,-0.1184,0.1765,267,6,4,,,
-motor_orientation_90_sweep,resp>0.25Hz,-0.0201,-0.2238,0.2582,93,6,5,,,
-motor_orientation_90_sweep,resp>0.5Hz,0.0505,-0.2983,0.3111,21,6,4,,,
+motor_orientation_90,"responsive>0.1Hz,default_qc",-0.0356,-0.1751,0.1101,200,6,4,0.051,-0.0099,0.1394
+motor_orientation_45,"responsive>0.1Hz,default_qc",-0.0281,-0.1717,0.127,190,5,3,0.037,0.0,0.1213
+motor_halt,"responsive>0.1Hz,default_qc",-0.3034,-0.6323,0.0665,200,6,1,0.0,-0.2391,0.1576
+motor_omission,"responsive>0.1Hz,default_qc",-0.0893,-0.3584,0.0877,190,5,2,0.0,-0.1817,0.0838
+motor_orientation_90_sweep,"resp>0.0Hz,default_qc",0.0,-0.1066,0.1101,514,6,4,,,
+motor_orientation_90_sweep,"resp>0.1Hz,default_qc",-0.0356,-0.1751,0.1101,200,6,4,,,
+motor_orientation_90_sweep,"resp>0.25Hz,default_qc",-0.0423,-0.2732,0.2177,76,6,4,,,
+motor_orientation_90_sweep,"resp>0.5Hz,default_qc",0.0505,-0.3171,0.335,21,6,5,,,
