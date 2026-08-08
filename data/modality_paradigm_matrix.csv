@@ -1,5 +1,5 @@
 ,ecephys_sessions,ecephys_CCF,ecephys_subj,mesoscope_sessions,mesoscope_subj,slap2_sessions,slap2_subj
-standard_oddball,15,15,15,17,7,2,2
-sensorimotor,16,15,16,16,7,2,2
-sequence,15,14,15,16,8,2,2
-duration,14,14,14,15,8,2,2
+standard_oddball,15,15,15,21,10,2,2
+sensorimotor,16,15,16,23,10,2,2
+sequence,15,14,15,20,10,2,2
+duration,14,14,14,18,10,2,2

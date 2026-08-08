@@ -108,10 +108,12 @@ prediction-error signal in any of the four paradigms — but at n = 2 sessions e
 yet separate a genuine input/output dissociation from underpowering. And when the *sequence*
 paradigm is broken down by cortical area in both modalities
 ([**Result 8**](#result-8--sequence-mismatch-a-cross-modality-areal-discrepancy-in-v1)), the
-Neuropixels and mesoscope signals **give opposite point estimates in V1**: spiking finds the
-sequence-PE *significantly positive and strongest* in primary V1 (+0.25), while mesoscope
-2-photon in V1 is a **null** (−0.08, wide CI crossing zero, 9/16 sessions negative). Only part
-of this is explained by mesoscope's superficial laminar sampling. So the cross-scale
+the Neuropixels signal is significantly positive in V1 while the mesoscope signal is a null there:
+spiking finds the sequence-PE *significantly positive and strongest* in primary V1 (+0.25), while
+mesoscope 2-photon in V1 sits essentially on zero (−0.03, wide CI crossing zero, 4/10 subjects
+negative — updated to the full 10-subject cohort now on DANDI). This is a spiking/imaging
+**detection** difference, not a sign reversal. Only part of this is explained by mesoscope's
+superficial laminar sampling. So the cross-scale
 generalization in panel B holds for the *feature-oddball* contrast (spikes and mesoscope both
 positive on responsive cells), but the finer area-resolved comparison is a **caution against
 treating the calcium DvI as interchangeable with the spiking DvI** — where spiking V1 carries a
@@ -186,18 +188,18 @@ classification; regenerate with the paradigm-classification logic in
 
 ![Data available across scales](figures/modality_paradigm_matrix.png)
 
-- **Neuropixels** (DANDI 001637, 60 sessions / 58 with CCF) and **Mesoscope 2p**
-  (001768, 64 sessions) carry all four paradigms with an identical named-block
-  design (including an open-loop prerecorded control block).
-- **SLAP2** (001424, 20 sessions) is in transition between two formats. **8
-  newer sessions** (subjects 828408 / 828409 / 829704) now use the **same
-  named-block design** as the other two modalities — 2 sessions each of
-  standard-oddball, sensorimotor, sequence, and duration — so the four-paradigm
-  SLAP2 set that was "expected in a later release" has begun to arrive. The
-  remaining **12 older sessions** store all stimuli in a single monolithic
-  `gratings` stream (†), with an embedded orientation oddball recoverable by
-  segmenting on orientation statistics. All SLAP2 is iGluSnFR glutamate at
-  dendritic resolution.
+- **Neuropixels** (DANDI 001637, 60 sessions / 58 with CCF, 16 mice) and **Mesoscope 2p**
+  (001768, 82 sessions across **10 mice**) carry all four paradigms with an identical named-block
+  design (including an open-loop prerecorded control block). Mesoscope now spans all 10 subjects in
+  every paradigm (18–23 sessions per paradigm — verified against DANDI 2026-08-08).
+- **SLAP2** (001424, 20 sessions, 8 mice) is in transition between two formats. **3 paradigm-matched
+  subjects** (828408 / 828409 / 829704) use the **same named-block design** as the other two
+  modalities — 2 sessions each of standard-oddball, sensorimotor, sequence, and duration — so the
+  four-paradigm SLAP2 set that was "expected in a later release" has begun to arrive (this is the
+  set Result 7 uses, still n=2/paradigm). The remaining **5 subjects** store all stimuli in a single
+  monolithic `stimulus_presentations` gratings stream (†) with no named paradigm blocks (RF/tuning
+  format); these were used for the RF and orientation-tuning validation, not for the paradigm
+  analyses. All SLAP2 is iGluSnFR glutamate at dendritic resolution.
 - The **standard / feature oddball** (rare orientation deviant vs. frequent
   standard) is expressible in all three modalities. Sequence and duration are
   well-powered in Neuropixels; the sensorimotor contrast is present but
@@ -867,11 +869,14 @@ metric-dependence and paradigm heterogeneity as the scalar analysis.
 ## Result 7 — Paradigm-matched SLAP2, first look (preliminary, n=2/paradigm)
 
 The SLAP2 dendritic-glutamate dataset (DANDI 001424, iGluSnFR) was originally a single
-monolithic gratings stream. **8 newer sessions** (subjects 828408 / 828409 / 829704) now
+monolithic gratings stream. **3 subjects** (828408 / 828409 / 829704) now
 carry the **same named-block design** as the Neuropixels and mesoscope datasets — 2 sessions
 each of standard-oddball, sequence, duration, and sensorimotor. This is the four-paradigm SLAP2
-set that was "expected in a later release," and it has begun to arrive. We compute the
-prediction-error index in each paradigm at dendritic-glutamate resolution for the first time.
+set that was "expected in a later release," and it has begun to arrive. (A 2026-08-08 DANDI check
+found 5 further SLAP2 subjects, but they remain in the older RF/tuning gratings-stream format with
+no named paradigm blocks — so Result 7 is still limited to these 2 paradigm-matched sessions per
+type.) We compute the prediction-error index in each paradigm at dendritic-glutamate resolution
+for the first time.
 
 ![Paradigm-matched SLAP2, four error types](figures/slap2_fourparadigm.png)
 
@@ -926,16 +931,22 @@ control, same DvI) in the two areas mesoscope samples. All CIs are **hierarchica
 
 | area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
 |---|---|---|
-| **VISp** (primary V1) | **+0.25** [+0.01, +0.40] — *significant, strongest area* | **−0.08** [−0.28, +0.14] — **null** |
-| **VISl** (lateral) | +0.18 [−0.01, +0.33] — n.s. (n=405) | +0.18 [+0.03, +0.31] — significant |
+| **VISp** (primary V1) | **+0.25** [+0.01, +0.40] — *significant, strongest area* | **−0.03** [−0.25, +0.20] — **null** |
+| **VISl** (lateral) | +0.18 [−0.01, +0.33] — n.s. (n=405) | +0.19 [+0.05, +0.31] — significant |
 
-**In V1 the two modalities give opposite point estimates, and where spiking is significantly
-positive, 2-photon is a null.** Spiking finds the sequence-PE *strongest* in primary V1 (+0.25,
-significant, present across all areas); mesoscope 2-photon in V1 is a wide null centred at −0.08
-(9 of 16 sessions negative — the negative point estimate is *not* significant once between-session
-variance is counted). So the honest statement is a **cross-modality discrepancy in V1**: the
+*(Mesoscope updated to the full 10-subject cohort now on DANDI — subjects 850399 and 853137 were
+added since the first pass. The extra two mice pull VISp from −0.08 to −0.03, i.e. **closer to
+zero**; the picture is a spiking/imaging **detection** difference in V1, not a sign reversal.)*
+
+**In V1 the spiking signal is significantly positive while 2-photon is a null.** Spiking finds
+the sequence-PE *strongest* in primary V1 (+0.25, significant, present across all areas);
+mesoscope 2-photon in V1 sits essentially on zero (−0.03, wide CI spanning zero; 4 of 10 subjects
+negative, 6 positive — no consistent sign once between-subject variance is counted). So the honest
+statement is a **cross-modality discrepancy in V1**: the
 spiking deviance signal that is strong and significant in V1 does not appear in the 2-photon
-signal there. In VISl the two modalities *agree* — both positive, +0.18 (Neuropixels) vs +0.18
+signal there. Note this is a **detection difference, not a sign reversal**: with the full
+10-subject cohort the mesoscope V1 estimate is −0.03 (essentially zero), not a negative effect.
+In VISl the two modalities *agree* — both positive, +0.18 (Neuropixels) vs +0.19
 (mesoscope) — though the Neuropixels VISl estimate is not itself significant (its CI just
 includes zero even at n=405 under the corrected probe mapping). The same direction holds for
 feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49), while mesoscope
@@ -946,7 +957,7 @@ L6**), while Neuropixels samples all layers. The Neuropixels V1 sequence-PE *is*
 (L5 +0.29, L6a +0.33, L6b +0.56 vs. L4 +0.14; panel B), so depth explains part of the magnitude
 gap. Restricting Neuropixels
 V1 to the superficial layers mesoscope can see gives +0.19 (point estimate positive) versus
-mesoscope's −0.08 — but with the honest hierarchical CI this superficial-matched comparison is
+mesoscope's −0.03 — but with the honest hierarchical CI this superficial-matched comparison is
 **underpowered** (wide interval crossing zero), so depth-matching neither rescues nor cleanly
 refutes the discrepancy. What is robust is the *full-population* contrast: spiking V1 significantly
 positive, 2-photon V1 null.
@@ -963,7 +974,7 @@ somatic calcium proxy.
 > tuning-biased cell sampling (the oddball index swings from −1.0 to +0.16 only after joint
 > balancing). Result 8 compares raw per-ROI and per-unit DvIs **without** that balancing: the
 > mesoscope side has no responsiveness floor (near-zero ROIs push the DvI toward ±1 on noise), and
-> the large n-asymmetry (VISp: 580 spiking units vs 16,275 mesoscope ROIs) alone drives part of the
+> the large n-asymmetry (VISp: 580 spiking units vs 18,690 mesoscope ROIs across 10 mice) alone drives part of the
 > "spiking n.s. / mesoscope tight" contrast. So the V1 sign discrepancy is real *in these raw
 > indices*, but the sampling/normalization explanation has **not** been ruled out. Treat Result 8 as
 > a flag for a balanced cross-modality re-analysis, not an established biological dissociation.
@@ -975,7 +986,7 @@ negative in both areas) — a candidate for a behavioral-state analysis as more 
 
 **Time-course diagnostic (four-level PSTH, ΔF/F).**
 
-![Result 8 four-level PSTH: mesoscope sequence position-3 deviant vs equiprobable control across 16 sessions](figures/r8_psth_fourlevel.png)
+![Result 8 four-level PSTH: mesoscope sequence position-3 deviant vs equiprobable control](figures/r8_psth_fourlevel.png)
 
 The example plane and ROI (panels A–B) show a clean, well-triggered ΔF/F transient with the
 expected ~200 ms calcium rise, and a strongly-positive example session (panel C). But the grand
