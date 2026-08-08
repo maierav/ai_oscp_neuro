@@ -80,10 +80,15 @@ def _boot_ci_subject(vals, subjects, n=5000, seed=0):
 
 def _both_fracs(df, idxcol, subjcol):
     """Return (frac_cells_pos, frac_animals_pos): fraction of units with index>0, and fraction of
-    animals whose per-animal median index is >0. Kept as two distinct quantities — never mixed."""
+    animals whose per-animal median index is >0. Kept as two distinct quantities — never mixed.
+
+    frac_animals_pos uses the ZEROS-DROPPED convention consistent with the sign test: a tied-zero
+    animal (per-animal median exactly 0) is uninformative about direction, so it is excluded from
+    BOTH numerator and denominator (n_pos / n_nonzero), matching `_sign_p_animals` and the forest."""
     cells = float((df[idxcol] > 0).mean())
     am = df.groupby(subjcol)[idxcol].median()
-    animals = float((am > 0).mean())
+    npos = int((am > 0).sum()); nnz = int((am != 0).sum())
+    animals = float(npos / nnz) if nnz else float("nan")
     return round(cells, 4), round(animals, 4)
 
 
@@ -157,22 +162,27 @@ def build_error_types():
     #    per-session extraction that live in sensorimotor_mismatch_ecephys.ipynb; re-deriving it from
     #    the raw all-VIS units table (which is not gated) would produce a *different* number. So the
     #    traceable source for this row is the summary CSV that notebook writes, not a recompute here.
-    #    Both fractions are read from that gated summary (cells_positive / n_units and
-    #    sess_positive / n_sessions) — same two columns every other row carries, no meaning-mixing.
+    #    The animal-level statistics use the SAME per-animal-median convention as every other row:
+    #    frac_animals_pos = n_pos / n_nonzero and p_sign_animals = exact sign test over the
+    #    per-animal medians of the gated (rstd>0.1 & QC & VIS) population, zeros dropped — computed
+    #    here from the persisted per_animal_medians string so all four rows are strictly comparable.
     p = os.path.join(DATA, "sensorimotor_multisession_summary.csv"); src["sensorimotor"] = p
     SM = pd.read_csv(p)
     r = SM[SM.deviant == "motor_orientation_90"].iloc[0]
-    if "cells_positive" not in SM.columns:
-        raise ValueError("sensorimotor_multisession_summary.csv missing 'cells_positive' — "
+    if "per_animal_medians" not in SM.columns:
+        raise ValueError("sensorimotor_multisession_summary.csv missing 'per_animal_medians' — "
                          "regenerate via sensorimotor_mismatch_ecephys.ipynb (QUICK=False)")
     from scipy import stats as _ss
-    sm_sign_p = float(f"{_ss.binomtest(int(r.sess_positive), int(r.n_sessions), 0.5).pvalue:.4g}")
+    _am = np.array([float(x.split(":")[1]) for x in str(r.per_animal_medians).split(";")])
+    _npos = int((_am > 0).sum()); _nnz = int((_am != 0).sum())
+    sm_frac_animals = round(_npos / _nnz, 4) if _nnz else float("nan")
+    sm_sign_p = float(f"{_ss.binomtest(_npos, _nnz, 0.5).pvalue:.4g}") if _nnz else float("nan")
     rows.append(dict(paradigm="Sensorimotor", expectation="motor contingency", metric="closed−open DvI (90°)",
                      population="QC & VIS & standard-responsive (>0.1 Hz)",
                      median=float(r.dvi), lo=float(r.ci_lo), hi=float(r.ci_hi),
                      n=int(r.n_units), n_sess=int(r.n_sessions),
                      frac_cells_pos=round(float(r.cells_positive) / float(r.n_units), 4),
-                     frac_animals_pos=round(float(r.sess_positive) / float(r.n_sessions), 4),
+                     frac_animals_pos=sm_frac_animals,
                      p_sign_animals=sm_sign_p))
     return pd.DataFrame(rows), src
 

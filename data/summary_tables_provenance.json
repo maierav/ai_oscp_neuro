@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-08T22:04:46.125680+00:00",
-  "git_sha": "fb16cbb2e426718252dd36d1b0feb543e0f9fc70",
+  "generated_at": "2026-08-08T23:07:53.726302+00:00",
+  "git_sha": "6de79e013d18debdb4497955c5d89f42eceec745",
   "python": "3.11.15",
   "packages": {
     "numpy": "2.4.6",
@@ -29,7 +29,7 @@
     },
     "sensorimotor": {
       "path": "data/sensorimotor_multisession_summary.csv",
-      "sha256": "bff02c38e13df4cc94d6e6aa5cbee9e9b6359bb9e00761f562eb6e939f24f1b1"
+      "sha256": "9bba661e765364d7d81607065c21f0b5c190d8c934f30c1e65cd5621efdd143e"
     },
     "crossscale": {
       "path": "data/crossscale_mechanism.parquet",
