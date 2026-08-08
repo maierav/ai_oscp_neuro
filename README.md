@@ -41,11 +41,18 @@ independent confound controls and shows the same *sign* at a second recording sc
 (mesoscope 2p, +0.10 across all four mesoscope mice that carry the paradigm) — a
 positive but weaker cross-scale signal that remains **exploratory** rather than an
 established replication (see Result 8). The fourth
-case we can test — motor–visual contingency (sensorimotor) — is **null in the
+case we can test — motor–visual contingency (sensorimotor) — was **not detected in the
 released data** (limited by low locomotion and a block-order confound; see Result 3),
-so it neither supports nor contradicts the common-mechanism reading. One consistent
-direction across the three establishable error types favours the common-mechanism
-reading (H1), with the motor case still open pending better-powered data.
+so it neither supports nor contradicts the common-mechanism reading. Importantly, a
+**consistent positive sign across the three establishable error types does not by itself
+discriminate H1 from H0** — three separate mechanisms that each produce a positive deviance
+response would look identical at this level. What we can state is the weaker, defensible
+claim: prediction-error signalling is **present and same-signed** across frequency-, order-,
+and timing-based expectation violations. Deciding *common vs. separate* mechanism needs a
+discriminating test (shared animal-to-animal covariance, a shared time-course component,
+cross-paradigm representational similarity, or an explicit model comparison) — see the H0/H1
+section; the dataset in hand (few CCF animals, separate sessions per paradigm) is underpowered
+for it. So the sign convergence is **suggestive of, not evidence for, H1**.
 
 ## Results at a glance
 
@@ -82,10 +89,12 @@ excluding zero (sensorimotor is null):
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 50 % |
 
 **Three** of the four error types carry a positive prediction-error index with a CI excluding
-zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is a null** (−0.04,
-CI spans zero; see Result 3) — limited by low locomotion and a block-order confound, so it is
-italicised and flagged as null here. So the convergence claim is honest about its scope: deviance
-detection appears across
+zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is not detected**
+(−0.04, CI [−0.18, +0.11] spans zero; see Result 3) — limited by low locomotion and a block-order
+confound. This is a *non-detection*, not a demonstrated equivalence to zero: the data cannot rule
+out a small effect of either sign, so it is italicised and flagged accordingly rather than counted
+either way. The convergence claim is honest about its scope: a positive, same-signed deviance
+response appears across
 frequency-, order-, and timing-based expectations, while the motor-contingency case is not
 established in the released data. Panel B shows the feature-oddball form with the **same positive
 sign** at a second recording scale (Neuropixels DvI +0.34 from 3 mice, mesoscope +0.10 from the
@@ -598,14 +607,23 @@ leg). Reproduce:
 Two error types (feature-oddball, tuning-controlled; omission, tuning-free), and —
 for the oddball — **three independent confound-free routes** (control-referenced
 DvI, tuning-free omission, and responsiveness×tuning-balanced OI), all yield a
-**positive prediction-error response at every recording scale**. One direction of
-effect across scales, error types, and confound controls is a substantially
-stronger footing for a **common** deviance-detection mechanism (H1) than any single
-contrast. Results 3–5 extend this to three further kinds of violated expectation
-(motor contingency, sequence order, timing); Result 6 tests H0/H1 anatomically; and
-Results 7–8 return to the cross-scale question with newly-arrived paradigm-matched SLAP2
-data and an area-resolved mesoscope analysis. The combined four-error-type picture,
-plus the cross-scale generalization, is in [**Results at a glance**](#results-at-a-glance).
+**positive prediction-error response at every recording scale**. This establishes that
+prediction-error signalling is **present and consistently same-signed** across error types,
+scales, and confound controls — a robust *phenomenon*.
+
+**It does not, on its own, adjudicate H1 vs H0.** A single common canonical mechanism (H1)
+and separate error-type-specific circuits that each happen to produce a positive response
+(H0) predict *the same thing* at the level of "is the response positive." Sign convergence
+is therefore consistent with H1 but does not favour it over H0 without a **discriminating
+prediction** — e.g. shared animal-to-animal covariance across paradigms, a shared temporal
+component, cross-paradigm representational similarity, or a formal model comparison. Result 6
+attempts the anatomical version of such a test and comes back **inconclusive** at the
+available power (few CCF animals, separate sessions per paradigm). So the honest summary is:
+a reproducible, cross-scale, same-signed PE phenomenon that is **compatible with H1 but not
+yet evidence for it over H0**. Results 3–5 extend the phenomenon to three further kinds of
+violated expectation (motor contingency — not detected; sequence order; timing); Results 7–8
+return to the cross-scale question with paradigm-matched SLAP2 data and an area-resolved
+mesoscope analysis. The combined picture is in [**Results at a glance**](#results-at-a-glance).
 
 ---
 
@@ -671,13 +689,21 @@ QC-passing (`default_qc`), visually-responsive VIS-area units (>0.1 Hz standard 
 | Halt | −0.30 | [−0.63, +0.07] | 1/6 | no |
 | Omission | −0.09 | [−0.36, +0.09] | 2/5 | no |
 
-**Honest status: null.** No deviant type shows a closed/open prediction-error signal — every CI
-includes zero, and per-session estimates are weak and sign-inconsistent. The null is robust to
-the responsiveness threshold (taking all QC-passing VIS units gives 0.00 for orientation-90; the
-sweep stays null at every cut, −0.04 → −0.04 → +0.05 across >0.1/0.25/0.5 Hz). Two features cap what these data can show: the
-open-loop control arm has only 8 events per type (running must coincide with them), and the
-closed-loop block always runs *earlier* than the open-loop control, so within-session drift
-biases the difference positive. What remains is at most a weak, non-significant hint of
+**Honest status: not detected (non-detection, not demonstrated equivalence).** No deviant type
+shows a closed/open prediction-error signal — every CI includes zero, and per-session estimates are
+weak and sign-inconsistent (animal-level sign test p ≈ 0.69). **This is a failure to detect an
+effect, not proof that the effect is zero.** A CI that crosses zero is not an equivalence result: to
+*claim* the motor-contingency PE is absent we would need a pre-specified smallest effect size of
+interest (SESOI) and a formal equivalence test (TOST) or a Bayes factor / posterior probability, and
+this dataset cannot support one — the closed−open DvI CI is [−0.18, +0.11], so the data are equally
+compatible with "no effect" and with a small effect of either sign up to |0.1–0.2|, which is a
+meaningful magnitude on this bounded index. The best we can say is that the paradigm as released
+does not detect the effect and cannot bound it tightly. The non-detection is at least robust to the
+responsiveness threshold (all QC-passing VIS units give 0.00 for orientation-90; the sweep stays
+near zero at every cut, −0.04 → −0.04 → +0.05 across >0.1/0.25/0.5 Hz). Two features cap what these
+data can show: the open-loop control arm has only 8 events per type (running must coincide with
+them), and the closed-loop block always runs *earlier* than the open-loop control, so within-session
+drift biases the difference positive. What remains is at most a weak, non-significant hint of
 running-state gain on the orientation deviants — a different and unestablished claim. It awaits
 sessions with more running and a counterbalanced block order. Reproduce:
 `scripts/audit_locomotion.py` for the inclusion set, then

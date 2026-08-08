@@ -26,6 +26,17 @@ flag in the per-unit table so the builder reproduces the notebook population exa
 n (tolerance 1e-6). Numbers change only when a Result notebook rewrites its per-unit
 table (e.g. a DANDI draft re-upload) — after which you re-run this builder to keep the
 CSVs in sync, and --check passes again.
+
+The `p_sign_animals` column is a **two-sided exact binomial sign test at the ANIMAL level**
+(of the per-animal median indices, how surprising is the number with positive sign under
+H0 p=0.5). Animal is the biological replicate, so this is the honest cross-animal detection
+statistic — NOT a pooled per-cell test (which treats thousands of nested units as independent
+and yields spuriously tiny values). It is never exactly 0 (exact-binomial floor); the smallest
+attainable value at n animals is 2·0.5^n (e.g. 2^-9·2 ≈ 0.004 at 9 mice). This column reports
+*detection* of a consistent sign across animals; it does not, by itself, discriminate H1 (one
+common mechanism) from H0 (separate mechanisms each with a positive response) — see the README
+H0/H1 section for why a discriminating test (shared covariance / representational similarity /
+model comparison) is required for that.
 """
 import argparse, hashlib, json, subprocess, sys, os
 from datetime import datetime, timezone
@@ -76,6 +87,19 @@ def _both_fracs(df, idxcol, subjcol):
     return round(cells, 4), round(animals, 4)
 
 
+def _sign_p_animals(df, idxcol, subjcol):
+    """Two-sided exact sign-test p at the ANIMAL level: of the per-animal median indices, how
+    surprising is the number with positive sign under H0 p=0.5? This is the honest cross-animal
+    detection statistic (animal = biological replicate), NOT a pooled per-cell test that treats
+    thousands of nested units as independent. Returned to 4 s.f.; never 0 (exact binomial floor)."""
+    from scipy import stats as _ss
+    am = df.groupby(subjcol)[idxcol].median()
+    npos = int((am > 0).sum()); n = int((am != 0).sum())
+    if n == 0:
+        return float("nan")
+    return float(f"{_ss.binomtest(npos, n, 0.5).pvalue:.4g}")
+
+
 def build_error_types():
     """capstone_error_types.csv — one bounded PE index per error type, from per-unit tables."""
     rows, src = [], {}
@@ -96,7 +120,8 @@ def build_error_types():
     rows.append(dict(paradigm="Feature-oddball", expectation="frequency", metric="DvI (90°)",
                      population="QC & VIS & responsive (resp_p<0.05)",
                      median=m, lo=lo, hi=hi, n=len(G), n_sess=int(G["subject"].nunique()),
-                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
+                     frac_cells_pos=fc, frac_animals_pos=fa,
+                     p_sign_animals=_sign_p_animals(G, "DvI_90", "subject")))
 
     # 2. Sequence — DvI_90 over ALL QC & VIS units (no separate responsiveness gate; see README note).
     p = os.path.join(DATA, "sequence_units.parquet"); src["sequence"] = p
@@ -109,7 +134,8 @@ def build_error_types():
     rows.append(dict(paradigm="Sequence", expectation="learned order", metric="DvI (90°)",
                      population="QC & VIS (all)",
                      median=m, lo=lo, hi=hi, n=len(S), n_sess=int(S["subject"].nunique()),
-                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
+                     frac_cells_pos=fc, frac_animals_pos=fa,
+                     p_sign_animals=_sign_p_animals(S, "_idx", "subject")))
 
     # 3. Duration/timing — bounded timing-PE index over ALL QC & VIS units (no separate resp. gate).
     p = os.path.join(DATA, "duration_timing_pe.parquet"); src["duration"] = p
@@ -123,7 +149,8 @@ def build_error_types():
     rows.append(dict(paradigm="Duration / timing", expectation="learned timing", metric="timing-PE index",
                      population="QC & VIS (all)",
                      median=m, lo=lo, hi=hi, n=len(T), n_sess=int(T["subject"].nunique()),
-                     frac_cells_pos=fc, frac_animals_pos=fa, p=0.0))
+                     frac_cells_pos=fc, frac_animals_pos=fa,
+                     p_sign_animals=_sign_p_animals(T, "_idx", "subject")))
 
     # 4. Sensorimotor — READ (not re-derive) the authoritative closed−open orient-90 row from its
     #    own notebook's summary CSV. This paradigm's value depends on a QC + responsiveness gate and
@@ -138,13 +165,15 @@ def build_error_types():
     if "cells_positive" not in SM.columns:
         raise ValueError("sensorimotor_multisession_summary.csv missing 'cells_positive' — "
                          "regenerate via sensorimotor_mismatch_ecephys.ipynb (QUICK=False)")
+    from scipy import stats as _ss
+    sm_sign_p = float(f"{_ss.binomtest(int(r.sess_positive), int(r.n_sessions), 0.5).pvalue:.4g}")
     rows.append(dict(paradigm="Sensorimotor", expectation="motor contingency", metric="closed−open DvI (90°)",
                      population="QC & VIS & standard-responsive (>0.1 Hz)",
                      median=float(r.dvi), lo=float(r.ci_lo), hi=float(r.ci_hi),
                      n=int(r.n_units), n_sess=int(r.n_sessions),
                      frac_cells_pos=round(float(r.cells_positive) / float(r.n_units), 4),
                      frac_animals_pos=round(float(r.sess_positive) / float(r.n_sessions), 4),
-                     p=float("nan")))
+                     p_sign_animals=sm_sign_p))
     return pd.DataFrame(rows), src
 
 
@@ -171,7 +200,7 @@ def build_crossscale():
 
 
 EXPECTED_SCHEMAS = {
-    "capstone_error_types.csv": ["paradigm", "expectation", "metric", "population", "median", "lo", "hi", "n", "n_sess", "frac_cells_pos", "frac_animals_pos", "p"],
+    "capstone_error_types.csv": ["paradigm", "expectation", "metric", "population", "median", "lo", "hi", "n", "n_sess", "frac_cells_pos", "frac_animals_pos", "p_sign_animals"],
     "capstone_crossscale.csv":  ["technique", "median", "lo", "hi", "n", "n_subj", "frac_cells_pos"],
 }
 
