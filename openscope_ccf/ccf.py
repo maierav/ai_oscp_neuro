@@ -21,7 +21,7 @@ FIBER_TRACTS = {
     "alv", "ccb", "ccg", "ccs", "cing", "dhc", "fa", "fi", "fp", "or",
     "scwm", "int", "ee", "st", "ar", "SH", "fx", "opt", "em", "cc",
 }
-UNASSIGNED = {"root", "void", ""}
+UNASSIGNED = {"root", "void", "unknown", ""}  # "unknown" = unaligned placeholder, not grey matter
 
 _LAYER_RE = re.compile(r"^(?P<area>[A-Za-z][A-Za-z\-]*?)(?P<layer>1|2/3|4|5|6a|6b)$")
 
@@ -47,7 +47,15 @@ def decode_ccf(acronym: str) -> dict:
     dict with keys ``area`` (str), ``layer`` (str | None),
     ``tissue`` (``"grey"`` | ``"fiber_tract"`` | ``"unassigned"``),
     ``group`` (coarse anatomical group).
+
+    A missing acronym (``None``, or a float ``NaN`` from a padded/absent
+    ``electrodes.location`` cell) decodes to ``unassigned`` rather than raising
+    an opaque ``TypeError`` inside the regex.
     """
+    if acronym is None or (isinstance(acronym, float) and acronym != acronym):
+        return dict(area=None, layer=None, tissue="unassigned", group="unassigned")
+    if not isinstance(acronym, str):
+        raise TypeError(f"decode_ccf expects a str acronym, got {type(acronym).__name__}: {acronym!r}")
     if acronym in FIBER_TRACTS:
         return dict(area=acronym, layer=None, tissue="fiber_tract", group="white_matter")
     if acronym in UNASSIGNED:

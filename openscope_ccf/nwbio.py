@@ -107,7 +107,26 @@ def unit_electrode_rows(fh: h5py.File) -> np.ndarray:
     eci = u["extremum_channel_index"][:]
     offset = {p: int(np.where(egrp == p)[0][0]) for p in sorted(set(egrp))}
     blocklen = {p: int((egrp == p).sum()) for p in offset}
-    return np.array([offset[d] + min(int(c), blocklen[d] - 1) for d, c in zip(dev, eci)])
+    # Each probe's electrode rows must be one contiguous block for the
+    # offset + local-index scheme to be valid; verify rather than assume.
+    for p, o in offset.items():
+        rows = np.where(egrp == p)[0]
+        if rows[-1] - rows[0] + 1 != len(rows):
+            raise ValueError(
+                f"electrode rows for probe {p!r} are not contiguous "
+                f"(rows {rows[0]}..{rows[-1]}, n={len(rows)}); the offset mapping "
+                f"assumes one contiguous block per probe")
+    out = np.empty(len(dev), dtype=np.int64)
+    for i, (d, c) in enumerate(zip(dev, eci)):
+        if d not in offset:
+            raise KeyError(f"unit {i} device_name {d!r} has no matching electrode group_name")
+        c = int(c)
+        if not (0 <= c < blocklen[d]):
+            raise IndexError(
+                f"unit {i} extremum_channel_index {c} is out of range for probe "
+                f"{d!r} (0..{blocklen[d] - 1}) — invalid anatomy, refusing to remap")
+        out[i] = offset[d] + c
+    return out
 
 
 def electrodes_frame(fh: h5py.File):

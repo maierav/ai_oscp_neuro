@@ -94,8 +94,20 @@ def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str
 
 
 def load_ccf(session_tag: str, kind: str = "units", sidecar_dir="data/sidecars") -> pd.DataFrame:
-    """Load a session's sidecar. ``kind`` is ``"units"`` or ``"channels"``."""
+    """Load a session's sidecar. ``kind`` is ``"units"`` or ``"channels"``.
+
+    Only 30 of the 58 CCF sessions ship prebuilt sidecars in the package. For an
+    indexed session without one, this raises ``FileNotFoundError`` naming the
+    one-liner that builds it on demand (streams the NWB, writes the parquet).
+    """
     p = _resolve_sidecar_dir(sidecar_dir) / f"{kind}_{session_tag}.parquet"
+    if not p.exists():
+        raise FileNotFoundError(
+            f"no prebuilt {kind} sidecar for {session_tag!r} at {p}. "
+            f"Only 30 of the 58 CCF sessions ship sidecars; build this one with "
+            f"openscope_ccf.build_session_sidecars(asset_id, subject, date, paradigm) "
+            f"(resolve asset_id via openscope_ccf.resolve_asset(subject, date)), "
+            f"or run scripts/build_all.py --sidecars to build all indexed sessions.")
     return pd.read_parquet(p)
 
 

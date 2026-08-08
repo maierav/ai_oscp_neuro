@@ -52,8 +52,16 @@ def main():
             print(f"[warn] atlas unavailable, figures will render without brain shell: {str(e)[:80]}")
 
     t0 = time.time()
+    failures = []
+    skipped = []
     for i, row in idx.reset_index(drop=True).iterrows():
         tag = f"{row.subject}_{row.date}"
+        # Never build against an unresolved (stale) asset id — the path did not
+        # resolve on the live dandiset, so row.aid is a superseded snapshot id.
+        if bool(getattr(row, "aid_unresolved", False)):
+            print(f"[{i+1}/{len(idx)}] {tag} SKIPPED: aid_unresolved (path not on live dandiset)")
+            skipped.append(tag)
+            continue
         try:
             if args.sidecars:
                 o.build_session_sidecars(row.aid, str(row.subject), row.date, row.paradigm,
@@ -66,7 +74,16 @@ def main():
             print(f"[{i+1}/{len(idx)}] {tag} {row.paradigm} ok ({time.time()-t0:.0f}s)")
         except Exception as e:
             print(f"[{i+1}/{len(idx)}] {tag} FAILED: {repr(e)[:120]}")
-    print(f"done in {time.time()-t0:.0f}s")
+            failures.append((tag, repr(e)[:200]))
+    print(f"done in {time.time()-t0:.0f}s — "
+          f"{len(idx)-len(failures)-len(skipped)} ok, {len(failures)} failed, {len(skipped)} skipped")
+    if failures:
+        print("FAILURES:")
+        for tag, err in failures:
+            print(f"  {tag}: {err}")
+    # Exit non-zero if anything failed or was skipped, so a broken batch cannot appear green in CI.
+    if failures or skipped:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -136,11 +136,16 @@ reusable products:
 1. **Attachable CCF sidecars** — small per-session Parquet tables (one per unit,
    one per channel) that carry area / layer / coarse group / CCF coordinates,
    keyed to the NWB `units` and `electrodes` row indices. Join them onto any
-   SUA / MUA / LFP / CSD analysis with a single `attach()` call.
+   SUA / MUA / LFP / CSD analysis with a single `attach()` call. **30 of the 58
+   CCF sessions ship prebuilt sidecars** in `data/sidecars/`; for any other
+   indexed session, `build_session_sidecars(...)` (or `scripts/build_all.py
+   --sidecars`) builds it on demand by streaming the NWB, and `load_ccf` raises
+   a message pointing there if a sidecar is missing.
 2. **Penetration figures** — a 3D render of the probe tracks inside a translucent
    Allen brain, and a per-probe laminar cross-check that overlays CCF region/layer
-   boundaries on spontaneous LFP band power and MUA depth profiles, so the
-   alignment can be validated against the recordings.
+   boundaries on spontaneous LFP band power and a summed sorted-unit rate depth
+   profile (a coarse spatial cross-check, not true MUA), so the alignment can be
+   validated against the recordings.
 
 Alongside these are the **validation** and **prediction-error** notebooks
 documented below, each of which doubles as a worked example of streaming and
@@ -230,8 +235,9 @@ then units) and the **per-session-positive fraction** reported alongside each re
 those are the numbers that count. Per-bin area×layer FDR grids likewise pool units and
 are descriptive (which bins are positive), not mouse-level inference.
 
-**CCF is present in 57 of 60 ecephys sessions** (`electrodes.location`/`x`/`y`/`z`
-populated); the rest carry placeholder `"unknown"` locations and omit `x`/`y`/`z`.
+**CCF is present in 58 of 60 ecephys sessions** (`electrodes.location`/`x`/`y`/`z`
+populated — the 58 rows shipped in `ccf_session_index.csv`); the rest carry
+placeholder `"unknown"` locations and omit `x`/`y`/`z`.
 **Status is per-session, not per-subject** — `sub-832691` has one `"unknown"` session
 and one fully-aligned session, so never infer a session's alignment from a sibling.
 Regenerate the registry with `python scripts/rebuild_session_index.py`.
@@ -244,7 +250,7 @@ every notebook resolves `(subject, date) -> current asset id` at run time via
 `resolve_asset()` rather than hard-coding an id. The shipped
 `ccf_session_index.csv` `aid` column is a snapshot; call
 `load_session_index(refresh_aids=True)` to re-resolve all ids from the live
-dandiset (adds an `aid_stale` flag), or `openscope_ccf.open_session(subject,
+dandiset (adds `aid_changed` and `aid_unresolved` flags), or `openscope_ccf.open_session(subject,
 date)` to stream a session id-free. This is why an `aid` in the index can differ
 from a fresh `rebuild_session_index.py` sweep without any data having changed.
 
@@ -1085,7 +1091,7 @@ openscope_ccf/          package
   sidecar.py            build/load/attach sidecar tables
   figures.py            build_probe_data, make_3d, make_laminar
   data/ccf_session_index.csv   registry of CCF sessions
-  data/sidecars/          prebuilt per-session sidecars (Parquet), shipped with the package
+  data/sidecars/          prebuilt sidecars (Parquet) for 30 of the 58 CCF sessions; others build on demand
 notebooks/              Colab notebooks (CCF figures, validation, prediction-error analyses)
 scripts/build_all.py    batch driver
 scripts/rebuild_session_index.py  re-sweep DANDI 001637 -> ccf_session_index.csv

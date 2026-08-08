@@ -1,12 +1,16 @@
 """Penetration figures: 3D atlas context + per-probe laminar cross-check.
 
 ``build_probe_data`` streams a session and computes, per probe: CCF coordinates
-and region per channel, spontaneous LFP band power (1-100 Hz and gamma 30-90 Hz)
-from a 30 s window, and an MUA firing-rate depth profile. ``make_3d`` renders the
-probes as PCA best-fit straight tracks inside a translucent Allen CCF brain
-shell; ``make_laminar`` renders the region/layer strip beside the LFP + MUA
-depth profiles so the CCF alignment can be visually cross-checked against the
-recordings.
+and region per channel, LFP band power (1-100 Hz and gamma 30-90 Hz) from a
+stimulus-free spontaneous window, and a **summed sorted-unit firing-rate depth
+profile**. Note this depth profile is *not* true multiunit activity (unsorted
+threshold crossings): it sums the rates of spike-sorted units per depth bin, so
+it is confounded by unit yield (deep bins with more sorted units read higher).
+It is a coarse spatial cross-check of where activity concentrates, not a
+quantitative MUA measure. ``make_3d`` renders the probes as PCA best-fit straight
+tracks inside a translucent Allen CCF brain shell; ``make_laminar`` renders the
+region/layer strip beside the LFP power and unit-rate depth profiles so the CCF
+alignment can be visually cross-checked against the recordings.
 
 The Allen brain shell (root mesh) is optional: pass ``brain_mesh=(verts, faces)``
 to :func:`make_3d`, or omit it for a mesh-free scatter. Fetch the mesh with
@@ -22,13 +26,51 @@ from .nwbio import open_remote, unit_electrode_rows, _decode
 _TAB = None
 
 
+def _spontaneous_start(fh, window_s):
+    """Earliest stimulus-free start time offering at least ``window_s`` seconds.
+
+    Scans every ``intervals/*_presentations`` table for stimulus onsets and
+    returns the start of the first gap >= ``window_s`` (the pre-stimulus lead-in
+    if long enough, else the largest inter-block gap). Returns ``0.0`` only if
+    the file has no stimulus interval tables at all — in which case the caller's
+    window is genuinely spontaneous by default.
+    """
+    onsets = []
+    stops = []
+    iv = fh.get("intervals")
+    if iv is not None:
+        for k in iv.keys():
+            g = iv[k]
+            if "start_time" in g and "presentations" in k:
+                onsets.append(float(g["start_time"][0]))
+                stops.append(float(g["stop_time"][-1]) if "stop_time" in g else float(g["start_time"][-1]))
+    if not onsets:
+        return 0.0
+    first_onset = min(onsets)
+    if first_onset >= window_s:          # pre-stimulus lead-in is long enough
+        return 0.0
+    # otherwise take the largest gap after a block's end and before the next onset
+    edges = sorted(zip(onsets, stops))
+    best_t, best_gap = 0.0, -1.0
+    for (o1, s1), (o2, s2) in zip(edges, edges[1:]):
+        gap = o2 - s1
+        if gap > best_gap:
+            best_gap, best_t = gap, s1
+    return best_t if best_gap >= window_s else max(e[1] for e in edges)
+
+
 def _tab(n):
     import matplotlib.pyplot as plt
     return plt.cm.tab10(np.linspace(0, 1, 10))[:n]
 
 
 def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int = 48) -> dict:
-    """Per-probe geometry + LFP band power + MUA depth profile for one session."""
+    """Per-probe geometry + LFP band power + summed sorted-unit rate depth profile.
+
+    The depth profile (``mua_dv``) sums spike-sorted unit rates per depth bin — it
+    is NOT unsorted multiunit activity and is confounded by unit yield. Kept under
+    the ``mua_*`` dict keys for backward compatibility; labelled honestly in plots.
+    """
     fh = open_remote(asset_id)
     try:
         u = fh["units"]
@@ -44,6 +86,13 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
         any_key = list(lfp_root.keys())[0]
         dur = lfp_root[any_key]["timestamps"][-1]
 
+        # Spontaneous window: a genuinely stimulus-free span, not an unchecked
+        # "first 30 s" (which usually overlaps the opening stimulus block). Find
+        # the earliest gap of >= welch_window_s before the first stimulus onset,
+        # else the largest inter-block gap; fall back to [0, welch_window_s] only
+        # if the file carries no stimulus intervals at all.
+        spont_t0 = _spontaneous_start(fh, welch_window_s)
+
         def nspk(i):
             lo = 0 if i == 0 else sti[i - 1]
             return sti[i] - lo
@@ -51,7 +100,21 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
 
         out = {}
         for p in sorted(set(egrp)):
-            keys = [k for k in lfp_root.keys() if p in k]
+            # Exact probe match. LFP group keys look like
+            # "ElectricalSeriesProbeA-LFP"; strip the "ElectricalSeries" prefix and
+            # the "-LFP"/"_LFP" suffix and require the remainder to EQUAL the probe
+            # name. A loose substring test ("ProbeB" in key) would misfire; exact
+            # equality after boundary-stripping cannot. See README "Data particulars".
+            def _probe_of(k):
+                s = k
+                for pre in ("ElectricalSeries", "electrical_series", "LFP_", "lfp_"):
+                    if s.startswith(pre):
+                        s = s[len(pre):]
+                for suf in ("-LFP", "_LFP", "-lfp", "_lfp", "LFP"):
+                    if s.endswith(suf):
+                        s = s[: -len(suf)]
+                return s.strip("-_")
+            keys = [k for k in lfp_root.keys() if k == p or _probe_of(k) == p]
             if not keys:
                 continue
             es = lfp_root[keys[0]]
@@ -59,7 +122,8 @@ def build_probe_data(asset_id: str, welch_window_s: float = 30.0, mua_bins: int 
             ts = es["timestamps"]
             fs = 1.0 / np.median(np.diff(ts[:2000]))
             n = int(welch_window_s * fs)
-            data = es["data"][:n, :].astype(np.float32)
+            i0 = int(np.searchsorted(ts[:], spont_t0))
+            data = es["data"][i0:i0 + n, :].astype(np.float32)
             f, Pxx = signal.welch(data, fs=fs, nperseg=int(fs), axis=0)
             bp_lf = Pxx[(f >= 1) & (f <= 100)].sum(0)
             bp_gamma = Pxx[(f >= 30) & (f <= 90)].sum(0)
@@ -186,7 +250,7 @@ def _draw_probe(ax_anat, ax_phys, probe_data, p, show_ylab, bg=None):
     ax_phys.tick_params(labelsize=5.5)
     axm = ax_phys.twiny()
     axm.plot(d["mua_dv"], d["mua_dv_centers"], color="#2ca02c", lw=1.2)
-    axm.set_xlabel("MUA (spk/s)", color="#2ca02c", fontsize=6)
+    axm.set_xlabel("Σ unit rate (spk/s)", color="#2ca02c", fontsize=6)
     axm.tick_params(axis="x", labelcolor="#2ca02c", labelsize=5)
     axm.set_ylim(dv.max() + 50, dv.min() - 50)
     axm.xaxis.set_major_locator(MaxNLocator(4))
@@ -216,11 +280,11 @@ def make_laminar(probe_data: dict, label: str, path: str, bg=None, dpi=150):
         _draw_probe(axa, axp, probe_data, p, show_ylab=(cc == 0), bg=bg)
     handles = [Line2D([0], [0], color="#1f77b4", lw=2, label="LFP power 1–100 Hz"),
                Line2D([0], [0], color="#d62728", lw=2, label="LFP γ 30–90 Hz"),
-               Line2D([0], [0], color="#2ca02c", lw=2, label="MUA firing rate"),
+               Line2D([0], [0], color="#2ca02c", lw=2, label="Σ sorted-unit rate"),
                mpl.patches.Patch(color="#cccccc", label="CCF region (colour = Allen atlas)")]
     fig.legend(handles=handles, loc="upper center", ncol=4, frameon=False,
                fontsize=9, bbox_to_anchor=(0.5, 0.995))
-    fig.suptitle(f"Laminar cross-check: CCF vs LFP power & MUA · {label} (DANDI 001637)",
+    fig.suptitle(f"Laminar cross-check: CCF vs LFP power & Σ unit rate · {label} (DANDI 001637)",
                  fontsize=10, y=0.93)
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
     plt.close(fig)
