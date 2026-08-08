@@ -610,6 +610,19 @@ sessions with more running and a counterbalanced block order. Reproduce:
 values in
 [`data/sensorimotor_multisession_summary.csv`](data/sensorimotor_multisession_summary.csv).
 
+The block-order confound is not hypothetical — it is measurable. Across the 6 sessions'
+695 running events, the closed- and open-loop arms are **matched on running speed**
+(medians 9.1 vs 10.1 cm/s, Mann–Whitney p ≈ 1) and **on pupil-derived arousal** (p ≈ 0.5),
+so the contrast is not confounded by locomotion or state. But they are **severely imbalanced
+on time-in-session**: open-loop events sit at a median 0.92 of the session vs 0.26 for
+closed-loop (p ≈ 2×10⁻⁷⁶), and this holds in every one of the 6 sessions. So any closed−open
+difference is entangled with within-session drift, not motor contingency — exactly why Result 3
+is reported as a null awaiting counterbalanced sessions.
+
+![Result 3 behavioral balance — speed & arousal matched, block order is not](figures/sensorimotor_behavioral_balance.png)
+
+Data in [`data/sensorimotor_behavioral_balance.parquet`](data/sensorimotor_behavioral_balance.parquet).
+
 **Time-course diagnostic (four-level PSTH).**
 
 ![Result 3 four-level PSTH: motor 90° mismatch vs standard flow across 8 sessions](figures/r3_psth_fourlevel.png)
@@ -787,6 +800,19 @@ the whole comparison rests on only **n = 10 pooled anatomical cells with no anim
 uncertainty**. The peak layer differs across types (oddball L5, sequence L6, duration L4), and the
 duration signal is a raw omission Hz while the other two are deviant-minus-control — so the profiles
 are not even on the same footing.
+
+**How thin the anatomy actually is.** The heatmap below makes the sampling explicit: each
+area×layer cell shows its median DvI *and the number of contributing mice* (not units).
+Only VISp is broadly supported (6–9 mice across the three paradigms); most non-V1 cells rest on
+1–5 mice, and the eye-catching negative cells (feature-oddball VISa −0.10; sequence VISl L4 −0.58,
+VISrl L4 −0.67) are all **single-mouse** cells, hatched here to recede. This is why the laminar
+comparison is presented as inconclusive rather than as a result — outside V1 the per-cell estimates
+are carried by too few animals to trust a gradient.
+
+![Area × layer PE and its animal support](figures/area_layer_animal_support.png)
+
+Per-cell values and animal counts in
+[`data/area_layer_animal_support.csv`](data/area_layer_animal_support.csv).
 
 **Bottom line for H1 vs H0.** This analysis does **not** distinguish a common H1 mechanism from
 different circuits that each happen to produce a positive average response. The evidence for H1
