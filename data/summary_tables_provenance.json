@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-08T17:50:17.210031+00:00",
-  "git_sha": "ca441e92844f8566370808b181fedee856f5b77f",
+  "generated_at": "2026-08-08T20:00:15.968324+00:00",
+  "git_sha": "ba34b4ef64bb1cba2c5489fbeabcc065bff308bc",
   "python": "3.11.15",
   "packages": {
     "numpy": "2.4.6",
@@ -33,7 +33,7 @@
     },
     "crossscale": {
       "path": "data/crossscale_mechanism.parquet",
-      "sha256": "8704208f595e8f0acc38e22f295cf40e4902ad41e8b46aa32a3718b51bf9ec61"
+      "sha256": "cfcf403e83c46cda4c624f8adfcf8694f4ec4e792f7d995b628ced55d5478bf5"
     }
   },
   "note": "Capstone CSVs are the deterministic output of this builder over the committed per-unit tables, with one named analysis population per result (see 'populations'). `--check` enforces committed == rebuild exactly. Point estimates change only when a Result notebook rewrites its per-unit table (e.g. DANDI draft re-upload)."

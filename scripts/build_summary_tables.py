@@ -157,19 +157,22 @@ def build_crossscale():
         return None, {"note": "crossscale_mechanism.parquet not in data/; leaving committed CSV untouched"}
     src["crossscale"] = p
     M = pd.read_parquet(p)
+    # Named population = RESPONSIVE cells with a defined DvI (matches the source notebook's G=M[M.resp]
+    # and the per-result convention elsewhere). Pooling non-responsive cells would dilute the median.
     for tech in ["ecephys", "mesoscope"]:
-        d = M[(M.modality.str.startswith(tech[:3])) & M.DvI.notna()]
+        d = M[(M.modality.str.startswith(tech[:3])) & M.resp & M.DvI.notna()]
         if len(d) == 0:
             continue
         m, lo, hi = _boot_ci_subject(d.DvI.values, d.subject.values)
         rows.append(dict(technique=tech, median=m, lo=lo, hi=hi, n=len(d),
+                         n_subj=int(d.subject.nunique()),
                          frac_cells_pos=round(float((d.DvI > 0).mean()), 4)))
     return pd.DataFrame(rows), src
 
 
 EXPECTED_SCHEMAS = {
     "capstone_error_types.csv": ["paradigm", "expectation", "metric", "population", "median", "lo", "hi", "n", "n_sess", "frac_cells_pos", "frac_animals_pos", "p"],
-    "capstone_crossscale.csv":  ["technique", "median", "lo", "hi", "n", "frac_cells_pos"],
+    "capstone_crossscale.csv":  ["technique", "median", "lo", "hi", "n", "n_subj", "frac_cells_pos"],
 }
 
 

@@ -37,7 +37,10 @@ headline scientific result: **three independent kinds of violated expectation �
 surprise defined by stimulus frequency, by learned sequence order, and by learned
 timing — each evoke a positively-signed prediction-error response** (CIs excluding
 zero under a session-level bootstrap), and the feature-oddball form survives three
-independent confound controls and generalizes across recording scales. The fourth
+independent confound controls and shows the same *sign* at a second recording scale
+(mesoscope 2p, +0.10 across all four mesoscope mice that carry the paradigm) — a
+positive but weaker cross-scale signal that remains **exploratory** rather than an
+established replication (see Result 8). The fourth
 case we can test — motor–visual contingency (sensorimotor) — is **null in the
 released data** (limited by low locomotion and a block-order confound; see Result 3),
 so it neither supports nor contradicts the common-mechanism reading. One consistent
@@ -46,7 +49,7 @@ reading (H1), with the motor case still open pending better-powered data.
 
 ## Results at a glance
 
-![Common deviance-detection signal across four kinds of violated expectation, generalizing across recording scales](figures/capstone_synthesis.png)
+![Common deviance-detection signal across four kinds of violated expectation, with an exploratory two-scale comparison for the feature-oddball case](figures/capstone_synthesis.png)
 
 The project's four error-type prediction-error contrasts, on one axis (the eight
 numbered Results below expand these plus the cross-scale and anatomical analyses).
@@ -84,9 +87,12 @@ CI spans zero; see Result 3) — limited by low locomotion and a block-order con
 italicised and flagged as null here. So the convergence claim is honest about its scope: deviance
 detection appears across
 frequency-, order-, and timing-based expectations, while the motor-contingency case is not
-established in the released data. Panel B shows the feature-oddball form generalizing across
-recording scales (Neuropixels DvI +0.37, mesoscope +0.09; SLAP2 via the matched omission
-contrast). The full logic, controls, and caveats for each row are in the Result sections below.
+established in the released data. Panel B shows the feature-oddball form with the **same positive
+sign** at a second recording scale (Neuropixels DvI +0.34 from 3 mice, mesoscope +0.10 from the
+**4 mesoscope mice** that carry the standard-mismatch paradigm — the full available cohort; SLAP2
+via the matched omission contrast). This remains an **exploratory** two-scale comparison rather than
+an established replication: the mesoscope effect is real in sign but ~3× smaller and rests on 4
+animals. The full logic, controls, and caveats for each row are in the Result sections below.
 
 > **Unit-inclusion rule per paradigm (they are not identical, by design).** All four start from
 > the same base gate — `default_qc` **and** VIS-area — applied in every extractor. On top of that,
@@ -135,10 +141,11 @@ mesoscope 2-photon in V1 sits essentially on zero (−0.03, wide CI crossing zer
 negative — updated to the full 10-subject cohort now on DANDI). This is a spiking/imaging
 **detection** difference, not a sign reversal. Only part of this is explained by mesoscope's
 superficial laminar sampling. So the cross-scale
-generalization in panel B holds for the *feature-oddball* contrast (spikes and mesoscope both
-positive on responsive cells), but the finer area-resolved comparison is a **caution against
-treating the calcium DvI as interchangeable with the spiking DvI** — where spiking V1 carries a
-strong deviance signal, 2-photon V1 does not.
+generalization in panel B holds only in *sign* for the *feature-oddball* contrast (spikes +0.34 and
+mesoscope +0.10, both positive on responsive cells, mesoscope pooled over all 4 available paradigm
+mice) — an **exploratory** agreement, not a quantitative match, and the finer area-resolved
+comparison is a **caution against treating the calcium DvI as interchangeable with the spiking
+DvI** — where spiking V1 carries a strong deviance signal, 2-photon V1 does not.
 
 "All positive," though, is consistent with **both** a single common deviance-detection
 mechanism (**H1**) and separate circuits each tuned to their own error type (**H0**).

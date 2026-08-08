@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-08-08T19:58:59.326097+00:00",
+  "git_sha": "ba34b4ef64bb1cba2c5489fbeabcc065bff308bc",
+  "n_cells": 7151,
+  "sessions": {
+    "ecephys": [
+      {
+        "subject": "830851",
+        "asset_id": "9b9e8abe-7b43-47f1-b8e1-4114f87898a1",
+        "path": "sub-830851/sub-830851_ses-ecephys-830851-2026-03-17-10-46-04_ecephys.nwb"
+      },
+      {
+        "subject": "830848",
+        "asset_id": "e597fc7d-a8e5-4a1f-833e-4eee1c139e35",
+        "path": "sub-830848/sub-830848_ses-ecephys-830848-2026-03-04-15-34-54_ecephys.nwb"
+      },
+      {
+        "subject": "830846",
+        "asset_id": "680d1c0c-e338-4d0b-ba29-4329436d2ae2",
+        "path": "sub-830846/sub-830846_ses-ecephys-830846-2026-03-11-10-19-32_ecephys.nwb"
+      }
+    ],
+    "mesoscope": [
+      {
+        "subject": "837568",
+        "asset_id": "b425c043-ebf5-456c-83a9-1d99465224c6",
+        "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-23-12-57-43_ophys.nwb"
+      },
+      {
+        "subject": "839909",
+        "asset_id": "cb6b3893-90ae-442f-886f-58e4cffb5cef",
+        "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-05-11-45-48_ophys.nwb"
+      },
+      {
+        "subject": "845342",
+        "asset_id": "6288e7b0-5b44-4660-b36d-c14d19220e2c",
+        "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-27-14-07-55_ophys.nwb"
+      },
+      {
+        "subject": "853137",
+        "asset_id": "931b2c27-cd9c-4022-a5a2-cd5e4fd3febb",
+        "path": "sub-853137/sub-853137_ses-multiplane-ophys-853137-2026-06-24-11-28-54_ophys.nwb"
+      }
+    ],
+    "slap2": [
+      {
+        "subject": "796630",
+        "asset_id": "b8c05ec0-0a74-46f5-956d-e82af3cc5d27",
+        "path": "sub-796630/sub-796630_ses-SLAP2-796630-2025-08-25-14-59-15_image+ophys.nwb"
+      },
+      {
+        "subject": "803496",
+        "asset_id": "d23a03af-c3bd-4cf0-9492-6dca96fb201d",
+        "path": "sub-803496/sub-803496_ses-SLAP2-803496-2025-07-02-15-33-26_image+ophys.nwb"
+      },
+      {
+        "subject": "801381",
+        "asset_id": "2ecafd40-29a6-422f-92b0-32f7e940c783",
+        "path": "sub-801381/sub-801381_ses-SLAP2-801381-2025-06-05-14-57-42_image+ophys.nwb"
+      }
+    ]
+  },
+  "per_modality": {
+    "ecephys": 775,
+    "mesoscope": 6060,
+    "slap2": 316
+  },
+  "note": "Per-cell cross-scale mechanism table. Feature-oddball DvI is defined only where a Control block 1 exists (ecephys + mesoscope); SLAP2 rows carry OI/TPI but DvI=NaN. Mesoscope cohort = the 4 subjects carrying the Standard-mismatch block (the max available); the cross-scale comparison remains EXPLORATORY at this cohort size."
+}
