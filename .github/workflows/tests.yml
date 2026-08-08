@@ -83,7 +83,7 @@ jobs:
       - name: Execute offline notebooks
         run: |
           python -m ipykernel install --user --name python3
-          for nb in notebooks/capstone_synthesis.ipynb notebooks/robustness_diagnostics.ipynb; do
+          for nb in notebooks/capstone_synthesis.ipynb notebooks/robustness_diagnostics.ipynb notebooks/cohort_diagnostics.ipynb; do
             echo "== executing $nb =="
             jupyter execute "$nb" --kernel_name=python3
           done

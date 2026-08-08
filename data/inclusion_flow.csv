@@ -1,0 +1,7 @@
+modality,paradigm,sessions,ccf_sessions,sorted_units_ccf,qc_area_units,responsive_units,final_units,resp_gate,analysis_sessions
+Neuropixels,standard_oddball,12,9.0,27662.0,1881,1566,1566,resp_p<0.05,9
+Neuropixels,sequence,11,7.0,20855.0,1514,1514,1514,none (all QC&VIS),7
+Neuropixels,duration,11,6.0,17770.0,744,744,744,none (all QC&VIS),6
+Neuropixels,sensorimotor,14,8.0,27566.0,1190,200,200,rstd>0.1 Hz,6
+Mesoscope,standard_oddball,4,,,6060,2834,2834,evoked>baseline (perm),4
+SLAP2,standard_oddball,3,,,316,133,133,evoked>baseline (perm),3

@@ -52,3 +52,6 @@ figures/*.png
 !figures/area_layer_animal_support.png
 !figures/sensorimotor_behavioral_balance.png
 !figures/per_animal_forest.png
+!figures/inclusion_flow.png
+!figures/crossmodality_per_animal.png
+!figures/sensorimotor_equivalence.png

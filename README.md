@@ -1200,6 +1200,45 @@ prediction-error signal. Full analysis:
 
 ---
 
+## Cohort diagnostics — inclusion, per-animal robustness, and the sensorimotor null
+
+Three cohort-level figures make the sample composition and the weakest result auditable. All
+three are built from committed tables (no DANDI streaming) and regenerate from one notebook,
+[`notebooks/cohort_diagnostics.ipynb`](notebooks/cohort_diagnostics.ipynb); every figure is saved
+as PNG + PDF + SVG with a colorblind-safe (Okabe–Ito) palette.
+
+**Inclusion flow (who is in each analysis).** The path from recorded sessions to final analysis
+units, per paradigm (Neuropixels) and per recording modality (cross-scale feature-oddball):
+sessions → CCF-aligned sessions → QC & VIS-area units → responsiveness gate → final set. Two-photon
+modalities have no CCF/spike-sorting stage (ROIs, not sorted units), marked N/A. The counts here are
+the same n's used everywhere else in the repo.
+
+![Inclusion flow](figures/inclusion_flow.png)
+
+**Cross-modality prediction error, one point per animal.** Feature-oddball DvI as a per-animal
+median in the two areas both scales share (VISp, VISl), Neuropixels vs mesoscope, with per-area
+session/unit counts. Panel B shows the group medians barely move when the responsiveness gate is
+removed. SLAP2 is excluded from this comparison — it has no physically-matched control block, so no
+control-referenced DvI. Data in
+[`data/crossmodality_per_animal.csv`](data/crossmodality_per_animal.csv).
+
+![Cross-modality per-animal DvI](figures/crossmodality_per_animal.png)
+
+**Sensorimotor: not detected, not equivalent, confounded.** The closed−open contrast is a
+*non-detection*, and this figure states exactly what that does and does not license. Panel A runs a
+two-one-sided-test (TOST) against a pre-specified smallest effect size of interest (SESOI = 0.10 on
+the bounded DvI): the 90 % CI [−0.12, +0.03] extends past −SESOI, so **equivalence to zero is not
+established** (TOST p = 0.12) — while a JZS-style Bayes factor gives **BF₀₁ ≈ 8** (moderate evidence
+*for* the null). So: no positive effect, mild evidence for absence, but not a clean equivalence
+claim. Panel B shows the structural block-order confound directly — the open-loop control always
+runs later in the session than the closed-loop deviants (median time-in-session ≈ 0.9 vs ≈ 0.25 in
+every session), so within-session drift is entangled with the contrast. Data in
+[`data/sensorimotor_confound.csv`](data/sensorimotor_confound.csv).
+
+![Sensorimotor equivalence and confound](figures/sensorimotor_equivalence.png)
+
+---
+
 ## Install
 
 ```bash
