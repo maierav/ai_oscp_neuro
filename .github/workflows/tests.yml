@@ -1,0 +1,31 @@
+name: tests
+
+# Run the offline unit + sidecar-integrity suite on every push and PR.
+# These tests do not stream from DANDI (they use in-memory fakes and the
+# shipped sidecars), so they run in seconds with no network.
+on:
+  push:
+    paths:
+      - "openscope_ccf/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - ".github/workflows/tests.yml"
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package + test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Run tests
+        run: pytest -q

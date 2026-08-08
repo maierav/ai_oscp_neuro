@@ -19,6 +19,7 @@ from .nwbio import (s3_url, open_remote, unit_electrode_rows, electrodes_frame,
 from .sidecar import (build_unit_sidecar, build_channel_sidecar,
                       build_session_sidecars, load_ccf, attach)
 from .figures import build_probe_data, make_3d, make_laminar, load_root_mesh
+from .provenance import record as provenance_record, asset_provenance, append_manifest, code_sha
 
 __version__ = "0.1.0"
 
@@ -70,5 +71,6 @@ __all__ = [
     "build_unit_sidecar", "build_channel_sidecar", "build_session_sidecars",
     "load_ccf", "attach",
     "build_probe_data", "make_3d", "make_laminar", "load_root_mesh",
+    "provenance_record", "asset_provenance", "append_manifest", "code_sha",
     "load_session_index", "__version__",
 ]

@@ -75,8 +75,14 @@ def build_channel_sidecar(fh, subject: str, date: str, paradigm: str) -> pd.Data
 
 
 def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str,
-                           outdir="data/sidecars") -> "dict[str, Path]":
-    """Stream a session and write both sidecars as Parquet. Returns their paths."""
+                           outdir="data/sidecars", record_provenance: bool = True) -> "dict[str, Path]":
+    """Stream a session and write both sidecars as Parquet. Returns their paths.
+
+    When ``record_provenance`` is true (default), also append a provenance record
+    — resolved asset id, SHA-256 content digest, dandiset/version, code SHA, and
+    the ``asset_id`` actually used — to ``<outdir>/provenance.jsonl``, so the
+    sidecars are traceable to an immutable content state of the mutable draft.
+    """
     outdir = Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)
     fh = open_remote(asset_id)
@@ -90,6 +96,14 @@ def build_session_sidecars(asset_id: str, subject: str, date: str, paradigm: str
     cp = outdir / f"channels_{tag}.parquet"
     us.to_parquet(up, index=False)
     cs.to_parquet(cp, index=False)
+    if record_provenance:
+        try:
+            from .provenance import record, append_manifest
+            rec = record(subject, date, params=dict(paradigm=paradigm, n_units=len(us),
+                                                     n_channels=len(cs), asset_id_used=asset_id))
+            append_manifest(rec, outdir / "provenance.jsonl")
+        except Exception as e:  # provenance is best-effort; never fail a build over it
+            print(f"[warn] provenance record skipped for {tag}: {str(e)[:80]}")
     return {"units": up, "channels": cp}
 
 

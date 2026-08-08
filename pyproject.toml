@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 atlas = ["brainglobe-atlasapi"]
+dev = ["pytest"]
 
 [tool.setuptools]
 packages = ["openscope_ccf"]

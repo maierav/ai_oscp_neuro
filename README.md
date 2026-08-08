@@ -1090,9 +1090,11 @@ openscope_ccf/          package
   nwbio.py              DANDI streaming + corrected unit→electrode mapping
   sidecar.py            build/load/attach sidecar tables
   figures.py            build_probe_data, make_3d, make_laminar
+  provenance.py         asset SHA-256 + code SHA + params -> JSONL manifest
   data/ccf_session_index.csv   registry of CCF sessions
   data/sidecars/          prebuilt sidecars (Parquet) for 30 of the 58 CCF sessions; others build on demand
 notebooks/              Colab notebooks (CCF figures, validation, prediction-error analyses)
+tests/                  offline pytest suite (decoding, unit→electrode mapping, sidecar integrity, provenance)
 scripts/build_all.py    batch driver
 scripts/rebuild_session_index.py  re-sweep DANDI 001637 -> ccf_session_index.csv
 scripts/audit_locomotion.py       score sensorimotor sessions on open-loop running
@@ -1113,6 +1115,48 @@ or a bare `pip install`.
 - Data: OpenScope Community Predictive Processing, [DANDI 001637](https://dandiarchive.org/dandiset/001637).
 - CCF alignment: OpenScope community ([discussion #163](https://github.com/AllenNeuralDynamics/openscope-community-predictive-processing/discussions/163)).
 - Atlas: `allen_mouse_25um` via [BrainGlobe](https://brainglobe.info/).
+
+## Testing
+
+An offline `pytest` suite (`tests/`) pins the package's correctness properties and
+runs in seconds with no DANDI streaming:
+
+- **CCF decoding** — layer splits, hippocampal subfields, fiber tracts, and the two
+  regressions the audits caught: `"unknown"` decodes to *unassigned* (not grey), and
+  a missing/`NaN` acronym decodes to *unassigned* rather than raising.
+- **`unit_electrode_rows`** — the per-probe offset is applied correctly, and invalid
+  anatomy (out-of-range or negative channel index, non-contiguous probe block, unknown
+  device) **raises** instead of silently remapping.
+- **Shipped sidecars** — the 30 pairs have unique/contiguous keys, row counts match
+  `_manifest.csv`, and re-running `decode_ccf` on each stored acronym reproduces the
+  stored area/layer/group/tissue exactly.
+
+```bash
+pip install -e ".[dev]"
+pytest -q
+```
+
+CI runs this on every push and PR across Python 3.9/3.11/3.12
+(`.github/workflows/tests.yml`).
+
+## Provenance & reproducibility
+
+Because 001637 is a **mutable draft** (asset ids are re-minted on re-upload), resolving
+a session by path at run time is convenient but is not, by itself, a reproducible pin.
+`openscope_ccf.provenance` records what was actually read so a result can be traced to an
+immutable content state even after the draft moves:
+
+```python
+from openscope_ccf import provenance_record, append_manifest
+rec = provenance_record("830794", "2026-01-26-12-02-05", params={"resp_win": [0, 0.3]})
+append_manifest(rec, "data/sidecars/provenance.jsonl")
+```
+
+Each record carries the resolved `asset_id`, the asset's **SHA-256 content digest** and
+byte size (from DANDI metadata — no download), the `dandiset`/`version`, the repo
+`code_sha`, the analysis `params`, and a UTC timestamp. `build_session_sidecars`
+appends one automatically to `<outdir>/provenance.jsonl`, so a batch build accumulates a
+full provenance log alongside the sidecars.
 
 ## Notebook hygiene (Colab ↔ GitHub)
 
