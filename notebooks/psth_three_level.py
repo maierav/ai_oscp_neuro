@@ -72,17 +72,22 @@ def psth_by_layer(paradigms, smooth=1.5, resp_win=None, suptitle=None, savepath=
 def psth_three_level(cen, example, sessions, resp_win=None, dev_label="deviant",
                      ctl_label="control", dev_color="#c0392b", ctl_color="#3b6ea5",
                      smooth=1.5, ylabel="firing rate (Hz)", suptitle=None, savepath=None,
-                     panelA_kind="channel MUA", panelA_ylabel="MUA rate (Hz)"):
+                     panelA_kind="summed nearby sorted-unit rate", panelA_ylabel="summed sorted-unit rate (Hz)"):
     """
     Four-level PSTH diagnostic (systems-neuro standard):
-      A example CHANNEL (MUA, all units on one channel) - trial mean +/- SEM  [trigger/timebase check]
+      A example CHANNEL (summed nearby sorted-unit rate) - trial mean +/- SEM  [trigger/timebase check]
       B example UNIT (single sorted unit)               - trial mean +/- SEM
       C example SESSION                                  - unit  mean +/- SEM
       D grand average across sessions                    - per-session lines + across-session mean +/- SEM
 
+    NOTE on panel A: this is NOT raw threshold-crossing / AP-band multiunit activity. It is the
+    pooled spike train of the sorted units on the best unit's channel (+/-2 channel neighbourhood),
+    so it depends on spike-sorting yield and can carry sorting artefacts/duplicates. It is used only
+    as a trigger/timebase sanity check, not as a quantitative MUA measure.
+
     cen       : (T,) bin-centre times in SECONDS.
     example   : dict with 'subject','uid','dev_trials','ctl_trials' (n_trials x T) for the example unit,
-                and 'mua_ch','mua_dev','mua_ctl' (n_trials x T) for the example channel's MUA.
+                and 'mua_ch','mua_dev','mua_ctl' (n_trials x T) for the example channel's summed rate.
     sessions  : list of dicts, each {'subject','dev' (n_units x T),'ctl' (n_units x T)}.
     resp_win  : optional (t0,t1) seconds; shaded response window on every panel.
     Returns (fig, overlaps_count). Gaussian smoothing is display-only.
@@ -92,7 +97,7 @@ def psth_three_level(cen, example, sessions, resp_win=None, dev_label="deviant",
     fig, (axA, axB, axC, axD) = plt.subplots(1, 4, figsize=(16.0, 4.5))
     fig.subplots_adjust(left=0.05, right=0.99, top=0.82, bottom=0.27, wspace=0.30)
 
-    # ---- Panel A: example channel MUA, mean +/- SEM across trials ----
+    # ---- Panel A: example channel summed nearby sorted-unit rate, mean +/- SEM across trials ----
     if example.get("mua_dev") is not None:
         for M, c, lab in [(example["mua_dev"], dev_color, dev_label),
                           (example["mua_ctl"], ctl_color, ctl_label)]:

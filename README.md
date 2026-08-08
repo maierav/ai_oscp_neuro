@@ -484,11 +484,13 @@ the confirmatory pool is in
 **Time-course diagnostic (four-level PSTH).** From the single channel up to the grand
 average, each level carries a variance band and the shaded response window:
 
-![Result 1 four-level PSTH: example channel MUA, example unit, example session, grand average across 9 sessions](figures/r1_psth_fourlevel.png)
+![Result 1 four-level PSTH: example channel summed nearby sorted-unit rate, example unit, example session, grand average across 9 sessions](figures/r1_psth_fourlevel.png)
 
-The example channel's multiunit (panel A) is the most direct trigger/timebase check — a
-clean onset at t = 0 and the next grating appearing at ~400 ms (the 701 ms cadence) confirm
-the alignment. The 90° oddball (red) exceeds the frequent **standard** (blue) at every level,
+Panel A is the **summed nearby sorted-unit rate** — the pooled spike train of the sorted
+units on the example channel (±2-channel neighbourhood). It is *not* raw threshold-crossing
+/ AP-band MUA (it depends on spike-sorting yield), so it serves only as the most direct
+trigger/timebase check — a clean onset at t = 0 and the next grating appearing at ~400 ms
+(the 701 ms cadence) confirm the alignment. The 90° oddball (red) exceeds the frequent **standard** (blue) at every level,
 and all 9 per-session means move together in the grand average (panel D) — the effect is not
 carried by one animal, and the response window sits on the peak. **Note on the contrast shown:**
 this PSTH plots the oddball against the *frequent standard* — the adaptation view, which makes the

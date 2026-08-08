@@ -1,4 +1,4 @@
-# Unified per-result PSTH extractor (streaming + MUA on best channel + trial PSTHs).
+# Unified per-result PSTH extractor (streaming + summed nearby sorted-unit rate on best channel + trial PSTHs).
 # Used to build the four-level diagnostic figures; one small get_onsets adapter per result.
 import numpy as np, h5py, remfile, requests, time
 
@@ -50,7 +50,7 @@ def extract_psth(sessions, get_onsets, example_subject, ds="001637",
     sessions       : list of (subject, date).
     get_onsets(fh) : returns (dev_onsets, ctl_onsets) 1-D arrays of event start-times (s).
     Returns dict {sess:[{subject,dev,ctl}], example:{...}, cen, resp}.
-      example carries the example unit's trial PSTHs AND the example channel's MUA trial PSTHs.
+      example carries the example unit's trial PSTHs AND the example channel's summed nearby sorted-unit trial PSTHs.
     """
     EDGES = np.arange(-PRE, POST + BW, BW); CEN = EDGES[:-1] + BW / 2
     def upsth(sp, times):
@@ -94,11 +94,14 @@ def extract_psth(sessions, get_onsets, example_subject, ds="001637",
         if subj == example_subject and example is None and len(rs):
             best_local = int(np.nanargmax(rs)); best = int(qidx[best_local])
             spb = st[starts[best]:sti[best]]
-            # MUA: units on the same channel (device_name, extremum_channel_index) as the best unit
+            # Summed nearby sorted-unit rate (NOT raw AP-band MUA): pool the spike trains of the
+            # sorted units on the best unit's channel (device_name, extremum_channel_index). This
+            # depends on spike-sorting yield and can include sorting artefacts/duplicates; it is a
+            # trigger/timebase sanity check only. Genuine MUA would need the raw electrical series.
             try:
                 dev_name = col(U, "device_name"); eci = U["extremum_channel_index"][:]
                 same = np.where((dev_name == dev_name[best]) & (eci == eci[best]) & qc)[0]
-                if len(same) < 2:  # widen to a +/-2 channel neighbourhood for a true multiunit
+                if len(same) < 2:  # widen to a +/-2 channel neighbourhood so the pooled trace isn't a single unit
                     same = np.where((dev_name == dev_name[best]) & (np.abs(eci - eci[best]) <= 2) & qc)[0]
                 mua_sp = np.sort(np.concatenate([st[starts[j]:sti[j]] for j in same]))
                 ch = int(eci[best]); n_mua = len(same)
