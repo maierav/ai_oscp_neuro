@@ -3,7 +3,7 @@
 Analysis toolkit for the **[OpenScope Community Project](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/)** dataset — Allen Institute for Neural Dynamics.
 
 > [!WARNING]
-> **Under development.** All results are preliminary and may change followingfurther code audits.
+> **Under development.** All results are preliminary and may change following further code audits.
  
 ## Background & motivation
 
