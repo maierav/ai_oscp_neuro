@@ -1,60 +1,26 @@
 # ai_oscp_neuro
 
-Analysis toolkit and cross-scale validation for the **OpenScope Community
-Predictive Processing** dataset — Allen Institute for Neural Dynamics.
+Analysis toolkit for the **[OpenScope Community Project](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/)** dataset — Allen Institute for Neural Dynamics.
 
-> Python package `openscope_ccf` — import name is `openscope_ccf`; the GitHub
-> repository is `maierav/ai_oscp_neuro`.
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/maierav/ai_oscp_neuro/blob/main/notebooks/ccf_penetration_figures.ipynb)
+NOTE: This code repository is currently under development. All results are preliminary and might change following further code audits.
 
 ## Background & motivation
 
-The [OpenScope Community Predictive Processing](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/)
-project asks how the brain implements **predictive processing** — whether the
-cortex learns to predict upcoming sensory input and signals *prediction errors*
-when reality violates expectation. The central question is whether different kinds
-of violation (a sensory oddball, a broken sensorimotor contingency, an omitted
-stimulus) are computed by **distinct specialized circuits** (H0) or by a **common
-canonical mechanism** repeated across the brain (H1). To decide between them, the
-same battery of "mismatch" paradigms is recorded at **three spatial scales in mouse
-visual cortex**, so error signals can be compared from single spikes up to
-population and dendritic activity. The conceptual and methodological background is
-laid out in the community white paper:
+The [OpenScope Community Project on Predictive Processing](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/) asks how the brain implements **predictive processing**. Predictive processing theorizes that the neocortex learns to predict upcoming sensory input and signals *prediction errors* when reality violates expectation. 
+
+The main aim of this project is to derive whether different kinds of prediction violations (e.g., a sensory mismatch/oddball, a broken sensorimotor contingency, an omitted stimulus) are computed by **a variety of mechanisms and circuits** (H0) or by a **common canonical mechanism** that is repeated across the brain (H1). 
+
+To decide between these two hypotheses, the same test battery of "mismatch" paradigms is recorded using **three distinct spatial scales in mouse visual cortex**: (1) Glutamate vesicle imaging (**SLAP2**), (2) Two-photon calcium imaging (**Mesoscope**), and (2) High density linear multiarray single neuron recordings across up to six brain areas simultaneously (**Neuropixels**). 
+
+Using these three techniques in tandem, error signals can be compared from dendritic activity to single spikes up to inter-areal population responses. 
+
+The conceptual and methodological background is laid out in the community white paper:
 
 > Aizenbud et al. (2025), *Neural mechanisms of predictive processing: a
 > collaborative community experiment through the OpenScope program.*
 > [arXiv:2504.09614](https://arxiv.org/abs/2504.09614)
 
-**What this repository provides.** (1) A reusable toolkit that makes the
-preliminary Allen CCF alignment usable and attachable to any downstream analysis;
-(2) a set of pipeline **validations** (receptive fields, direction tuning) that
-pass before any prediction-error claim is trusted; and (3) the **prediction-error
-analyses** themselves — feature-oddball, omission, sensorimotor, sequence, and
-timing — carried across the three recording scales where the paradigm allows,
-with the cross-technique confounds explicitly measured and controlled. The
-headline scientific result: **three independent kinds of violated expectation —
-surprise defined by stimulus frequency, by learned sequence order, and by learned
-timing — each evoke a positively-signed prediction-error response** (CIs excluding
-zero under a session-level bootstrap), and the feature-oddball form survives three
-independent confound controls and shows the same *sign* at a second recording scale
-(mesoscope 2p, +0.10 across all four mesoscope mice that carry the paradigm) — a
-positive but weaker cross-scale signal that remains **exploratory** rather than an
-established replication (see Result 8). The fourth
-case we can test — motor–visual contingency (sensorimotor) — was **not detected in the
-released data** (limited by low locomotion and a block-order confound; see Result 3),
-so it neither supports nor contradicts the common-mechanism reading. Importantly, a
-**consistent positive sign across the three establishable error types does not by itself
-discriminate H1 from H0** — three separate mechanisms that each produce a positive deviance
-response would look identical at this level. What we can state is the weaker, defensible
-claim: prediction-error signalling is **present and same-signed** across frequency-, order-,
-and timing-based expectation violations. Deciding *common vs. separate* mechanism needs a
-discriminating test (shared animal-to-animal covariance, a shared time-course component,
-cross-paradigm representational similarity, or an explicit model comparison) — see the H0/H1
-section; the dataset in hand (few CCF animals, separate sessions per paradigm) is underpowered
-for it. So the sign convergence is **suggestive of, not evidence for, H1**.
-
-## Results at a glance
+## Preliminary results at a glance
 
 ![Common deviance-detection signal across four kinds of violated expectation, with an exploratory two-scale comparison for the feature-oddball case](figures/capstone_synthesis.png)
 
