@@ -1029,7 +1029,7 @@ control, same DvI) in the two areas mesoscope samples. All CIs are **hierarchica
 
 | area | **Neuropixels** DvI (90°) | **Mesoscope** DvI (90°) |
 |---|---|---|
-| **VISp** (primary V1) | **+0.25** [+0.01, +0.40] — *significant, strongest area* | **−0.03** [−0.25, +0.20] — **null** |
+| **VISp** (primary V1) | **+0.25** [+0.02, +0.40] — *significant, strongest area* | **−0.03** [−0.24, +0.21] — **null** |
 | **VISl** (lateral) | +0.18 [−0.01, +0.33] — n.s. (n=405) | +0.19 [+0.05, +0.31] — significant |
 
 *(Mesoscope updated to the full 10-subject cohort now on DANDI — subjects 850399 and 853137 were
