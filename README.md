@@ -2,15 +2,16 @@
 
 Analysis toolkit for the **[OpenScope Community Project](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/)** dataset — Allen Institute for Neural Dynamics.
 
-NOTE: This code repository is currently under development. All results are preliminary and might change following further code audits.
-
+> [!WARNING]
+> **Under development.** All results are preliminary and may change followingfurther code audits.
+ 
 ## Background & motivation
 
 The [OpenScope Community Project on Predictive Processing](https://allenneuraldynamics.github.io/openscope-community-predictive-processing/) asks how the brain implements **predictive processing**. Predictive processing theorizes that the neocortex learns to predict upcoming sensory input and signals *prediction errors* when reality violates expectation. 
 
 The main aim of this project is to derive whether different kinds of prediction violations (e.g., a sensory mismatch/oddball, a broken sensorimotor contingency, an omitted stimulus) are computed by **a variety of mechanisms and circuits** (H0) or by a **common canonical mechanism** that is repeated across the brain (H1). 
 
-To decide between these two hypotheses, the same test battery of "mismatch" paradigms is recorded using **three distinct spatial scales in mouse visual cortex**: (1) Glutamate vesicle imaging (**SLAP2**), (2) Two-photon calcium imaging (**Mesoscope**), and (2) High density linear multiarray single neuron recordings across up to six brain areas simultaneously (**Neuropixels**). 
+To decide between these two hypotheses, the same test battery of "mismatch" paradigms is recorded using **three distinct spatial scales in mouse visual cortex**: (1) Glutamate vesicle imaging (**SLAP2**), (2) Two-photon calcium imaging (**Mesoscope**), and (3) High density linear multiarray single neuron recordings across up to six brain areas simultaneously (**Neuropixels**). 
 
 Using these three techniques in tandem, error signals can be compared from dendritic activity to single spikes up to inter-areal population responses. 
 
