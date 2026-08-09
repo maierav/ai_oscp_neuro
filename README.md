@@ -21,11 +21,15 @@ The conceptual and methodological background is laid out in the community white 
 > collaborative community experiment through the OpenScope program.*
 > [arXiv:2504.09614](https://arxiv.org/abs/2504.09614)
 
-## Preliminary results at a glance
+## 1. Preliminary results 
+
+### 1.1 Grand Average Overview (the Big Picture so far)
 
 ![Figure 1](figures/capstone_synthesis.svg)
 
-**Figure 1 — Prediction-error index across four kinds of violated expectation.** *Panel A: the four error-type contrasts on a single bounded −1…+1 axis. Three rows (feature-oddball, sequence, sensorimotor; drawn ●) are deviance indices, DvI = (R\_dev − R\_ctrl) / (|R\_dev| + |R\_ctrl|), against a physically-matched control stimulus. The duration row (drawn ■) is a timing-PE index — the omission response at the expected onset time over the same units' standard sensory response, om\_pe / (|om\_pe| + |std\_r|) — because an omitted stimulus has no matched control. Both index families are bounded and both place a surprise-related response over a response-magnitude denominator, but they are not the same quantity (different denominators and reference conditions); the axis therefore encodes the **sign and consistency** of each effect, not its magnitude, and bar lengths are not an effect-size ranking. Open marker = not detected. Panel B: the feature-oddball DvI at two recording scales (Neuropixels spikes; mesoscope two-photon). The duration index is traceable end-to-end to the `timing_pe_index` cell of `duration_mismatch_ecephys.ipynb` (`data/duration_timing_pe.parquet`).*
+**Figure 1: Prediction-error index across four kinds of violated expectation.** *Panel A: Neuropixels only: The four error-type contrasts on a single bounded −1…+1 axis. Three rows (feature-oddball, sequence, sensorimotor; drawn ●) are deviance indices, DvI = (R\_dev − R\_ctrl) / (|R\_dev| + |R\_ctrl|), against a physically-matched control stimulus. The duration row (drawn ■) is a timing-PE index — the omission response at the expected onset time over the same units' standard sensory response, om\_pe / (|om\_pe| + |std\_r|) — because an omitted stimulus has no matched control. Both index families are bounded and both place a surprise-related response over a response-magnitude denominator, but they are not the same quantity (different denominators and reference conditions); the axis therefore encodes the **sign and consistency** of each effect, not its magnitude, and bar lengths are not an effect-size ranking. Open marker = not detected. Panel B: Cross-technique comparison: The feature-oddball DvI at two recording scales (Neuropixels spikes; mesoscope two-photon). SLAP2 will require more data to be posted on DANDI archive before comparisons can be made.*
+
+See also the table below:
 
 | error type | expectation set by | PE index | 95 % CI (hierarchical) | sessions | cells + |
 |---|---|---|---|---|---|
@@ -34,29 +38,28 @@ The conceptual and methodological background is laid out in the community white 
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 48 % |
 
-**How to read it**
+**Table 1: Summary of Results (used in Figure 1)**
 
-- Three of four error types — **feature-oddball**, **sequence**, **duration/timing** — carry a positively-signed PE index whose 95 % CI (session-level hierarchical bootstrap) excludes zero (values in the table above).
-- **Sensorimotor is not detected** (−0.04, CI [−0.18, +0.11] spans zero). This is a *non-detection*, not a demonstrated equivalence to zero — the data cannot rule out a small effect of either sign, limited by low locomotion and a block-order confound (see Result 3).
-- **Panel B is sign-only and exploratory.** Feature-oddball keeps the same positive sign at a second scale (Neuropixels +0.34, 3 mice; mesoscope +0.10, 4 mice), but the mesoscope effect is ~3× smaller and rests on 4 animals — agreement in direction, not an established quantitative replication.
-- **A shared positive sign does not by itself favour one hypothesis.** "All positive" is equally consistent with a single common deviance-detection mechanism (H1) and with separate per-error circuits that each produce a positive response (H0); the sign convergence is *suggestive of, not evidence for*, H1. Discriminating the two needs an anatomical or representational test (Results 6–8).
+**Interpretation**
 
-> **Unit-inclusion rule per paradigm (they are not identical, by design).** All four start from
-> the same base gate — `default_qc` **and** VIS-area — applied in every extractor. On top of that,
-> feature-oddball and sensorimotor add a **responsiveness gate** (feature-oddball: Wilcoxon
-> `resp_p < 0.05`; sensorimotor: standard evoked rate > 0.1 Hz), while sequence and duration use all
-> QC-passing VIS units with no separate responsiveness cut. This difference is deliberate and, for a
-> *normalised* index, largely immaterial: a non-responsive unit contributes a near-zero DvI/timing-PE
-> (tiny numerator over tiny denominator) and so barely moves the median. We verified this directly —
-> adding a responsiveness gate to the two ungated paradigms leaves the headline essentially unchanged
-> (**sequence** +0.20 → +0.22, 7/7 mice either way; **duration** +0.32 → +0.32, 6/6 mice either way).
-> The feature-oddball number is the one exception where responsiveness matters, and there the gate is
-> applied (an all-QC feature-oddball population dilutes the median because ~20 % of VIS units are
-> unresponsive to the standard). So the capstone axis compares indices computed on comparable
-> populations to within this robustness margin; the per-paradigm gate is stated in each Result
-> section and in the extractor cell of each notebook.
+- Three of the four tested error types (**feature-oddball**, **sequence**, **duration/timing**) elicit a positively-signed PE index whose 95 % CI (session-level hierarchical bootstrap) excludes zero (values in the table above).
+  
+- **Sensorimotor oddball responses not detected** (−0.04, CI [−0.18, +0.11] spans zero). We cannot rule out a small effect of either sign, say due to low locomotion and a block-order confound (see Result 3).
+  
+- **Panel B is sign-only and exploratory.** Feature-oddball keeps the same positive sign at a second scale (Neuropixels +0.34, 3 mice; mesoscope +0.10, 4 mice), but the mesoscope effect is ~3× smaller and rests on 4 animals — agreement in direction only.
+  
+- **A shared positive sign does not by itself favor one hypothesis.** "All positive" is equally consistent with a single common deviance-detection mechanism (H1) and with separate per-error circuits that each produce a positive response (H0); the sign convergence is *suggestive of, not evidence for*, H1. Discriminating the two needs further tests (see Results 6–8).
 
-**Is any headline carried by one mouse?** The forest below puts the *animal* — not the unit — as
+> **Unit-inclusion rule per paradigm (not identical).** All four start from
+> the same base criterion (see `default_qc` **and** VIS-area).
+> 
+> On top of that, feature-oddball and sensorimotor add a **responsiveness criterion**
+> (feature-oddball: Wilcoxon `resp_p < 0.05`; sensorimotor: standard evoked rate > 0.1 Hz),
+> while sequence and duration use all QC-passing VIS units with no separate responsiveness cut.
+
+### 1.1 Subject-by-Subject Analysis
+
+The forest plot below puts the *animal* — not the unit — as
 the visible unit of replication for every primary effect: each ● is one mouse's median, ◆ is the
 pooled hierarchical-bootstrap CI, ⊢ is the leave-one-animal-out range (how far the pooled estimate
 moves when any single mouse is dropped), and the right margin gives an exact sign test on the
@@ -65,6 +68,8 @@ i.e. those whose per-animal median is non-zero; tied-zero mice are dropped, the 
 sign-test convention).
 
 ![Per-animal robustness of every primary effect](figures/per_animal_forest.png)
+
+**Figure 2: Main effects as a function of subject.** 
 
 The pattern is honest about its own strength: **feature-oddball** (9/9 mice positive, sign
 p = 0.004), **duration/timing** (6/6, p = 0.031), and **sequence** (7/7, p = 0.016) all survive the
