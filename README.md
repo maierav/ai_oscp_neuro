@@ -27,7 +27,7 @@ The conceptual and methodological background is laid out in the community white 
 
 ![Figure 1](figures/capstone_synthesis.svg)
 
-**Figure 1: Prediction-error index across four kinds of violated expectation.** *Panel A: Neuropixels only: The four error-type contrasts on a single bounded −1…+1 axis. Three rows (feature-oddball, sequence, sensorimotor; drawn ●) are deviance indices, DvI = (R\_dev − R\_ctrl) / (|R\_dev| + |R\_ctrl|), against a physically-matched control stimulus. The duration row (drawn ■) is a timing-PE index — the omission response at the expected onset time over the same units' standard sensory response, om\_pe / (|om\_pe| + |std\_r|) — because an omitted stimulus has no matched control. Both index families are bounded and both place a surprise-related response over a response-magnitude denominator, but they are not the same quantity (different denominators and reference conditions); the axis therefore encodes the **sign and consistency** of each effect, not its magnitude, and bar lengths are not an effect-size ranking. Open marker = not detected. Panel B: Cross-technique comparison: The feature-oddball DvI at two recording scales (Neuropixels spikes; mesoscope two-photon). SLAP2 will require more data to be posted on DANDI archive before comparisons can be made.*
+**Figure 1: Prediction-error index across four kinds of violated expectation.** *Panel A: Neuropixels only: The four error-type contrasts on a single bounded −1…+1 axis. Three rows (feature-oddball, sequence, sensorimotor; drawn ●) are deviance indices, DvI = (R\_dev − R\_ctrl) / (|R\_dev| + |R\_ctrl|), against a physically-matched control stimulus. The duration row (drawn ■) is a timing-PE index — the omission response at the expected onset time over the same units' standard sensory response, om\_pe / (|om\_pe| + |std\_r|) — because an omitted stimulus has no matched control. Both index families are bounded and both place a surprise-related response over a response-magnitude denominator, but they are not the same quantity (different denominators and reference conditions); the axis therefore encodes the **sign and consistency** of each effect, not its magnitude, and bar lengths are not an effect-size ranking. Open marker = not detected. Panel B: Cross-technique comparison: The feature-oddball DvI at two recording scales (Neuropixels spikes; mesoscope two-photon). SLAP2 will require more data to be posted on DANDI archive before comparisons can be made. Reproduce: [`notebooks/capstone_synthesis.ipynb`](notebooks/capstone_synthesis.ipynb).*
 
 See also the table below:
 
@@ -38,7 +38,12 @@ See also the table below:
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 48 % |
 
-**Table 1: Summary of Results (used in Figure 1)**
+**Table 1: Summary of Results (used in Figure 1).** Assembled by
+[`scripts/build_summary_tables.py`](scripts/build_summary_tables.py) into
+[`data/capstone_error_types.csv`](data/capstone_error_types.csv) from each paradigm's committed
+per-unit table (`notebooks/oddball_confirmatory_ecephys.ipynb`,
+`sequence_mismatch_ecephys.ipynb`, `duration_mismatch_ecephys.ipynb`,
+`sensorimotor_mismatch_ecephys.ipynb`).
 
 **Interpretation**
 
@@ -57,7 +62,7 @@ See also the table below:
 > (feature-oddball: Wilcoxon `resp_p < 0.05`; sensorimotor: standard evoked rate > 0.1 Hz),
 > while sequence and duration use all QC-passing VIS units with no separate responsiveness cut.
 
-### 1.1 Subject-by-Subject Analysis
+### 1.2 Subject-by-Subject Analysis
 
 The forest plot below puts the *animal* — not the unit — as
 the visible unit of replication for every primary effect: each ● is one mouse's median, ◆ is the
@@ -69,7 +74,8 @@ sign-test convention).
 
 ![Per-animal robustness of every primary effect](figures/per_animal_forest.png)
 
-**Figure 2: Main effects as a function of subject.** 
+**Figure 2: Main effects as a function of subject.** *Reproduce:
+[`notebooks/robustness_diagnostics.ipynb`](notebooks/robustness_diagnostics.ipynb).*
 
 The pattern is honest about its own strength: **feature-oddball** (9/9 mice positive, sign
 p = 0.004), **duration/timing** (6/6, p = 0.031), and **sequence** (7/7, p = 0.016) all survive the
@@ -578,7 +584,7 @@ a reproducible, cross-scale, same-signed PE phenomenon that is **compatible with
 yet evidence for it over H0**. Results 3–5 extend the phenomenon to three further kinds of
 violated expectation (motor contingency — not detected; sequence order; timing); Results 7–8
 return to the cross-scale question with paradigm-matched SLAP2 data and an area-resolved
-mesoscope analysis. The combined picture is in [**Results at a glance**](#results-at-a-glance).
+mesoscope analysis. The combined picture is in [**Preliminary results**](#1-preliminary-results).
 
 ---
 
