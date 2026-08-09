@@ -86,7 +86,7 @@ excluding zero (sensorimotor is null):
 | **Feature-oddball** | stimulus frequency | **+0.43** | [+0.36, +0.54] | 9 | 79 % |
 | **Sequence** | learned temporal order | **+0.20** | [+0.10, +0.31] | 7 | 58 % |
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
-| Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 50 % |
+| Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 48 % |
 
 **Three** of the four error types carry a positive prediction-error index with a CI excluding
 zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is not detected**
@@ -307,7 +307,8 @@ mapping (add the per-probe row offset) lives in `nwbio.unit_electrode_rows()`.
 label — get area/layer from CCF. **Match `device_name` to the electrode
 `group_name` by exact equality, never by substring** — a substring match (e.g.
 `device[-1].lower() in group.lower()`) maps `ProbeE` onto `ProbeB` and mislabels
-8–16 % of units per session. The correct mapping (add the per-probe row offset)
+roughly 8–24 % of units per session (up to 24 % in the duration sessions). The
+correct mapping (add the per-probe row offset)
 lives in `nwbio.unit_electrode_rows()`; all notebooks use it.
 
 **Statistics — pooled p-values measure effect *presence*, not cross-animal
@@ -580,7 +581,8 @@ treats all three fairly. Reproduce:
 ![Oddball index across techniques](figures/crossscale_oddball_index.png)
 
 - The adaptation-controlled **DvI stays positive wherever it can be computed** —
-  **+0.39** spikes, **+0.11** mesoscope (all sessions positive). SLAP2's *original*
+  **+0.34** spikes, **+0.10** mesoscope (all sessions positive; mesoscope now the full
+  4-subject cohort). SLAP2's *original*
   monolithic sessions had no equiprobable control block, so DvI was not computable there;
   the newer paradigm-matched SLAP2 sessions do, and are analyzed in
   [**Result 7**](#result-7--paradigm-matched-slap2-first-look-preliminary-n2paradigm).
@@ -1048,7 +1050,7 @@ In VISl the two modalities *agree* — both positive, +0.18 (Neuropixels) vs +0.
 (mesoscope) — though the Neuropixels VISl estimate is not itself significant (its CI just
 includes zero even at n=405 under the corrected probe mapping). The same direction holds for
 feature-oddball (Result 1): Neuropixels V1 is the strongest area (+0.49), while mesoscope
-feature-oddball is weak pooled (Result 2, +0.11).
+feature-oddball is weak pooled (Result 2, +0.10).
 
 **Is it just laminar sampling?** Mesoscope images ~46–428 µm (L2/3 through upper L5, **missing
 L6**), while Neuropixels samples all layers. The Neuropixels V1 sequence-PE *is* deep-biased
@@ -1159,7 +1161,9 @@ Three levels, applied to the feature-oddball index:
 
 1. **Matched responsiveness criterion.** Applying the same excitatory-only rule to
    all three techniques moves the ephys tuning bias from −0.05 to −0.18 — the
-   asymmetric rule had flattered ephys. DvI is untouched (+0.39 → +0.40).
+   asymmetric rule had flattered ephys. The deviance index (DvI) is essentially
+   unchanged by the rule — the correction moves the *tuning* metric, not the
+   deviance signal.
 2. **Detection-floor test.** Restricting ephys to progressively
    stronger-responding cells *trends* its tuning bias toward the mesoscope's (TPI
    −0.18 → −0.37 at the strongest quartile), showing the skew is partly a shared
