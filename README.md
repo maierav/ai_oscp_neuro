@@ -23,30 +23,9 @@ The conceptual and methodological background is laid out in the community white 
 
 ## Preliminary results at a glance
 
-![Common deviance-detection signal across four kinds of violated expectation, with an exploratory two-scale comparison for the feature-oddball case](figures/capstone_synthesis.png)
+![Figure 1](figures/capstone_synthesis.svg)
 
-The project's four error-type prediction-error contrasts, on one axis (the eight
-numbered Results below expand these plus the cross-scale and anatomical analyses).
-Each row of panel A is a different way of making a stimulus *unexpected*, expressed
-as a bounded −1…+1 index so the four can share an axis. **The rows are not the
-identical construction, and the axis compares direction and consistency, not magnitude
-— so the relative bar lengths are deliberately not interpretable as effect-size
-ranking.** Three rows (feature-oddball, sequence, sensorimotor, drawn ●) are DvIs — the
-deviant response relative to a **physically-matched control stimulus**,
-(R_dev−R_ctrl)/(|R_dev|+|R_ctrl|). The duration row (drawn ■, distinct marker) is a
-**timing-PE index** — the omission response at the expected onset time (there is *no*
-stimulus, so no physically-matched control is possible) normalized by the same units'
-**standard sensory response**, om_pe/(|om_pe|+|std_r|). The underlying duration Result
-is reported in Hz (+0.97 Hz omission response over +1.63 Hz standard); the +0.32 here
-is that ratio put on the bounded scale — its **generating expression now lives in
-`duration_mismatch_ecephys.ipynb`** (the `timing_pe_index` cell) and is persisted in
-`data/duration_timing_pe.parquet`, so the capstone value is traceable end-to-end. Both
-index families are bounded to −1…+1 and both put a surprise-related response over a
-response-magnitude denominator, but a duration +0.32 and a feature-oddball +0.43 are
-**not the same quantity** (different denominators, different reference). Read the panel
-as **"which error types produce a positively-signed PE and how consistently,"** not as
-a strength ranking. On that reading, three of four are positive with CIs
-excluding zero (sensorimotor is null):
+**Figure 1 — Prediction-error index across four kinds of violated expectation.** *Panel A: the four error-type contrasts on a single bounded −1…+1 axis. Three rows (feature-oddball, sequence, sensorimotor; drawn ●) are deviance indices, DvI = (R\_dev − R\_ctrl) / (|R\_dev| + |R\_ctrl|), against a physically-matched control stimulus. The duration row (drawn ■) is a timing-PE index — the omission response at the expected onset time over the same units' standard sensory response, om\_pe / (|om\_pe| + |std\_r|) — because an omitted stimulus has no matched control. Both index families are bounded and both place a surprise-related response over a response-magnitude denominator, but they are not the same quantity (different denominators and reference conditions); the axis therefore encodes the **sign and consistency** of each effect, not its magnitude, and bar lengths are not an effect-size ranking. Open marker = not detected. Panel B: the feature-oddball DvI at two recording scales (Neuropixels spikes; mesoscope two-photon). The duration index is traceable end-to-end to the `timing_pe_index` cell of `duration_mismatch_ecephys.ipynb` (`data/duration_timing_pe.parquet`).*
 
 | error type | expectation set by | PE index | 95 % CI (hierarchical) | sessions | cells + |
 |---|---|---|---|---|---|
@@ -55,20 +34,12 @@ excluding zero (sensorimotor is null):
 | **Duration / timing** | learned interval timing | **+0.32** | [+0.26, +0.43] | 6 | 74 % |
 | Sensorimotor *(null)* | motor–visual contingency | −0.04 | [−0.18, +0.11] | 6 | 48 % |
 
-**Three** of the four error types carry a positive prediction-error index with a CI excluding
-zero under a session-level (hierarchical) bootstrap. The **sensorimotor row is not detected**
-(−0.04, CI [−0.18, +0.11] spans zero; see Result 3) — limited by low locomotion and a block-order
-confound. This is a *non-detection*, not a demonstrated equivalence to zero: the data cannot rule
-out a small effect of either sign, so it is italicised and flagged accordingly rather than counted
-either way. The convergence claim is honest about its scope: a positive, same-signed deviance
-response appears across
-frequency-, order-, and timing-based expectations, while the motor-contingency case is not
-established in the released data. Panel B shows the feature-oddball form with the **same positive
-sign** at a second recording scale (Neuropixels DvI +0.34 from 3 mice, mesoscope +0.10 from the
-**4 mesoscope mice** that carry the standard-mismatch paradigm — the full available cohort; SLAP2
-via the matched omission contrast). This remains an **exploratory** two-scale comparison rather than
-an established replication: the mesoscope effect is real in sign but ~3× smaller and rests on 4
-animals. The full logic, controls, and caveats for each row are in the Result sections below.
+**How to read it**
+
+- Three of four error types — **feature-oddball**, **sequence**, **duration/timing** — carry a positively-signed PE index whose 95 % CI (session-level hierarchical bootstrap) excludes zero (values in the table above).
+- **Sensorimotor is not detected** (−0.04, CI [−0.18, +0.11] spans zero). This is a *non-detection*, not a demonstrated equivalence to zero — the data cannot rule out a small effect of either sign, limited by low locomotion and a block-order confound (see Result 3).
+- **Panel B is sign-only and exploratory.** Feature-oddball keeps the same positive sign at a second scale (Neuropixels +0.34, 3 mice; mesoscope +0.10, 4 mice), but the mesoscope effect is ~3× smaller and rests on 4 animals — agreement in direction, not an established quantitative replication.
+- **A shared positive sign does not by itself favour one hypothesis.** "All positive" is equally consistent with a single common deviance-detection mechanism (H1) and with separate per-error circuits that each produce a positive response (H0); the sign convergence is *suggestive of, not evidence for*, H1. Discriminating the two needs an anatomical or representational test (Results 6–8).
 
 > **Unit-inclusion rule per paradigm (they are not identical, by design).** All four start from
 > the same base gate — `default_qc` **and** VIS-area — applied in every extractor. On top of that,
