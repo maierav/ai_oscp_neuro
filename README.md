@@ -14,7 +14,9 @@ The main aim of this project is to derive whether different kinds of prediction 
 To decide between these two hypotheses, the same test battery of "mismatch" paradigms is recorded using **three distinct spatial scales in mouse visual cortex**: 
 
 (1) Glutamate vesicle imaging (**SLAP2**), 
+
 (2) Two-photon calcium imaging (**Mesoscope**), and 
+
 (3) High density linear multiarray single neuron recordings across up to six brain areas simultaneously (**Neuropixels**). 
 
 Using these three techniques in tandem, error signals can be compared from dendritic activity to single spikes up to inter-areal population responses. 
