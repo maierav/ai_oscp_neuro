@@ -380,6 +380,33 @@ are the **most reliable at the single-ROI level** (median split-half r = 0.25), 
 population fraction is a margin statement, not a per-ROI weakness. Reproduce:
 [`notebooks/rf_sanity_check_three_modalities.ipynb`](notebooks/rf_sanity_check_three_modalities.ipynb).
 
+#### Labeled example RFs — provenance you can read
+
+The same well-formed RFs, but with each example carrying a **compact, human-legible unique ID** so
+anyone can trace it back to the exact source unit or ROI without a lookup table:
+
+![Labeled example receptive fields across three recording scales](figures/rf_labeled_examples.svg)
+
+**Figure: Labeled example receptive fields.** *Six best-fit RFs per technique (rows: Neuropixels
+spikes, mesoscope somatic ΔF/F, SLAP2 dendritic glutamate), each panel titled with its provenance
+ID and annotated with fitted width and R². Selection, colour scale, and controls are as above.*
+
+The ID joins the fields that make an example locatable, separated by `·`:
+
+- **Neuropixels** — `NP·<subject>·<date>·<area+layer>·pr<Probe>·d<depth µm>·u<unit>`
+  (e.g. `NP·830851·2026-03-17·VISp2/3·prC·d3187·u1260`): CCF area/layer from the corrected
+  per-probe electrode mapping, probe device, and the unit's depth below the pia.
+- **Mesoscope** — `MS·<subject>·<date>·<area>·<plane-depth µm>·roi<id>·(<x,y> µm)`
+  (e.g. `MS·832700·2026-01-31·VISl·150µm·roi308·(375,326)µm`): imaging-plane area and depth from
+  the NWB `optophysiology` metadata, plus the ROI's within-field-of-view centroid in microns.
+- **SLAP2** — `SL·<subject>·<date>·<DMD>·roi<id>·(<x,y> px)`
+  (e.g. `SL·796630·2025-10-01·DMD1·roi7·(105,694)px`): the DMD (imaging channel) and the ROI's
+  pixel centroid — no CCF area, because SLAP2 resolves dendritic glutamate, not somatic position.
+
+The full provenance table for the plotted examples is in
+[`data/rf_labeled_examples.csv`](data/rf_labeled_examples.csv). Reproduce:
+[`notebooks/rf_labeled_examples.ipynb`](notebooks/rf_labeled_examples.ipynb).
+
 ### Direction tuning
 
 Each session's `Control block 1` carries a full **14-direction drifting-grating
