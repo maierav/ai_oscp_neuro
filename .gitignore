@@ -56,3 +56,4 @@ figures/*.png
 !figures/crossmodality_per_animal.png
 !figures/sensorimotor_equivalence.png
 !figures/rf_labeled_examples.png
+!figures/our_rf_stacked_830794.png

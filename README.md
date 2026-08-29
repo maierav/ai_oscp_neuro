@@ -1380,3 +1380,28 @@ allow several minutes per notebook). Set `QUICK = True` for a fast 3-session pre
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+---
+
+## Temporary — RF cross-check for sharing (ecephys 830794, 2026-01-26)
+
+> **Temporary block for discussion — not a permanent part of the analysis.** A side-by-side
+> reproduction of the "top-10 by Zebra correlation" units using *this repo's* receptive-field
+> pipeline, for visual comparison against an external figure. Same session, same 10 units, same
+> top-to-bottom order.
+
+These are the 10 units rendered with our RF method — the response map from the **RF-mapping
+(Gabor-patch) block** (spike rate 30–200 ms post-onset minus baseline, per azimuth/elevation
+position), 2-D Gaussian fit, diverging colour map centred at zero, black = half-max contour. Row
+labels (`Probe` / unit tag) match the external figure so rows line up; the bold header on each
+panel is the CCF nucleus and depth-from-tip resolved for that unit.
+
+![Our RF pipeline on the top-10 Zebra-correlated units of 830794](figures/our_rf_stacked_830794.png)
+
+All 10 resolve to the **lateral geniculate** (visual thalamus): ProbeC in dorsal LGN
+(`LGd-co` core, `LGd-ip` shell), ProbeD in ventral LGN (`LGv`) — expected, since ranking by raw
+visual-stimulus correlation surfaces the most reliably driven relay cells. RF locations agree with
+the external Zebra maps; note that several units are **OFF/suppressed** by Gabor patches (blue)
+despite being positively correlated with the Zebra movie — a genuine stimulus/estimator difference,
+not a pipeline artifact. The unit-tag mapping (external hex → full AIND `unit_name`, CCF nucleus,
+depth) is in [`data/zebra_top10_resolved.csv`](data/zebra_top10_resolved.csv).
