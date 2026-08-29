@@ -1398,6 +1398,11 @@ panel is the CCF nucleus and depth-from-tip resolved for that unit.
 
 ![Our RF pipeline on the top-10 Zebra-correlated units of 830794](figures/our_rf_stacked_830794.png)
 
+*Reproduce (streams the data and rebuilds this exact figure):*
+[`notebooks/rf_crosscheck_830794_zebra_top10.ipynb`](notebooks/rf_crosscheck_830794_zebra_top10.ipynb).
+*Each map pools the three Gabor orientations (0°/45°/90°) presented at each position — i.e. it is
+the orientation-averaged spatial RF, not an orientation-resolved one.*
+
 All 10 resolve to the **lateral geniculate** (visual thalamus): ProbeC in dorsal LGN
 (`LGd-co` core, `LGd-ip` shell), ProbeD in ventral LGN (`LGv`) — expected, since ranking by raw
 visual-stimulus correlation surfaces the most reliably driven relay cells. RF locations agree with
