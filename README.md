@@ -1056,7 +1056,7 @@ somatic calcium proxy.
 
 > **Important caveat — this comparison is *not* tuning/responsiveness-balanced, and Result 2 shows
 > that matters.** Result 2 demonstrates that raw cross-technique indices are dominated by
-> tuning-biased cell sampling (the oddball index swings from −1.0 to +0.16 only after joint
+> tuning-biased cell sampling (the mesoscope oddball index moves from −0.41 to +0.21 only after joint
 > balancing). Result 8 compares raw per-ROI and per-unit DvIs **without** that balancing: the
 > mesoscope side has no responsiveness floor (near-zero ROIs push the DvI toward ±1 on noise), and
 > the large n-asymmetry (VISp: 580 spiking units vs 18,690 mesoscope ROIs across 10 mice) alone drives part of the
@@ -1103,17 +1103,20 @@ oddball work.
 
 ![Mesoscope difference diagnostic](figures/mesoscope_difference_diagnostic.png)
 
-1. **Detection sensitivity.** Neuropixels finds ~91 % of visual units responsive to
-   the standard; mesoscope ~51 %, SLAP2 ~42 %. Calcium imaging only sees cells whose
+*The diagnostic panels were drawn on the earlier 4-mouse mesoscope sample; the percentages below are
+recomputed on the full cohort (10 mice) from `data/crossscale_mechanism.parquet`.*
+
+1. **Detection sensitivity.** Neuropixels finds ~87 % of visual units responsive to
+   the standard; mesoscope ~49 %, SLAP2 ~42 %. Calcium imaging only sees cells whose
    spiking crosses the indicator threshold, dropping the weakly-driven majority.
 2. **A definitional asymmetry.** The ephys responsiveness rule (Wilcoxon p<0.05)
-   admits suppressed-by-standard cells (28 % of responsive ephys units); the imaging
+   admits suppressed-by-standard cells (25 % of responsive ephys units); the imaging
    rule (p<0.05 **and mean>0**) excludes them.
 3. **Indicator kinetics.** Spikes are transient and adapting; calcium is slow and
    sustained. The standard trace dips below baseline late in ephys but stays
    elevated in calcium.
-4. **Calcium nonlinearity sharpens apparent tuning.** 58 % of mesoscope cells pile
-   at |TPI|>0.9 vs 37 % in ephys — a cell responds to its preferred orientation and
+4. **Calcium nonlinearity sharpens apparent tuning.** 53 % of responsive mesoscope cells pile
+   at |TPI|>0.9 vs 42 % in ephys — a cell responds to its preferred orientation and
    goes *invisible* for the orthogonal one, saturating the tuning index toward ±1.
    (The mesoscope images depths 62–385 µm, superficial through L5, so this is *not* a
    layer artifact — it is technique-intrinsic.)
@@ -1145,25 +1148,31 @@ mice; −0.35 Neuropixels), so magnitudes should be compared only after tuning b
 > distribution).** Controlling tuning alone is insufficient, because the detection
 > threshold silently pre-selects a tuning-biased subset.
 
-Three levels, applied to the feature-oddball index:
+Three levels, applied to the feature-oddball index (all cells on DANDI with the paradigm:
+Neuropixels 3 mice, mesoscope 10 mice / 23 sessions, SLAP2 3 original sessions; values in
+[`data/responsiveness_matching.csv`](data/responsiveness_matching.csv)):
 
-1. **Matched responsiveness criterion.** Applying the same excitatory-only rule to
-   all three techniques moves the ephys tuning bias from −0.05 to −0.18 — the
-   asymmetric rule had flattered ephys. The deviance index (DvI) is essentially
-   unchanged by the rule — the correction moves the *tuning* metric, not the
+1. **Matched responsiveness criterion.** Applying the imaging (excitatory-only) rule to Neuropixels
+   moves its tuning bias from −0.06 to −0.12 — the asymmetric rule had made it look less biased
+   than a fair comparison allows. The imaging populations are unchanged (they already use that
+   rule), and DvI barely moves (+0.34 → +0.37): the correction shifts the *tuning* metric, not the
    deviance signal.
-2. **Detection-floor test.** Restricting ephys to progressively
-   stronger-responding cells *trends* its tuning bias toward the mesoscope's (TPI
-   −0.18 → −0.37 at the strongest quartile), showing the skew is partly a shared
-   detection-threshold effect. The imaging-matched ~50 % fraction alone does **not**
-   flip ephys OI negative (still +0.03); only a stricter cut does. The calcium
-   *saturation* (|TPI|>0.9 ≈ 58 %) is not reproduced at any ephys threshold — that
-   piece is calcium-specific.
-3. **Joint balancing (responsiveness × tuning).** Balancing on both flips the
-   mesoscope OI from −1.00 to **+0.16** (95 % CI [+0.04, +0.23]) and gives ephys
-   +0.20 — both positive under the fully-matched comparison. (An independent
-   tuning-only balancing gives the same qualitative flip; see
+2. **Detection-floor test.** Keeping only the most strongly driven Neuropixels cells pushes its OI
+   from +0.03 to −0.10 at the imaging-like 50 % floor (mesoscope detects ≈49 % of cells) and −0.14 at
+   the top 25 %, i.e. toward the mesoscope's −0.41; its tuning bias moves the same way, though not
+   monotonically (−0.12 → −0.24 → −0.19). So part of the imaging population skew is a
+   detection-threshold effect that spiking data share when thresholded the same way. The calcium
+   *saturation* of tuning (|TPI|>0.9: 53 % mesoscope) is not reproduced at any Neuropixels floor
+   (33–41 %) — that piece is calcium-specific.
+3. **Joint balancing (response strength × tuning).** Drawing equal numbers of cells from every
+   tuning-bin × response-strength-tertile cell turns the mesoscope OI from −0.41 to **+0.21**
+   (95 % CI resampling mice [+0.09, +0.30]) and gives Neuropixels **+0.14** [+0.02, +0.26] — both
+   positive under the matched comparison. Mouse by mouse the balanced mesoscope OI is positive in
+   7/10 mice (sign test p = 0.34), so it is less uniform than the balanced DvI, which is positive in
+   10/10 (p = 0.002). (An independent tuning-only balancing gives the same qualitative flip; see
    [`notebooks/subsample_tuning_balanced.ipynb`](notebooks/subsample_tuning_balanced.ipynb).)
+   Reproduce all three levels, offline:
+   [`notebooks/responsiveness_matching.ipynb`](notebooks/responsiveness_matching.ipynb).
 
 **SLAP2 caveat throughout:** with no equiprobable control block, its tuning index
 and its oddball index derive from the same 0°-vs-90° comparison, so the two cannot
@@ -1175,14 +1184,16 @@ Neuropixels + mesoscope; SLAP2's positive evidence is the tuning-free omission.
 ![Time series and adaptation control](figures/timeseries_and_adaptation.png)
 
 Summary indices can mislead, so the joint-balanced result is also shown as
-time-courses (top row): the oddball leads the standard throughout the window in
-every technique, including the mesoscope whose raw OI was −1.00.
+time-courses (top row, **one example session per technique**: Neuropixels 830851, mesoscope 837568,
+SLAP2 796630): the oddball leads the standard throughout the window in every technique,
+including the mesoscope, whose raw OI is negative. The full-cohort, mouse-averaged time courses are
+in Result 2.
 
 The bottom row is the **adaptation control** for the omission response — the
 alternative a reviewer would raise: is the large, positive mesoscope omission
 response merely *release from adaptation*? If so, the standard should decline across
 the standard train and the omission should not exceed the un-adapted (early)
-standard. **Neither holds.** Splitting the standard by train position, the traces
+standard. **Neither holds** in these example sessions. Splitting the standard by train position, the traces
 are essentially superimposed — no adaptation (mesoscope 0.018 → 0.016 → 0.022 dF/F;
 ephys 4.1 → 4.6 Hz) — and the omission (0.088 dF/F) exceeds even the earliest,
 least-adapted standard (0.018) by ~4–5×. There is no adaptation to release from, and
