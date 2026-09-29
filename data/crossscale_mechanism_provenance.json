@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-08T19:58:59.326097+00:00",
-  "git_sha": "ba34b4ef64bb1cba2c5489fbeabcc065bff308bc",
-  "n_cells": 7151,
+  "generated_at": "2026-09-29T01:46:39.565196+00:00",
+  "git_sha": "ce2659e5c0008acac21248ddcd794a076f165f14",
+  "n_cells": 46562,
   "sessions": {
     "ecephys": [
       {
@@ -22,9 +22,39 @@
     ],
     "mesoscope": [
       {
+        "subject": "832700",
+        "asset_id": "8b7e9f4a-2544-4c47-b1a9-e65cb58e62cd",
+        "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-30-09-32-25_ophys.nwb"
+      },
+      {
+        "subject": "832700",
+        "asset_id": "83e0c8f3-5208-417c-87c4-bc4617b0f834",
+        "path": "sub-832700/sub-832700_ses-multiplane-ophys-832700-2026-01-31-11-38-29_ophys.nwb"
+      },
+      {
+        "subject": "837568",
+        "asset_id": "4899cef5-e772-4af8-a5c8-f414a950dd76",
+        "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-20-10-35-23_ophys.nwb"
+      },
+      {
         "subject": "837568",
         "asset_id": "b425c043-ebf5-456c-83a9-1d99465224c6",
         "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-02-23-12-57-43_ophys.nwb"
+      },
+      {
+        "subject": "837568",
+        "asset_id": "80047d6b-6958-4124-a0c3-3cb67b791327",
+        "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-03-05-14-14-51_ophys.nwb"
+      },
+      {
+        "subject": "837568",
+        "asset_id": "e11c921f-48b5-412b-92eb-237e938f37ab",
+        "path": "sub-837568/sub-837568_ses-multiplane-ophys-837568-2026-03-06-13-39-00_ophys.nwb"
+      },
+      {
+        "subject": "839909",
+        "asset_id": "6e9abda3-0fad-451e-acd2-d75fa4b5efe3",
+        "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-02-27-14-04-04_ophys.nwb"
       },
       {
         "subject": "839909",
@@ -32,14 +62,79 @@
         "path": "sub-839909/sub-839909_ses-multiplane-ophys-839909-2026-03-05-11-45-48_ophys.nwb"
       },
       {
+        "subject": "842971",
+        "asset_id": "a16d3078-a22c-49cf-b10a-1d527124ce79",
+        "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-04-29-09-39-57_ophys.nwb"
+      },
+      {
+        "subject": "842971",
+        "asset_id": "31b0789e-de41-4c40-97c3-915919d0397a",
+        "path": "sub-842971/sub-842971_ses-multiplane-ophys-842971-2026-05-06-09-36-56_ophys.nwb"
+      },
+      {
+        "subject": "843000",
+        "asset_id": "de9fc0a6-246d-4a0a-8597-00a240b0d6ee",
+        "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-17-12-23-04_ophys.nwb"
+      },
+      {
+        "subject": "843000",
+        "asset_id": "ab004f5f-cc27-44e3-a89c-5808d6aef1a3",
+        "path": "sub-843000/sub-843000_ses-multiplane-ophys-843000-2026-03-18-14-44-34_ophys.nwb"
+      },
+      {
+        "subject": "843001",
+        "asset_id": "670ff354-0d45-4e2d-b0a3-b5ef0616b87c",
+        "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-19-13-01-20_ophys.nwb"
+      },
+      {
+        "subject": "843001",
+        "asset_id": "5395b82a-5072-4fd2-baec-403291d13c84",
+        "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-21-11-43-22_ophys.nwb"
+      },
+      {
+        "subject": "843001",
+        "asset_id": "568daf63-3dcb-4c03-bb24-d827210a32e7",
+        "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-03-25-12-01-30_ophys.nwb"
+      },
+      {
+        "subject": "843001",
+        "asset_id": "75ee604b-885d-40c5-baa8-cebe13e467bb",
+        "path": "sub-843001/sub-843001_ses-multiplane-ophys-843001-2026-04-11-13-05-48_ophys.nwb"
+      },
+      {
         "subject": "845342",
         "asset_id": "6288e7b0-5b44-4660-b36d-c14d19220e2c",
         "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-27-14-07-55_ophys.nwb"
       },
       {
+        "subject": "845342",
+        "asset_id": "502db71d-8ca1-4584-b676-fb8e1bb6dd45",
+        "path": "sub-845342/sub-845342_ses-multiplane-ophys-845342-2026-03-30-09-58-06_ophys.nwb"
+      },
+      {
+        "subject": "846289",
+        "asset_id": "457acda8-80a6-4de1-a003-df1b397e83f9",
+        "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-15-13-55-19_ophys.nwb"
+      },
+      {
+        "subject": "846289",
+        "asset_id": "6dc5f369-7199-4242-b0c9-3874f23e644e",
+        "path": "sub-846289/sub-846289_ses-multiplane-ophys-846289-2026-04-16-13-56-40_ophys.nwb"
+      },
+      {
+        "subject": "850399",
+        "asset_id": "740b24eb-0fbc-4b17-ae9e-36d8c0a88d34",
+        "path": "sub-850399/sub-850399_ses-multiplane-ophys-850399-2026-05-29-10-06-36_ophys.nwb"
+      },
+      {
         "subject": "853137",
         "asset_id": "931b2c27-cd9c-4022-a5a2-cd5e4fd3febb",
         "path": "sub-853137/sub-853137_ses-multiplane-ophys-853137-2026-06-24-11-28-54_ophys.nwb"
+      },
+      {
+        "subject": "853137",
+        "asset_id": "f95228c0-0be3-4c43-9a83-1df1310f8699",
+        "path": "sub-853137/sub-853137_ses-multiplane-ophys-853137-2026-06-25-13-03-30_ophys.nwb"
       }
     ],
     "slap2": [
@@ -62,8 +157,8 @@
   },
   "per_modality": {
     "ecephys": 775,
-    "mesoscope": 6060,
-    "slap2": 316
+    "slap2": 316,
+    "mesoscope": 45471
   },
-  "note": "Per-cell cross-scale mechanism table. Feature-oddball DvI is defined only where a Control block 1 exists (ecephys + mesoscope); SLAP2 rows carry OI/TPI but DvI=NaN. Mesoscope cohort = the 4 subjects carrying the Standard-mismatch block (the max available); the cross-scale comparison remains EXPLORATORY at this cohort size."
+  "note": "Per-cell cross-scale mechanism table. Feature-oddball DvI is defined only where a Control block 1 exists (ecephys + mesoscope); SLAP2 rows carry OI/TPI but DvI=NaN. Mesoscope cohort = all 23 sessions (10 mice) carrying the Standard-mismatch block + Control block 1; inference resamples mice, so repeat sessions add cells, not replicates. Mesoscope rows extracted with the notebook's own img_mech run as parallel per-session processes (scripts/extract_crossscale_mesoscope.py); the 4 previously committed sessions reproduce the prior table exactly (max |dDvI| = 0)."
 }

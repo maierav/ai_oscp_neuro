@@ -57,3 +57,5 @@ figures/*.png
 !figures/sensorimotor_equivalence.png
 !figures/rf_labeled_examples.png
 !figures/our_rf_stacked_830794.png
+.meso_parts/
+.tc_parts/
