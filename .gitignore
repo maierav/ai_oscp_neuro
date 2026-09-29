@@ -59,3 +59,4 @@ figures/*.png
 !figures/our_rf_stacked_830794.png
 .meso_parts/
 .tc_parts/
+.ct_parts/

@@ -1103,8 +1103,9 @@ oddball work.
 
 ![Mesoscope difference diagnostic](figures/mesoscope_difference_diagnostic.png)
 
-*The diagnostic panels were drawn on the earlier 4-mouse mesoscope sample; the percentages below are
-recomputed on the full cohort (10 mice) from `data/crossscale_mechanism.parquet`.*
+*Full cohort: Neuropixels 3 mice, mesoscope 23 sessions / 10 mice, SLAP2 3 original sessions; responsive
+cells unless stated. Reproduce, offline:
+[`notebooks/crosstechnique_corrections.ipynb`](notebooks/crosstechnique_corrections.ipynb).*
 
 1. **Detection sensitivity.** Neuropixels finds ~87 % of visual units responsive to
    the standard; mesoscope ~49 %, SLAP2 ~42 %. Calcium imaging only sees cells whose
@@ -1112,14 +1113,19 @@ recomputed on the full cohort (10 mice) from `data/crossscale_mechanism.parquet`
 2. **A definitional asymmetry.** The ephys responsiveness rule (Wilcoxon p<0.05)
    admits suppressed-by-standard cells (25 % of responsive ephys units); the imaging
    rule (p<0.05 **and mean>0**) excludes them.
-3. **Indicator kinetics.** Spikes are transient and adapting; calcium is slow and
-   sustained. The standard trace dips below baseline late in ephys but stays
-   elevated in calcium.
+3. **Indicator kinetics.** Spikes are transient; calcium is slow and sustained. The
+   Neuropixels standard response dips below baseline after grating offset, while the
+   calcium response carries into the gap (panel B, mouse-averaged).
 4. **Calcium nonlinearity sharpens apparent tuning.** 53 % of responsive mesoscope cells pile
    at |TPI|>0.9 vs 42 % in ephys — a cell responds to its preferred orientation and
    goes *invisible* for the orthogonal one, saturating the tuning index toward ±1.
    (The mesoscope images depths 62–385 µm, superficial through L5, so this is *not* a
    layer artifact — it is technique-intrinsic.)
+
+In the **same areas**, the imaged population prefers the 0° standard (median TPI −0.76 in VISp,
+−0.60 in VISl; negative in every mesoscope mouse), whereas Neuropixels is close to zero (−0.07 VISp,
+−0.01 VISl). Because the oddball is the 90° grating, this sampling difference alone pushes the raw
+mesoscope oddball index negative.
 
 ### The mechanism of the OI reversal — a tuning-sampling effect
 
@@ -1183,23 +1189,33 @@ Neuropixels + mesoscope; SLAP2's positive evidence is the tuning-free omission.
 
 ![Time series and adaptation control](figures/timeseries_and_adaptation.png)
 
-Summary indices can mislead, so the joint-balanced result is also shown as
-time-courses (top row, **one example session per technique**: Neuropixels 830851, mesoscope 837568,
-SLAP2 796630): the oddball leads the standard throughout the window in every technique,
-including the mesoscope, whose raw OI is negative. The full-cohort, mouse-averaged time courses are
-in Result 2.
+*Full cohort; each trace is balanced (top) or averaged (bottom) within a mouse, then averaged across
+mice (band = ±SEM across mice). Mouse-level summaries in
+[`data/crosstechnique_traces.parquet`](data/crosstechnique_traces.parquet), built by
+[`scripts/extract_crosstechnique_traces.py`](scripts/extract_crosstechnique_traces.py).*
 
-The bottom row is the **adaptation control** for the omission response — the
-alternative a reviewer would raise: is the large, positive mesoscope omission
-response merely *release from adaptation*? If so, the standard should decline across
-the standard train and the omission should not exceed the un-adapted (early)
-standard. **Neither holds** in these example sessions. Splitting the standard by train position, the traces
-are essentially superimposed — no adaptation (mesoscope 0.018 → 0.016 → 0.022 dF/F;
-ephys 4.1 → 4.6 Hz) — and the omission (0.088 dF/F) exceeds even the earliest,
-least-adapted standard (0.018) by ~4–5×. There is no adaptation to release from, and
-the response dwarfs what it would release toward: an active, positively-signed
-prediction-error signal. Full analysis:
-[`notebooks/crosstechnique_corrections.ipynb`](notebooks/crosstechnique_corrections.ipynb).
+Summary indices can mislead, so the joint-balanced result is also shown as time-courses (top row):
+the 90° oddball exceeds the standard across the response window in 3/3 Neuropixels mice and 10/10
+mesoscope mice, including the mesoscope, whose raw OI is negative. SLAP2 is shown for completeness
+(2/3 mice), but without an equiprobable control its tuning and deviance cannot be separated.
+
+The bottom row is the **adaptation control** for the omission response — the alternative a
+reviewer would raise: is the large, positive mesoscope omission response merely *release from
+adaptation*? If so, the standard should decline across the standard train and the omission should
+not exceed the un-adapted (early) standard. **Neither holds.**
+- Split by position in the standard train (early 0–2, mid 3–8, late ≥9), the standard does not
+  decline in either technique: the late standard is never below the early one in any mouse
+  (mesoscope 0.014 → 0.017 → 0.020 dF/F; Neuropixels 1.5 → 1.6 → 1.8 Hz, mouse means).
+- In the mesoscope the omission response (0.046 dF/F over 0–700 ms) exceeds even the earliest,
+  least-adapted standard in **10/10 mice** (1.4–5.8× per mouse), and it already exceeds the standard
+  from ~160 ms. Its later part (after 701 ms) overlaps the response to the next grating, so the
+  0–367 ms portion is the cleanest evidence.
+- In Neuropixels the omission response is smaller than the evoked standard (1.1 vs 1.5 Hz; larger in
+  1/3 mice), as expected for a transient spiking response to a blank, but it rises above baseline
+  where the grating would have appeared.
+
+There is no adaptation to release from, and in the mesoscope the omission response exceeds the
+least-adapted standard: an active, positively signed prediction-error signal.
 
 ---
 
